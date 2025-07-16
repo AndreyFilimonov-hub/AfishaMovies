@@ -33,9 +33,14 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
+
+    implementation(libs.dotsindicator)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
