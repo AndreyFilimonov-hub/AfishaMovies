@@ -1,5 +1,6 @@
 package com.filimonov.afishamovies
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,8 @@ class OnBoardActivity : AppCompatActivity() {
 
         binding.tvSkip.setOnClickListener {
             // start HomeActivity
+            val intent = Intent(this, HomePageActivity::class.java)
+            startActivity(intent)
         }
     }
 

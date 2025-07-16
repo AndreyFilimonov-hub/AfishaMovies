@@ -49,6 +49,8 @@ dependencies {
 
     implementation(libs.glide)
 
+    implementation(libs.material)
+
     implementation(libs.dotsindicator)
 
     implementation(libs.androidx.core.ktx)

@@ -3,4 +3,5 @@
     <string name="afisha_movies">Afisha Movies</string>
     <string name="skip">Пропустить</string>
     <string name="welcome_image">welcome image</string>
+    <string name="loading">loading</string>
 </resources>
