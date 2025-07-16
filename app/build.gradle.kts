@@ -40,6 +40,15 @@ android {
 
 dependencies {
 
+    implementation(libs.rxandroid)
+    implementation(libs.rxjava)
+
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.adapter.rxjava3)
+
+    implementation(libs.glide)
+
     implementation(libs.dotsindicator)
 
     implementation(libs.androidx.core.ktx)
