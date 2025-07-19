@@ -5,13 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.filimonov.afishamovies.databinding.ItemPageBinding
 
-class ViewPagerAdapter : RecyclerView.Adapter<ViewPagerAdapter.PagerViewHolder>() {
+class ViewPagerAdapter(private val onBoardModels: List<OnBoardModel>) : RecyclerView.Adapter<ViewPagerAdapter.PagerViewHolder>() {
 
-    private val onBoards = listOf<OnBoard>(
-        OnBoard("Узнавай \nо премьерах" ,R.drawable.onboard_first),
-        OnBoard("Создавай \nколлекции", R.drawable.onboard_second),
-        OnBoard("Делись \nс друзьями", R.drawable.onboard_third),
-    )
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerViewHolder {
@@ -24,14 +19,18 @@ class ViewPagerAdapter : RecyclerView.Adapter<ViewPagerAdapter.PagerViewHolder>(
     }
 
     override fun onBindViewHolder(holder: PagerViewHolder, position: Int) {
-        val item = onBoards[position]
-        holder.binding.ivLoaded.setImageResource(item.resId)
-        holder.binding.tvTitle.text = item.text
+        val item = onBoardModels[position]
+        holder.bind(item)
     }
 
     override fun getItemCount(): Int {
-        return onBoards.size
+        return onBoardModels.size
     }
 
-    class PagerViewHolder(val binding: ItemPageBinding) : RecyclerView.ViewHolder(binding.root)
+    class PagerViewHolder(private val binding: ItemPageBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: OnBoardModel) {
+            binding.ivLoaded.setImageResource(item.resId)
+            binding.tvTitle.text = item.title
+        }
+    }
 }

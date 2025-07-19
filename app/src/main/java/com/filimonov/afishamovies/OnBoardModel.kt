@@ -1,6 +1,6 @@
 package com.filimonov.afishamovies
 
-data class OnBoard(
-    val text: String,
+data class OnBoardModel(
+    val title: String,
     val resId: Int
 )
