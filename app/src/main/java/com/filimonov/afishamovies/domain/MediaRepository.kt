@@ -7,9 +7,9 @@ import com.filimonov.afishamovies.domain.entities.Series
 
 interface MediaRepository {
 
-    fun getMovie(movieId: Int): LiveData<Movie>
+    fun getMovie(movieId: Int): Movie
 
-    fun getPerson(personId: Int): LiveData<Person>
+    fun getPerson(personId: Int): Person
 
     fun getPremierMovieList(): LiveData<List<Movie>>
 
