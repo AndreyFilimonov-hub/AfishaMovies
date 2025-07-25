@@ -1,20 +1,19 @@
 package com.filimonov.afishamovies.domain
 
-import androidx.lifecycle.LiveData
 import com.filimonov.afishamovies.domain.entities.Movie
 import com.filimonov.afishamovies.domain.entities.Series
 
 interface MediaRepository {
 
-    fun getPremierMovieList(): LiveData<List<Movie>>
+    suspend fun getPremierMovieList(): List<Movie>
 
-    fun getPopularMovieList(): LiveData<List<Movie>>
+    suspend fun getPopularMovieList(): List<Movie>
 
-    fun getActionUSAMovieList(): LiveData<List<Movie>>
+    suspend fun getActionUSAMovieList(): List<Movie>
 
-    fun getTop250MovieList(): LiveData<List<Movie>>
+    suspend fun getTop250MovieList(): List<Movie>
 
-    fun getDramaFranceMovieList(): LiveData<List<Movie>>
+    suspend fun getDramaFranceMovieList(): List<Movie>
 
-    fun getSeriesList(): LiveData<List<Series>>
+    suspend fun getSeriesList(): List<Series>
 }

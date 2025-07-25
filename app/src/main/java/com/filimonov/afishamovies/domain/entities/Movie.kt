@@ -12,7 +12,7 @@ data class Movie(
     val countries: String,
     val rating: Double,
     val poster: String,
-    val similarMovies: List<Movie>,
+    val similarMovies: List<Movie>?,
     val isFavourite: Boolean,
     val isWatching: Boolean
 )
