@@ -6,7 +6,7 @@ import com.filimonov.afishamovies.domain.entities.Movie
 
 class GetDramaFranceMovieListUseCase(private val repository: MediaRepository) {
 
-    operator fun invoke(): LiveData<List<Movie>> {
+    suspend operator fun invoke(): List<Movie> {
         return repository.getDramaFranceMovieList()
     }
 }

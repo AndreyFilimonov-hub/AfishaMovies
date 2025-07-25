@@ -6,7 +6,7 @@ import com.filimonov.afishamovies.domain.entities.Series
 
 class GetSeriesListUseCase(private val repository: MediaRepository) {
 
-    operator fun invoke(): LiveData<List<Series>> {
+    suspend operator fun invoke(): List<Series> {
         return repository.getSeriesList()
     }
 }
