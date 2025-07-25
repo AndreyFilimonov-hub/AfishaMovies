@@ -3,4 +3,7 @@
     <string name="afisha_movies">Afisha Movies</string>
     <string name="skip">Пропустить</string>
     <string name="welcome_image">welcome image</string>
+    <string name="premiers">Премьеры</string>
+    <string name="all">Все</string>
+    <string name="poster">poster</string>
 </resources>

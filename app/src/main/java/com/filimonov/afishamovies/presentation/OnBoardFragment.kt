@@ -29,7 +29,7 @@ class OnBoardFragment : Fragment() {
         offBottomNav()
         setupViewPager()
         binding.tvSkip.setOnClickListener {
-            // TODO: go HomeFragment
+            launchHomePageFragment()
         }
     }
 
@@ -50,6 +50,12 @@ class OnBoardFragment : Fragment() {
     private fun offBottomNav() {
         val bindingMain = (requireActivity() as MainActivity).binging
         bindingMain.bNav.visibility = View.INVISIBLE
+    }
+
+    private fun launchHomePageFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, HomePageFragment())
+            .commit()
     }
 
     override fun onDestroyView() {
