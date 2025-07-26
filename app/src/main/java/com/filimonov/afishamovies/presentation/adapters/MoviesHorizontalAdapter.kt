@@ -31,12 +31,12 @@ class MoviesHorizontalAdapter :
 
         fun bind(movie: Movie) {
             binding.tvName.text = movie.name
-            binding.tvGenre.text = movie.genreMain
             Glide.with(binding.root)
                 .load(movie.poster)
-                .placeholder(R.drawable.onboard_second)
                 .transform(RoundedCorners((4 * binding.root.context.resources.displayMetrics.density).toInt()))
+                .placeholder(R.drawable.onboard_second)
                 .into(binding.ivPoster)
+            binding.tvGenre.text = movie.genreMain
             binding.tvRating.text = movie.rating.toString().substring(0, 3)
 
         }

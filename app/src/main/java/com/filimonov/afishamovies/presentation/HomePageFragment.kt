@@ -38,7 +38,7 @@ class HomePageFragment : Fragment() {
         onBottomNav()
         lifecycleScope.launch {
             try {
-                val list = ApiFactory.apiService.getPopularMovieList()
+                val list = ApiFactory.apiService.getDramaFranceMovieList()
                 Log.d("AAA", list.toString())
                 val a = list.movies.map {
                     it.toEntity()
