@@ -14,7 +14,10 @@ fun MovieDto.toEntity(): Movie {
         description = this.description,
         movieLength = this.movieLength,
         ageRating = this.ageRating,
-        genres = this.genres.joinToString(),
+        genres = this.genres.map {
+            it.name
+        },
+        genreMain = this.genres.first().name,
         countries = this.countries.joinToString(),
         rating = this.rating.kp,
         poster = this.poster.url,

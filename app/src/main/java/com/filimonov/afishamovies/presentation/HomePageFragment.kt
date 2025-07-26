@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.data.mapper.toEntity
 import com.filimonov.afishamovies.data.network.ApiFactory
