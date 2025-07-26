@@ -1,5 +1,6 @@
 package com.filimonov.afishamovies.presentation
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import com.filimonov.afishamovies.data.mapper.toEntity
 import com.filimonov.afishamovies.data.network.ApiFactory
 import com.filimonov.afishamovies.databinding.FragmentHomePageBinding
 import com.filimonov.afishamovies.databinding.FragmentOnBoardBinding
+import com.filimonov.afishamovies.presentation.adapters.HorizontalSpaceItemDecoration
 import com.filimonov.afishamovies.presentation.adapters.MoviesHorizontalAdapter
 import kotlinx.coroutines.launch
 
@@ -35,6 +37,12 @@ class HomePageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val adapter = MoviesHorizontalAdapter()
         binding.rvPremier.adapter = adapter
+        binding.rvPremier.addItemDecoration(
+            HorizontalSpaceItemDecoration(
+                resources.getDimensionPixelSize(R.dimen.margin_start),
+                resources.getDimensionPixelSize(R.dimen.space_between)
+            )
+        )
         onBottomNav()
         lifecycleScope.launch {
             try {

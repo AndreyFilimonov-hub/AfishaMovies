@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ItemImageBinding
@@ -33,7 +34,7 @@ class MoviesHorizontalAdapter :
             binding.tvName.text = movie.name
             Glide.with(binding.root)
                 .load(movie.poster)
-                .transform(RoundedCorners((4 * binding.root.context.resources.displayMetrics.density).toInt()))
+                .transform(CenterCrop() ,RoundedCorners((4 * binding.root.context.resources.displayMetrics.density).toInt()))
                 .placeholder(R.drawable.onboard_second)
                 .into(binding.ivPoster)
             binding.tvGenre.text = movie.genreMain

@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="156dp"
         android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/poster"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
@@ -18,8 +19,7 @@
         android:id="@+id/tv_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="10dp"
+        android:layout_margin="6dp"
         android:background="@drawable/rectangle_blue"
         android:textColor="@color/white"
         android:textStyle="bold"

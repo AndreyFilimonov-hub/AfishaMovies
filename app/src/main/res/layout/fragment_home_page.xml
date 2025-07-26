@@ -51,7 +51,6 @@
         android:clipToPadding="false"
         android:maxHeight="194dp"
         android:orientation="horizontal"
-        android:paddingHorizontal="26dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_premier"
