@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies
+package com.filimonov.afishamovies.presentation
 
 data class OnBoardModel(
     val title: String,
