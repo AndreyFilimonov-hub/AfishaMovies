@@ -99,6 +99,11 @@ class HomePageFragment : Fragment() {
         bindingMain.bNav.visibility = View.VISIBLE
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     companion object {
 
         @JvmStatic
