@@ -12,7 +12,7 @@ data class Series(
     val genreMain: String,
     val countries: String,
     val rating: Double,
-    val poster: String,
+    val poster: String?,
     val similarSeries: List<Series>?,
     val isFavourite: Boolean,
     val isWatching: Boolean
