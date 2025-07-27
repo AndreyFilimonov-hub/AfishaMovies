@@ -1,6 +1,5 @@
 package com.filimonov.afishamovies.presentation
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,12 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.data.mapper.toEntity
 import com.filimonov.afishamovies.data.network.ApiFactory
 import com.filimonov.afishamovies.databinding.FragmentHomePageBinding
-import com.filimonov.afishamovies.databinding.FragmentOnBoardBinding
 import com.filimonov.afishamovies.presentation.adapters.HorizontalSpaceItemDecoration
 import com.filimonov.afishamovies.presentation.adapters.MoviesHorizontalAdapter
 import kotlinx.coroutines.launch
@@ -35,9 +32,17 @@ class HomePageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = MoviesHorizontalAdapter()
-        binding.rvPremier.adapter = adapter
-        binding.rvPremier.addItemDecoration(
+        val adapterPremier = MoviesHorizontalAdapter()
+        val adapterPopular = MoviesHorizontalAdapter()
+        binding.rvComedyRussian.adapter = adapterPremier
+        binding.rvComedyRussian.addItemDecoration(
+            HorizontalSpaceItemDecoration(
+                resources.getDimensionPixelSize(R.dimen.margin_start),
+                resources.getDimensionPixelSize(R.dimen.space_between)
+            )
+        )
+        binding.rvPopular.adapter = adapterPopular
+        binding.rvPopular.addItemDecoration(
             HorizontalSpaceItemDecoration(
                 resources.getDimensionPixelSize(R.dimen.margin_start),
                 resources.getDimensionPixelSize(R.dimen.space_between)
@@ -46,12 +51,17 @@ class HomePageFragment : Fragment() {
         onBottomNav()
         lifecycleScope.launch {
             try {
-                val list = ApiFactory.apiService.getDramaFranceMovieList()
-                Log.d("AAA", list.toString())
-                val a = list.movies.map {
+                val premier = ApiFactory.apiService.getComedyRussiaMovieList()
+                val popular = ApiFactory.apiService.getPopularMovieList()
+                Log.d("AAA", premier.toString())
+                val a = premier.movies.map {
                     it.toEntity()
                 }
-                adapter.submitList(a)
+                val b = popular.movies.map {
+                    it.toEntity()
+                }
+                adapterPopular.submitList(b)
+                adapterPremier.submitList(a)
             } catch (e: Exception) {
                 Log.d("AAA", e.toString())
             }

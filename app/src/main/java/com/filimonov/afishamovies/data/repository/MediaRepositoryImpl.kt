@@ -10,8 +10,8 @@ class MediaRepositoryImpl : MediaRepository {
 
     private val apiService = ApiFactory.apiService
 
-    override suspend fun getPremierMovieList(): List<Movie> {
-        return apiService.getPremiereMovieList().movies.map {
+    override suspend fun getComedyRussiaMovieList(): List<Movie> {
+        return apiService.getComedyRussiaMovieList().movies.map {
             it.toEntity()
         }
     }

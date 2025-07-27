@@ -5,7 +5,7 @@ import com.filimonov.afishamovies.domain.entities.Series
 
 interface MediaRepository {
 
-    suspend fun getPremierMovieList(): List<Movie>
+    suspend fun getComedyRussiaMovieList(): List<Movie>
 
     suspend fun getPopularMovieList(): List<Movie>
 

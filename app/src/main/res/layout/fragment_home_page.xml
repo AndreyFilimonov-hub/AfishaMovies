@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,53 +7,244 @@
     android:background="@color/white"
     tools:context=".presentation.HomePageFragment">
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="@dimen/zero_dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_start"
-        android:layout_marginTop="@dimen/margin_top"
-        android:layout_weight="1"
-        android:text="@string/afisha_movies"
-        android:textSize="@dimen/text_size_24"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_premier"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_start"
-        android:layout_marginTop="@dimen/margin_top_46dp"
-        android:text="@string/premiers"
-        android:textSize="@dimen/text_size_18"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title" />
-
-    <TextView
-        android:id="@+id/tv_premier_all"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top_46dp"
-        android:layout_marginEnd="@dimen/margin_start"
-        android:text="@string/all"
-        android:textColor="@color/blue"
-        android:textSize="@dimen/text_size_14"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_premier"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:clipToPadding="false"
-        android:maxHeight="194dp"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_premier"
-        tools:listitem="@layout/item_image" />
+        android:layout_height="match_parent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="@dimen/zero_dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_start"
+            android:layout_marginTop="@dimen/margin_top"
+            android:layout_weight="1"
+            android:text="@string/afisha_movies"
+            android:textSize="@dimen/text_size_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_comedy_russian"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_start"
+            android:layout_marginTop="@dimen/margin_top_46dp"
+            android:text="@string/russian_comedy"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/rv_comedy_russian"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+        <TextView
+            android:id="@+id/tv_comedy_russian_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top_46dp"
+            android:layout_marginEnd="@dimen/margin_start"
+            android:text="@string/all"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_comedy_russian"
+            android:layout_width="match_parent"
+            android:layout_height="235dp"
+            android:layout_marginTop="24dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_comedy_russian"
+            tools:listitem="@layout/item_image" />
+
+        <TextView
+            android:id="@+id/tv_popular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_start"
+            android:layout_marginTop="26dp"
+            android:text="@string/popular"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_comedy_russian" />
+
+        <TextView
+            android:id="@+id/tv_popular_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="@dimen/margin_start"
+            android:text="@string/all"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_comedy_russian" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_popular"
+            android:layout_width="match_parent"
+            android:layout_height="235dp"
+            android:layout_marginTop="24dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_popular"
+            tools:listitem="@layout/item_image" />
+
+        <TextView
+            android:id="@+id/tv_actionUSA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_start"
+            android:layout_marginTop="26dp"
+            android:text="@string/action_usa"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_popular" />
+
+        <TextView
+            android:id="@+id/tv_actionUSA_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="@dimen/margin_start"
+            android:text="@string/all"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_popular" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_actionUSA"
+            android:layout_width="match_parent"
+            android:layout_height="235dp"
+            android:layout_marginTop="24dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_actionUSA"
+            tools:listitem="@layout/item_image" />
+
+        <TextView
+            android:id="@+id/tv_top250"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_start"
+            android:layout_marginTop="26dp"
+            android:text="@string/top250"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_actionUSA" />
+
+        <TextView
+            android:id="@+id/tv_top250_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="@dimen/margin_start"
+            android:text="@string/all"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_actionUSA" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_top250"
+            android:layout_width="match_parent"
+            android:layout_height="235dp"
+            android:layout_marginTop="24dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_top250"
+            tools:listitem="@layout/item_image" />
+
+        <TextView
+            android:id="@+id/tv_drama_france"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_start"
+            android:layout_marginTop="26dp"
+            android:text="@string/drama_france"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_top250" />
+
+        <TextView
+            android:id="@+id/tv_drama_france_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="@dimen/margin_start"
+            android:text="@string/all"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_top250" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_drama_france"
+            android:layout_width="match_parent"
+            android:layout_height="235dp"
+            android:layout_marginTop="24dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_drama_france"
+            tools:listitem="@layout/item_image" />
+
+        <TextView
+            android:id="@+id/tv_series"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_start"
+            android:layout_marginTop="26dp"
+            android:text="@string/series"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_drama_france" />
+
+        <TextView
+            android:id="@+id/tv_series_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="@dimen/margin_start"
+            android:text="@string/all"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_drama_france" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_series"
+            android:layout_width="match_parent"
+            android:layout_height="235dp"
+            android:layout_marginTop="24dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_series"
+            tools:listitem="@layout/item_image" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

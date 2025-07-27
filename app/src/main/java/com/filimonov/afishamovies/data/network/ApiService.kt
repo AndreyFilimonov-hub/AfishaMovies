@@ -4,32 +4,76 @@ import com.filimonov.afishamovies.data.model.MovieResponse
 import com.filimonov.afishamovies.data.model.SeriesResponse
 import retrofit2.http.GET
 import retrofit2.http.Headers
+import retrofit2.http.Query
 
 interface ApiService {
 
     @Headers("X-API-KEY:$API_KEY")
-    @GET("movie?page=1&limit=10&notNullFields=year&sortField=premiere.russia&sortType=-1")
-    suspend fun getPremiereMovieList(): MovieResponse
+    @GET("movie")
+    suspend fun getComedyRussiaMovieList(
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 20,
+        @Query("sortField") sortField: String = "votes.kp",
+        @Query("sortType") sortType: Int = -1,
+        @Query("type") type: String = "movie",
+        @Query("genres.name") genresName: String = "комедия",
+        @Query("countries.name") countryName: String = "Россия"
+        ): MovieResponse
 
     @Headers("X-API-KEY:$API_KEY")
-    @GET("movie?page=1&limit=10&notNullFields=year&sortField=votes.kp&sortType=-1")
-    suspend fun getPopularMovieList(): MovieResponse
+    @GET("movie")
+    suspend fun getPopularMovieList(
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 20,
+        @Query("notNullFields") notNullFields: String = "year",
+        @Query("sortField") sortField: String = "votes.kp",
+        @Query("sortType") sortType: Int = -1
+    ): MovieResponse
 
     @Headers("X-API-KEY:$API_KEY")
-    @GET("movie?page=1&limit=10&sortField=rating.kp&sortType=-1&type=movie&genres.name=%D0%B1%D0%BE%D0%B5%D0%B2%D0%B8%D0%BA&countries.name=%D0%A1%D0%A8%D0%90")
-    suspend fun getActionMoviesUSAMovieList(): MovieResponse
+    @GET("movie")
+    suspend fun getActionMoviesUSAMovieList(
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 20,
+        @Query("sortField") sortField: String = "rating.kp",
+        @Query("sortType") sortType: Int = -1,
+        @Query("type") type: String = "movie",
+        @Query("genres.name") genresName: String = "боевик",
+        @Query("countries.name") countryName: String = "США"
+    ): MovieResponse
 
     @Headers("X-API-KEY:$API_KEY")
-    @GET("movie?page=1&limit=10&notNullFields=top250&sortField=top250&sortType=1&lists=top250")
-    suspend fun getTop250MovieList(): MovieResponse
+    @GET("movie")
+    suspend fun getTop250MovieList(
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 20,
+        @Query("notNullFields") notNullFields: String = "top250",
+        @Query("sortField") sortField: String = "top250",
+        @Query("sortType") sortType: Int = 1,
+        @Query("lists") type: String = "top250",
+    ): MovieResponse
 
     @Headers("X-API-KEY:$API_KEY")
-    @GET("movie?page=1&limit=10&sortField=rating.kp&sortType=-1&genres.name=%D0%B4%D1%80%D0%B0%D0%BC%D0%B0&countries.name=%D0%A4%D1%80%D0%B0%D0%BD%D1%86%D0%B8%D1%8F")
-    suspend fun getDramaFranceMovieList(): MovieResponse
+    @GET("movie")
+    suspend fun getDramaFranceMovieList(
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 20,
+        @Query("sortField") sortField: String = "rating.kp",
+        @Query("sortType") sortType: Int = -1,
+        @Query("type") type: String = "movie",
+        @Query("genres.name") genresName: String = "драма",
+        @Query("countries.name") countryName: String = "Франция"
+    ): MovieResponse
 
     @Headers("X-API-KEY:$API_KEY")
-    @GET("movie??page=1&limit=10&sortField=rating.kp&sortType=-1&type=tv-series")
-    suspend fun getSeriesList(): SeriesResponse
+    @GET("movie")
+    suspend fun getSeriesList(
+        @Query("page") page: Int = 1,
+        @Query("limit") limit: Int = 20,
+        @Query("sortField") sortField: String = "rating.kp",
+        @Query("sortType") sortType: Int = -1,
+        @Query("type") type: String = "tv-series"
+    ): SeriesResponse
 
     companion object {
 
