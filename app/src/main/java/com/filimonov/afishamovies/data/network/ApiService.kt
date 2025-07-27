@@ -13,6 +13,7 @@ interface ApiService {
     suspend fun getComedyRussiaMovieList(
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 20,
+        @Query("notNullFields") notNullFields: String = "name",
         @Query("sortField") sortField: String = "votes.kp",
         @Query("sortType") sortType: Int = -1,
         @Query("type") type: String = "movie",
@@ -25,7 +26,8 @@ interface ApiService {
     suspend fun getPopularMovieList(
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 20,
-        @Query("notNullFields") notNullFields: String = "year",
+        @Query("notNullFields") notNullFieldsName: String = "name",
+        @Query("notNullFields") notNullFieldsYear: String = "year",
         @Query("sortField") sortField: String = "votes.kp",
         @Query("sortType") sortType: Int = -1
     ): MovieResponse
@@ -35,6 +37,7 @@ interface ApiService {
     suspend fun getActionMoviesUSAMovieList(
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 20,
+        @Query("notNullFields") notNullFields: String = "name",
         @Query("sortField") sortField: String = "rating.kp",
         @Query("sortType") sortType: Int = -1,
         @Query("type") type: String = "movie",
@@ -47,6 +50,7 @@ interface ApiService {
     suspend fun getTop250MovieList(
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 20,
+        @Query("notNullFields") notNullFieldsName: String = "name",
         @Query("notNullFields") notNullFields: String = "top250",
         @Query("sortField") sortField: String = "top250",
         @Query("sortType") sortType: Int = 1,
@@ -58,6 +62,7 @@ interface ApiService {
     suspend fun getDramaFranceMovieList(
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 20,
+        @Query("notNullFields") notNullFields: String = "name",
         @Query("sortField") sortField: String = "rating.kp",
         @Query("sortType") sortType: Int = -1,
         @Query("type") type: String = "movie",
@@ -70,6 +75,7 @@ interface ApiService {
     suspend fun getSeriesList(
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 20,
+        @Query("notNullFields") notNullFields: String = "name",
         @Query("sortField") sortField: String = "rating.kp",
         @Query("sortType") sortType: Int = -1,
         @Query("type") type: String = "tv-series"
