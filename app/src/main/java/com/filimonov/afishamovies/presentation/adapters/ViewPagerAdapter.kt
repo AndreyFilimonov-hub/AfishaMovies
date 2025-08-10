@@ -1,9 +1,10 @@
-package com.filimonov.afishamovies
+package com.filimonov.afishamovies.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.filimonov.afishamovies.databinding.ItemPageBinding
+import com.filimonov.afishamovies.presentation.OnBoardModel
 
 class ViewPagerAdapter(private val onBoardModels: List<OnBoardModel>) : RecyclerView.Adapter<ViewPagerAdapter.PagerViewHolder>() {
 
