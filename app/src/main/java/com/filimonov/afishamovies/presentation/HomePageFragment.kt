@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentHomePageBinding
 import com.filimonov.afishamovies.presentation.adapters.HorizontalSpaceItemDecoration
-import com.filimonov.afishamovies.presentation.adapters.MoviesHorizontalAdapter
-import com.filimonov.afishamovies.presentation.adapters.SeriesHorizontalAdapter
+import com.filimonov.afishamovies.presentation.adapters.MediaHorizontalAdapter
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomePageFragment : Fragment() {
 
@@ -23,12 +23,12 @@ class HomePageFragment : Fragment() {
         ViewModelProvider(this)[HomePageViewModel::class.java]
     }
 
-    private val adapterComedyRussian = MoviesHorizontalAdapter()
-    private val adapterPopular = MoviesHorizontalAdapter()
-    private val adapterActionUSA = MoviesHorizontalAdapter()
-    private val adapterTop250 = MoviesHorizontalAdapter()
-    private val adapterDramaFrance = MoviesHorizontalAdapter()
-    private val adapterSeries = SeriesHorizontalAdapter()
+    private val adapterComedyRussian = MediaHorizontalAdapter()
+    private val adapterPopular = MediaHorizontalAdapter()
+    private val adapterActionUSA = MediaHorizontalAdapter()
+    private val adapterTop250 = MediaHorizontalAdapter()
+    private val adapterDramaFrance = MediaHorizontalAdapter()
+    private val adapterSeries = MediaHorizontalAdapter()
 
 
     override fun onCreateView(
@@ -43,14 +43,29 @@ class HomePageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         onBottomNav()
 
-        setupMoviesRecyclerView(binding.rvComedyRussian, adapterComedyRussian)
-        setupMoviesRecyclerView(binding.rvPopular, adapterPopular)
-        setupMoviesRecyclerView(binding.rvActionUSA, adapterActionUSA)
-        setupMoviesRecyclerView(binding.rvTop250, adapterTop250)
-        setupMoviesRecyclerView(binding.rvDramaFrance, adapterDramaFrance)
-        setupSeriesRecyclerView(binding.rvSeries, adapterSeries)
+        setPaddingNestedScroll()
+
+        setupMediaRecyclerView(binding.rvComedyRussian, adapterComedyRussian)
+        setupMediaRecyclerView(binding.rvPopular, adapterPopular)
+        setupMediaRecyclerView(binding.rvActionUSA, adapterActionUSA)
+        setupMediaRecyclerView(binding.rvTop250, adapterTop250)
+        setupMediaRecyclerView(binding.rvDramaFrance, adapterDramaFrance)
+        setupMediaRecyclerView(binding.rvSeries, adapterSeries)
 
         observeViewModel()
+    }
+
+    private fun setPaddingNestedScroll() {
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bNav)
+        val nestedScroll = binding.root
+
+        bottomNavigationView.post {
+            val bottomHeight = bottomNavigationView.height
+
+            val layoutParams = nestedScroll.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.bottomMargin = bottomHeight
+            nestedScroll.layoutParams = layoutParams
+        }
     }
 
     private fun observeViewModel() {
@@ -74,17 +89,7 @@ class HomePageFragment : Fragment() {
         }
     }
 
-    private fun setupMoviesRecyclerView(rv: RecyclerView, adapter: MoviesHorizontalAdapter) {
-        rv.adapter = adapter
-        rv.addItemDecoration(
-            HorizontalSpaceItemDecoration(
-                resources.getDimensionPixelSize(R.dimen.margin_start),
-                resources.getDimensionPixelSize(R.dimen.space_between)
-            )
-        )
-    }
-
-    private fun setupSeriesRecyclerView(rv: RecyclerView, adapter: SeriesHorizontalAdapter) {
+    private fun setupMediaRecyclerView(rv: RecyclerView, adapter: MediaHorizontalAdapter) {
         rv.adapter = adapter
         rv.addItemDecoration(
             HorizontalSpaceItemDecoration(

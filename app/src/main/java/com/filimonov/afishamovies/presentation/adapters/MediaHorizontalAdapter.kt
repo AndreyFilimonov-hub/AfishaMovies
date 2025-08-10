@@ -9,10 +9,10 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ItemImageBinding
-import com.filimonov.afishamovies.domain.entities.Movie
+import com.filimonov.afishamovies.domain.entities.Media
 
-class MoviesHorizontalAdapter :
-    ListAdapter<Movie, MoviesHorizontalAdapter.MoviesViewHolder>(MovieDiffCallback()) {
+class MediaHorizontalAdapter :
+    ListAdapter<Media, MediaHorizontalAdapter.MoviesViewHolder>(MediaDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
         val binding = ItemImageBinding.inflate(
@@ -30,16 +30,24 @@ class MoviesHorizontalAdapter :
 
     class MoviesViewHolder(private val binding: ItemImageBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(movie: Movie) {
-            binding.tvName.text = movie.name
+        fun bind(media: Media) {
+            binding.tvName.text = media.name
             Glide.with(binding.root)
-                .load(movie.poster)
-                .transform(CenterCrop() ,RoundedCorners((4 * binding.root.context.resources.displayMetrics.density).toInt()))
+                .load(media.poster)
+                .transform(
+                    CenterCrop(),
+                    RoundedCorners((RADIUS_PX * binding.root.context.resources.displayMetrics.density).toInt())
+                )
                 .placeholder(R.drawable.onboard_second)
                 .into(binding.ivPoster)
-            binding.tvGenre.text = movie.genreMain
-            binding.tvRating.text = movie.rating.toString().substring(0, 3)
+            binding.tvGenre.text = media.genreMain
+            binding.tvRating.text = media.rating.toString().substring(0, 3)
 
         }
+    }
+
+    companion object {
+
+        private const val RADIUS_PX = 4
     }
 }

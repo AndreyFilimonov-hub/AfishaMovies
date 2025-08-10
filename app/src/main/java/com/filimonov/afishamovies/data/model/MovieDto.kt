@@ -9,7 +9,7 @@ data class MovieDto(
     @SerializedName("description") val description: String?,
     @SerializedName("shortDescription") val shortDescription: String?,
     @SerializedName("rating") val rating: RatingDto,
-    @SerializedName("movieLength") val movieLength: Int,
+    @SerializedName("movieLength") val mediaLength: Int,
     @SerializedName("ageRating") val ageRating: Int,
     @SerializedName("poster") val poster: PosterDto,
     @SerializedName("genres") val genres: List<GenreDto>,

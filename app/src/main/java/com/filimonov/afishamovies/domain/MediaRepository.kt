@@ -1,19 +1,18 @@
 package com.filimonov.afishamovies.domain
 
-import com.filimonov.afishamovies.domain.entities.Movie
-import com.filimonov.afishamovies.domain.entities.Series
+import com.filimonov.afishamovies.domain.entities.Media
 
 interface MediaRepository {
 
-    suspend fun getComedyRussiaMovieList(): List<Movie>
+    suspend fun getComedyRussiaMovieList(): List<Media>
 
-    suspend fun getPopularMovieList(): List<Movie>
+    suspend fun getPopularMovieList(): List<Media>
 
-    suspend fun getActionUSAMovieList(): List<Movie>
+    suspend fun getActionUSAMovieList(): List<Media>
 
-    suspend fun getTop250MovieList(): List<Movie>
+    suspend fun getTop250MovieList(): List<Media>
 
-    suspend fun getDramaFranceMovieList(): List<Movie>
+    suspend fun getDramaFranceMovieList(): List<Media>
 
-    suspend fun getSeriesList(): List<Series>
+    suspend fun getSeriesList(): List<Media>
 }

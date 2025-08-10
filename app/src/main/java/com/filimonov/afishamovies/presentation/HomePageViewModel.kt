@@ -6,8 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filimonov.afishamovies.data.repository.MediaRepositoryImpl
-import com.filimonov.afishamovies.domain.entities.Movie
-import com.filimonov.afishamovies.domain.entities.Series
+import com.filimonov.afishamovies.domain.entities.Media
 import com.filimonov.afishamovies.domain.usecases.GetActionUSAMovieListUseCase
 import com.filimonov.afishamovies.domain.usecases.GetComedyRussiaMovieListUseCase
 import com.filimonov.afishamovies.domain.usecases.GetDramaFranceMovieListUseCase
@@ -15,6 +14,8 @@ import com.filimonov.afishamovies.domain.usecases.GetPopularMovieListUseCase
 import com.filimonov.afishamovies.domain.usecases.GetSeriesListUseCase
 import com.filimonov.afishamovies.domain.usecases.GetTop250MovieListUseCase
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 
 class HomePageViewModel : ViewModel() {
 
@@ -28,28 +29,28 @@ class HomePageViewModel : ViewModel() {
     private val getSeriesListUseCase = GetSeriesListUseCase(repository)
 
 
-    private val _comedyRussian: MutableLiveData<List<Movie>> = MutableLiveData()
-    val comedyRussian: LiveData<List<Movie>>
+    private val _comedyRussian: MutableLiveData<List<Media>> = MutableLiveData()
+    val comedyRussian: LiveData<List<Media>>
         get() = _comedyRussian
 
-    private val _popularMovies: MutableLiveData<List<Movie>> = MutableLiveData()
-    val popularMovies: LiveData<List<Movie>>
+    private val _popularMovies: MutableLiveData<List<Media>> = MutableLiveData()
+    val popularMovies: LiveData<List<Media>>
         get() = _popularMovies
 
-    private val _actionUSA: MutableLiveData<List<Movie>> = MutableLiveData()
-    val actionUSA: LiveData<List<Movie>>
+    private val _actionUSA: MutableLiveData<List<Media>> = MutableLiveData()
+    val actionUSA: LiveData<List<Media>>
         get() = _actionUSA
 
-    private val _top250: MutableLiveData<List<Movie>> = MutableLiveData()
-    val top250: LiveData<List<Movie>>
+    private val _top250: MutableLiveData<List<Media>> = MutableLiveData()
+    val top250: LiveData<List<Media>>
         get() = _top250
 
-    private val _dramaFrance: MutableLiveData<List<Movie>> = MutableLiveData()
-    val dramaFrance: LiveData<List<Movie>>
+    private val _dramaFrance: MutableLiveData<List<Media>> = MutableLiveData()
+    val dramaFrance: LiveData<List<Media>>
         get() = _dramaFrance
 
-    private val _series: MutableLiveData<List<Series>> = MutableLiveData()
-    val series: LiveData<List<Series>>
+    private val _series: MutableLiveData<List<Media>> = MutableLiveData()
+    val series: LiveData<List<Media>>
         get() = _series
 
     init {
@@ -60,49 +61,55 @@ class HomePageViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 _comedyRussian.value = getComedyRussiaMovieListUseCase()
-                Log.d("AAA", "Comedy: " + comedyRussian.value.toString())
-            } catch (e: Exception) {
-                Log.d("AAA", "Comedy: $e")
+            } catch (e: IOException) {
+                Log.d("HomePageViewModel", e.toString())
+            } catch (e: HttpException) {
+                Log.d("HomePageViewModel", e.toString())
             }
         }
         viewModelScope.launch {
             try {
                 _popularMovies.value = getPopularMovieListUseCase()
-                Log.d("AAA", "Popular: " + popularMovies.value.toString())
-            } catch (e: Exception) {
-                Log.d("AAA", "Popular: $e")
+            } catch (e: IOException) {
+                Log.d("HomePageViewModel", e.toString())
+            } catch (e: HttpException) {
+                Log.d("HomePageViewModel", e.toString())
             }
         }
         viewModelScope.launch {
             try {
                 _actionUSA.value = getActionUSAMovieListUseCase()
-                Log.d("AAA","ActionUSA: " +  actionUSA.value.toString())
-            } catch (e: Exception) {
-                Log.d("AAA", "ActionUSA: $e")
+            } catch (e: IOException) {
+                Log.d("HomePageViewModel", e.toString())
+            } catch (e: HttpException) {
+                Log.d("HomePageViewModel", e.toString())
             }
         }
         viewModelScope.launch {
             try {
                 _top250.value = getTop250MovieListUseCase()
-                Log.d("AAA","Top250: " +  top250.value.toString())
-            } catch (e: Exception) {
-                Log.d("AAA", "Top250: $e")
+            } catch (e: IOException) {
+                Log.d("HomePageViewModel", e.toString())
+            } catch (e: HttpException) {
+                Log.d("HomePageViewModel", e.toString())
             }
         }
         viewModelScope.launch {
             try {
                 _dramaFrance.value = getDramaFranceMovieListUseCase()
-                Log.d("AAA","DramaFrance: " +  dramaFrance.value.toString())
-            } catch (e: Exception) {
-                Log.d("AAA", "DramaFrance: $e")
+            } catch (e: IOException) {
+                Log.d("HomePageViewModel", e.toString())
+            } catch (e: HttpException) {
+                Log.d("HomePageViewModel", e.toString())
             }
         }
         viewModelScope.launch {
             try {
                 _series.value = getSeriesListUseCase()
-                Log.d("AAA","Series: " +  series.value.toString())
-            } catch (e: Exception) {
-                Log.d("AAA", "Series: $e")
+            } catch (e: IOException) {
+                Log.d("HomePageViewModel", e.toString())
+            } catch (e: HttpException) {
+                Log.d("HomePageViewModel", e.toString())
             }
         }
     }

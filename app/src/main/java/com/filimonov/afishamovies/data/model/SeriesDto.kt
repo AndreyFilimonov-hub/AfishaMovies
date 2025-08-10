@@ -8,7 +8,7 @@ data class SeriesDto(
     @SerializedName("year") val year: Int,
     @SerializedName("shortDescription") val shortDescription: String?,
     @SerializedName("description") val description: String?,
-    @SerializedName("seriesLength") val seriesLength: Int?,
+    @SerializedName("seriesLength") val mediaLength: Int?,
     @SerializedName("ageRating") val ageRating: Int,
     @SerializedName("genres") val genres: List<GenreDto>,
     @SerializedName("countries") val countries: List<CountryDto>,

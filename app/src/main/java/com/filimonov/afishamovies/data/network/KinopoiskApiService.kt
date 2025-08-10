@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
-interface ApiService {
+interface KinopoiskApiService {
 
     @Headers("X-API-KEY:$API_KEY")
     @GET("movie")
@@ -76,7 +76,7 @@ interface ApiService {
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 20,
         @Query("notNullFields") notNullFields: String = "name",
-        @Query("sortField") sortField: String = "rating.kp",
+        @Query("sortField") sortField: String = "votes.kp",
         @Query("sortType") sortType: Int = -1,
         @Query("type") type: String = "tv-series"
     ): SeriesResponse

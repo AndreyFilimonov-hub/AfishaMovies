@@ -2,17 +2,16 @@ package com.filimonov.afishamovies.data.mapper
 
 import com.filimonov.afishamovies.data.model.MovieDto
 import com.filimonov.afishamovies.data.model.SeriesDto
-import com.filimonov.afishamovies.domain.entities.Movie
-import com.filimonov.afishamovies.domain.entities.Series
+import com.filimonov.afishamovies.domain.entities.Media
 
-fun MovieDto.toEntity(): Movie {
-    return Movie(
+fun MovieDto.toEntity(): Media {
+    return Media(
         id = this.id,
         year = this.year,
         name = this.name,
         shortDescription = this.shortDescription,
         description = this.description,
-        movieLength = this.movieLength,
+        mediaLength = this.mediaLength,
         ageRating = this.ageRating,
         genres = this.genres.map {
             it.name
@@ -21,27 +20,27 @@ fun MovieDto.toEntity(): Movie {
         countries = this.countries.joinToString(),
         rating = this.rating.kp,
         poster = this.poster.url,
-        similarMovies = null,
+        similarMedia = null,
         isFavourite = false,
         isWatching = false
     )
 }
 
-fun SeriesDto.toEntity(): Series {
-    return Series(
+fun SeriesDto.toEntity(): Media {
+    return Media(
         id = this.id,
         year = this.year,
         name = this.name,
         shortDescription = this.shortDescription ?: "",
         description = this.description ?: "",
-        seriesLength = this.seriesLength ?: 0,
+        mediaLength = this.mediaLength ?: 0,
         ageRating = this.ageRating,
         genres = this.genres.map { it.name },
         genreMain = this.genres.first().name,
         countries = this.countries.joinToString(),
         rating = this.rating.kp,
         poster = this.poster.url,
-        similarSeries = null,
+        similarMedia = null,
         isFavourite = false,
         isWatching = false
     )
