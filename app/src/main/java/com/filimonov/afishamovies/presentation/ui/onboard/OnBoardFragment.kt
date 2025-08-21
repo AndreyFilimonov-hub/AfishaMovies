@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.presentation
+package com.filimonov.afishamovies.presentation.ui.onboard
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentOnBoardBinding
-import com.filimonov.afishamovies.presentation.adapters.ViewPagerAdapter
+import com.filimonov.afishamovies.presentation.ui.homepage.HomePageFragment
+import com.filimonov.afishamovies.presentation.ui.MainActivity
 
 
 class OnBoardFragment : Fragment() {

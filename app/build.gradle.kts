@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+val apiKey = project.findProperty("API_KEY") ?: ""
+
 android {
     namespace = "com.filimonov.afishamovies"
     compileSdk = 35
@@ -16,6 +18,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
+        buildConfigField("String", "API_KEY", "\"${apiKey}\"")
     }
 
     buildTypes {
@@ -35,6 +40,7 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
+        buildConfig = true
         viewBinding = true
     }
 }

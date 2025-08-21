@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.presentation.adapters
+package com.filimonov.afishamovies.presentation.ui
 
 import android.graphics.Rect
 import android.view.View

@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.presentation
+package com.filimonov.afishamovies.presentation.ui.homepage
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentHomePageBinding
-import com.filimonov.afishamovies.presentation.adapters.HorizontalSpaceItemDecoration
-import com.filimonov.afishamovies.presentation.adapters.MediaHorizontalAdapter
+import com.filimonov.afishamovies.presentation.ui.HorizontalSpaceItemDecoration
+import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomePageFragment : Fragment() {

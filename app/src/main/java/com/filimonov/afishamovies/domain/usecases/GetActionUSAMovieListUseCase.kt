@@ -1,11 +1,11 @@
 package com.filimonov.afishamovies.domain.usecases
 
-import com.filimonov.afishamovies.domain.MediaRepository
-import com.filimonov.afishamovies.domain.entities.Media
+import com.filimonov.afishamovies.domain.repository.HomePageRepository
+import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 
-class GetActionUSAMovieListUseCase(private val repository: MediaRepository) {
+class GetActionUSAMovieListUseCase(private val repository: HomePageRepository) {
 
-    suspend operator fun invoke(): List<Media> {
+    suspend operator fun invoke(): List<MediaBannerEntity> {
         return repository.getActionUSAMovieList()
     }
 }

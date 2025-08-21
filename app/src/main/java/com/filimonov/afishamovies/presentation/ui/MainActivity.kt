@@ -1,14 +1,11 @@
-package com.filimonov.afishamovies.presentation
+package com.filimonov.afishamovies.presentation.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.filimonov.afishamovies.R
-import com.filimonov.afishamovies.data.network.ApiFactory
 import com.filimonov.afishamovies.databinding.ActivityMainBinding
-import kotlinx.coroutines.launch
+import com.filimonov.afishamovies.presentation.ui.onboard.OnBoardFragment
 
 class MainActivity : AppCompatActivity() {
 

@@ -16,4 +16,19 @@
     <dimen name="margin_top_46dp">46dp</dimen>
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="space_between">4dp</dimen>
+    <dimen name="media_banner">235dp</dimen>
+    <dimen name="margin_top24">24dp</dimen>
+    <dimen name="margin_top26">26dp</dimen>
+    <dimen name="margin_top36">36dp</dimen>
+    <dimen name="poster_height">156dp</dimen>
+    <dimen name="margin6dp">6dp</dimen>
+    <dimen name="margin_start4dp">4dp</dimen>
+    <dimen name="margin_top8dp">8dp</dimen>
+    <dimen name="text_size14sp">14sp</dimen>
+    <dimen name="margin_top2dp">2dp</dimen>
+    <dimen name="radius8dp">8dp</dimen>
+    <dimen name="padding_bottom2dp">2dp</dimen>
+    <dimen name="padding_left4dp">4dp</dimen>
+    <dimen name="padding_right4dp">4dp</dimen>
+    <dimen name="padding_top2dp">2dp</dimen>
 </resources>

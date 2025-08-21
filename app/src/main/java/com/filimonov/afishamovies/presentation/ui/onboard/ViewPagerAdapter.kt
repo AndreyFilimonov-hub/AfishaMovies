@@ -1,14 +1,11 @@
-package com.filimonov.afishamovies.presentation.adapters
+package com.filimonov.afishamovies.presentation.ui.onboard
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.filimonov.afishamovies.databinding.ItemPageBinding
-import com.filimonov.afishamovies.presentation.OnBoardModel
 
 class ViewPagerAdapter(private val onBoardModels: List<OnBoardModel>) : RecyclerView.Adapter<ViewPagerAdapter.PagerViewHolder>() {
-
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerViewHolder {
         val binding = ItemPageBinding.inflate(

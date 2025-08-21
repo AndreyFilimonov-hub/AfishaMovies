@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.presentation.adapters
+package com.filimonov.afishamovies.presentation.ui.homepage
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,10 +9,10 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ItemImageBinding
-import com.filimonov.afishamovies.domain.entities.Media
+import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 
 class MediaHorizontalAdapter :
-    ListAdapter<Media, MediaHorizontalAdapter.MoviesViewHolder>(MediaDiffCallback()) {
+    ListAdapter<MediaBannerEntity, MediaHorizontalAdapter.MoviesViewHolder>(MediaDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
         val binding = ItemImageBinding.inflate(
@@ -30,24 +30,24 @@ class MediaHorizontalAdapter :
 
     class MoviesViewHolder(private val binding: ItemImageBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(media: Media) {
-            binding.tvName.text = media.name
+        fun bind(mediaBannerEntity: MediaBannerEntity) {
+            binding.tvName.text = mediaBannerEntity.name
             Glide.with(binding.root)
-                .load(media.poster)
+                .load(mediaBannerEntity.posterUrl)
                 .transform(
                     CenterCrop(),
                     RoundedCorners((RADIUS_PX * binding.root.context.resources.displayMetrics.density).toInt())
                 )
                 .placeholder(R.drawable.onboard_second)
                 .into(binding.ivPoster)
-            binding.tvGenre.text = media.genreMain
-            binding.tvRating.text = media.rating.toString().substring(0, 3)
+            binding.tvGenre.text = mediaBannerEntity.genreMain
+            binding.tvRating.text = mediaBannerEntity.rating.toString().substring(0, 3)
 
         }
-    }
 
-    companion object {
+        companion object {
 
-        private const val RADIUS_PX = 4
+            private const val RADIUS_PX = 4
+        }
     }
 }
