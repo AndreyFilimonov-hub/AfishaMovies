@@ -42,7 +42,6 @@ class MediaHorizontalAdapter :
                 .into(binding.ivPoster)
             binding.tvGenre.text = mediaBannerEntity.genreMain
             binding.tvRating.text = mediaBannerEntity.rating.toString().substring(0, 3)
-
         }
 
         companion object {
