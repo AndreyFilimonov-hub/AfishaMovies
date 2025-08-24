@@ -5,13 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentHomePageBinding
-import com.filimonov.afishamovies.presentation.ui.HorizontalSpaceItemDecoration
 import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 
 class HomePageFragment : Fragment() {
 
@@ -23,12 +25,7 @@ class HomePageFragment : Fragment() {
         ViewModelProvider(this)[HomePageViewModel::class.java]
     }
 
-    private val adapterComedyRussian = MediaHorizontalAdapter()
-    private val adapterPopular = MediaHorizontalAdapter()
-    private val adapterActionUSA = MediaHorizontalAdapter()
-    private val adapterTop250 = MediaHorizontalAdapter()
-    private val adapterDramaFrance = MediaHorizontalAdapter()
-    private val adapterSeries = MediaHorizontalAdapter()
+    private val sectionAdapter = SectionAdapter()
 
 
     override fun onCreateView(
@@ -41,18 +38,15 @@ class HomePageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        onBottomNav()
 
         setPaddingNestedScroll()
-
-        setupMediaRecyclerView(binding.rvComedyRussian, adapterComedyRussian)
-        setupMediaRecyclerView(binding.rvPopular, adapterPopular)
-        setupMediaRecyclerView(binding.rvActionUSA, adapterActionUSA)
-        setupMediaRecyclerView(binding.rvTop250, adapterTop250)
-        setupMediaRecyclerView(binding.rvDramaFrance, adapterDramaFrance)
-        setupMediaRecyclerView(binding.rvSeries, adapterSeries)
-
         observeViewModel()
+
+        binding.rvSections.adapter = sectionAdapter
+
+        binding.buttonReload.setOnClickListener {
+            viewModel.reloadData()
+        }
     }
 
     private fun setPaddingNestedScroll() {
@@ -69,34 +63,33 @@ class HomePageFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.comedyRussian.observe(viewLifecycleOwner) {
-            adapterComedyRussian.submitList(it)
-        }
-        viewModel.popularMovies.observe(viewLifecycleOwner) {
-            adapterPopular.submitList(it)
-        }
-        viewModel.actionUSA.observe(viewLifecycleOwner) {
-            adapterActionUSA.submitList(it)
-        }
-        viewModel.top250.observe(viewLifecycleOwner) {
-            adapterTop250.submitList(it)
-        }
-        viewModel.dramaFrance.observe(viewLifecycleOwner) {
-            adapterDramaFrance.submitList(it)
-        }
-        viewModel.series.observe(viewLifecycleOwner) {
-            adapterSeries.submitList(it)
-        }
-    }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.state.collect {
+                    when (it) {
+                        is HomePageState.Loading -> {
+                            binding.error.visibility = View.INVISIBLE
+                            binding.success.visibility = View.INVISIBLE
+                            binding.loading.visibility = View.VISIBLE
+                        }
 
-    private fun setupMediaRecyclerView(rv: RecyclerView, adapter: MediaHorizontalAdapter) {
-        rv.adapter = adapter
-        rv.addItemDecoration(
-            HorizontalSpaceItemDecoration(
-                resources.getDimensionPixelSize(R.dimen.margin_start),
-                resources.getDimensionPixelSize(R.dimen.space_between)
-            )
-        )
+                        HomePageState.Error -> {
+                            binding.loading.visibility = View.INVISIBLE
+                            binding.error.visibility = View.VISIBLE
+                        }
+
+                        is HomePageState.Success -> {
+                            onBottomNav()
+
+                            binding.loading.visibility = View.INVISIBLE
+                            binding.success.visibility = View.VISIBLE
+
+                            sectionAdapter.submitList(it.categories)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun onBottomNav() {
