@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@color/white"
+    tools:context=".presentation.ui.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
@@ -21,11 +22,13 @@
         android:id="@+id/bNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:paddingHorizontal="@dimen/padding_horizontal_bottomnav"
         app:itemActiveIndicatorStyle="@android:color/transparent"
         app:itemIconSize="@dimen/icon_size_bottomnav"
         app:itemIconTint="@drawable/bottom_nav_selector"
         app:itemRippleColor="@null"
+        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom" />
 
