@@ -12,23 +12,23 @@ import com.filimonov.afishamovies.databinding.ItemImageBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 
 class MediaHorizontalAdapter :
-    ListAdapter<MediaBannerEntity, MediaHorizontalAdapter.MoviesViewHolder>(MediaDiffCallback()) {
+    ListAdapter<MediaBannerEntity, MediaHorizontalAdapter.MediaViewHolder>(MediaDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
         val binding = ItemImageBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return MoviesViewHolder(binding)
+        return MediaViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
         val movie = getItem(position)
         holder.bind(movie)
     }
 
-    class MoviesViewHolder(private val binding: ItemImageBinding) : RecyclerView.ViewHolder(binding.root) {
+    class MediaViewHolder(private val binding: ItemImageBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(mediaBannerEntity: MediaBannerEntity) {
             binding.tvName.text = mediaBannerEntity.name
