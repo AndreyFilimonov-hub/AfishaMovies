@@ -1,11 +1,14 @@
-package com.filimonov.afishamovies
+package com.filimonov.afishamovies.presentation.ui.onboard
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentOnBoardBinding
+import com.filimonov.afishamovies.presentation.ui.homepage.HomePageFragment
+import com.filimonov.afishamovies.presentation.ui.MainActivity
 
 
 class OnBoardFragment : Fragment() {
@@ -27,7 +30,7 @@ class OnBoardFragment : Fragment() {
         offBottomNav()
         setupViewPager()
         binding.tvSkip.setOnClickListener {
-            // TODO: go HomeFragment
+            launchHomePageFragment()
         }
     }
 
@@ -40,7 +43,7 @@ class OnBoardFragment : Fragment() {
     }
 
     private fun getOnBoardModels() = listOf(
-        OnBoardModel("Узнавай \nо премьерах" ,R.drawable.onboard_first),
+        OnBoardModel("Узнавай \nо премьерах" , R.drawable.onboard_first),
         OnBoardModel("Создавай \nколлекции", R.drawable.onboard_second),
         OnBoardModel("Делись \nс друзьями", R.drawable.onboard_third),
     )
@@ -48,6 +51,12 @@ class OnBoardFragment : Fragment() {
     private fun offBottomNav() {
         val bindingMain = (requireActivity() as MainActivity).binging
         bindingMain.bNav.visibility = View.INVISIBLE
+    }
+
+    private fun launchHomePageFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, HomePageFragment.newInstance())
+            .commit()
     }
 
     override fun onDestroyView() {
