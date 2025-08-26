@@ -80,7 +80,6 @@ class HomePageFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.state.collect {
                     TransitionManager.beginDelayedTransition(binding.root)
-
                     when (it) {
                         is HomePageState.Loading -> {
                             binding.error.visibility = View.INVISIBLE
@@ -108,8 +107,15 @@ class HomePageFragment : Fragment() {
     }
 
     private fun onBottomNav() {
-        val bindingMain = (requireActivity() as MainActivity).binging
-        bindingMain.bNav.visibility = View.VISIBLE
+        val bNav = (requireActivity() as MainActivity).binging.bNav
+        bNav.apply {
+            visibility = View.VISIBLE
+            translationY = height.toFloat()
+        }
+            .animate()
+            .translationY(0f)
+            .setDuration(1000)
+            .start()
     }
 
     override fun onDestroyView() {

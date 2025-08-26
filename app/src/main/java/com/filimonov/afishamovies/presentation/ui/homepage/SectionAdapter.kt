@@ -25,7 +25,8 @@ class SectionAdapter :
         holder.bind(mediaSection)
     }
 
-    class MediaViewHolder(private val binding: ItemSectionBinding) : RecyclerView.ViewHolder(binding.root) {
+    class MediaViewHolder(private val binding: ItemSectionBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(mediaSection: MediaSection) {
             binding.tvTitle.text = mediaSection.title
@@ -33,10 +34,12 @@ class SectionAdapter :
             val mediaHorizontalAdapter = MediaHorizontalAdapter()
             binding.rvSection.adapter = mediaHorizontalAdapter
 
-            binding.rvSection.addItemDecoration(HorizontalSpaceItemDecoration(
-                binding.root.context.resources.getDimensionPixelSize(R.dimen.margin_start),
-                binding.root.context.resources.getDimensionPixelSize(R.dimen.space_between)
-            ))
+            binding.rvSection.addItemDecoration(
+                HorizontalSpaceItemDecoration(
+                    binding.root.context.resources.getDimensionPixelSize(R.dimen.margin_start),
+                    binding.root.context.resources.getDimensionPixelSize(R.dimen.space_between)
+                )
+            )
 
             mediaHorizontalAdapter.submitList(mediaSection.mediaList)
         }
