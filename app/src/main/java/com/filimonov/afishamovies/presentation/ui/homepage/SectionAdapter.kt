@@ -8,7 +8,9 @@ import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ItemSectionBinding
 import com.filimonov.afishamovies.presentation.ui.HorizontalSpaceItemDecoration
 
-class SectionAdapter :
+class SectionAdapter(
+    private val showAllClick: (String) -> Unit
+) :
     ListAdapter<MediaSection, SectionAdapter.MediaViewHolder>(MediaSectionDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
@@ -17,7 +19,7 @@ class SectionAdapter :
             parent,
             false
         )
-        return MediaViewHolder(binding)
+        return MediaViewHolder(binding, showAllClick)
     }
 
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
@@ -25,13 +27,16 @@ class SectionAdapter :
         holder.bind(mediaSection)
     }
 
-    class MediaViewHolder(private val binding: ItemSectionBinding) :
+    class MediaViewHolder(
+        private val binding: ItemSectionBinding,
+        private val showAllClick: (String) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(mediaSection: MediaSection) {
             binding.tvTitle.text = mediaSection.title
 
-            val mediaHorizontalAdapter = MediaHorizontalAdapter()
+            val mediaHorizontalAdapter = MediaHorizontalAdapter(mediaSection.title, showAllClick)
             binding.rvSection.adapter = mediaHorizontalAdapter
 
             binding.rvSection.addItemDecoration(
@@ -41,7 +46,9 @@ class SectionAdapter :
                 )
             )
 
-            mediaHorizontalAdapter.submitList(mediaSection.mediaList)
+            mediaHorizontalAdapter.submitList(
+                mediaSection.mediaList.map { Media.MediaBanner(it) } + Media.ShowAll
+            )
         }
     }
 }

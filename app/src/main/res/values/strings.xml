@@ -12,4 +12,5 @@
     <string name="series">Сериалы</string>
     <string name="russian_comedy">Русские комедии</string>
     <string name="retry">Повторить</string>
+    <string name="show_all">Показать все</string>
 </resources>

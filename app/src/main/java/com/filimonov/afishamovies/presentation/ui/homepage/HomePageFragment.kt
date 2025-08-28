@@ -1,6 +1,7 @@
 package com.filimonov.afishamovies.presentation.ui.homepage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,9 @@ class HomePageFragment : Fragment() {
         ViewModelProvider(this)[HomePageViewModel::class.java]
     }
 
-    private val sectionAdapter = SectionAdapter()
+    private val sectionAdapter = SectionAdapter(showAllClick = {
+        Log.d("AAA", "Show all click $it")
+    })
 
 
     override fun onCreateView(
