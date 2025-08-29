@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ItemSectionBinding
+import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.presentation.ui.HorizontalSpaceItemDecoration
 
 class SectionAdapter(
-    private val showAllClick: (String) -> Unit
+    private val onShowAllClick: (String) -> Unit,
+    private val onMediaClick: (MediaBannerEntity) -> Unit,
 ) :
     ListAdapter<MediaSection, SectionAdapter.MediaViewHolder>(MediaSectionDiffCallback()) {
 
@@ -19,7 +21,7 @@ class SectionAdapter(
             parent,
             false
         )
-        return MediaViewHolder(binding, showAllClick)
+        return MediaViewHolder(binding, onShowAllClick, onMediaClick)
     }
 
     override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
@@ -29,14 +31,16 @@ class SectionAdapter(
 
     class MediaViewHolder(
         private val binding: ItemSectionBinding,
-        private val showAllClick: (String) -> Unit
+        private val onShowAllClick: (String) -> Unit,
+        private val onMediaClick: (MediaBannerEntity) -> Unit,
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(mediaSection: MediaSection) {
             binding.tvTitle.text = mediaSection.title
 
-            val mediaHorizontalAdapter = MediaHorizontalAdapter(mediaSection.title, showAllClick)
+            val mediaHorizontalAdapter =
+                MediaHorizontalAdapter(mediaSection.title, onShowAllClick, onMediaClick)
             binding.rvSection.adapter = mediaHorizontalAdapter
 
             binding.rvSection.addItemDecoration(
@@ -49,6 +53,10 @@ class SectionAdapter(
             mediaHorizontalAdapter.submitList(
                 mediaSection.mediaList.map { Media.MediaBanner(it) } + Media.ShowAll
             )
+
+            binding.tvAll.setOnClickListener {
+                onShowAllClick(binding.tvTitle.text.toString())
+            }
         }
     }
 }

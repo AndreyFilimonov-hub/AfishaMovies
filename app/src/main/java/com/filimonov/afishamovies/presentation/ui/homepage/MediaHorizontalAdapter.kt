@@ -10,10 +10,12 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ItemImageBinding
 import com.filimonov.afishamovies.databinding.ItemShowAllBinding
+import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 
 class MediaHorizontalAdapter(
     private val sectionTitle: String,
-    private val showAllClick: (String) -> Unit
+    private val onShowAllClick: (String) -> Unit,
+    private val onMediaClick: (MediaBannerEntity) -> Unit,
 ) :
     ListAdapter<Media, RecyclerView.ViewHolder>(MediaDiffCallback()) {
 
@@ -31,7 +33,8 @@ class MediaHorizontalAdapter(
                         LayoutInflater.from(parent.context),
                         parent,
                         false
-                    )
+                    ),
+                    onMediaClick
                 )
             }
 
@@ -43,7 +46,7 @@ class MediaHorizontalAdapter(
                         false
                     ),
                     sectionTitle,
-                    showAllClick
+                    onShowAllClick
                 )
             }
 
@@ -72,7 +75,10 @@ class MediaHorizontalAdapter(
         }
     }
 
-    class MediaViewHolder(private val binding: ItemImageBinding) :
+    class MediaViewHolder(
+        private val binding: ItemImageBinding,
+        private val onMediaClick: (MediaBannerEntity) -> Unit
+        ) :
         RecyclerView.ViewHolder(binding.root) {
 
         companion object {
@@ -92,19 +98,23 @@ class MediaHorizontalAdapter(
                 .into(binding.ivPoster)
             binding.tvGenre.text = mediaBanner.media.name
             binding.tvRating.text = mediaBanner.media.rating.toString().substring(0, 3)
+
+            binding.ivPoster.setOnClickListener {
+                onMediaClick(mediaBanner.media)
+            }
         }
     }
 
     class ShowAllViewHolder(
         private val binding: ItemShowAllBinding,
         private val sectionTitle: String,
-        private val showAllClick: (String) -> Unit
+        private val onShowAllClick: (String) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind() {
             binding.ibShowAll.setOnClickListener {
-                showAllClick(sectionTitle)
+                onShowAllClick(sectionTitle)
             }
         }
     }
