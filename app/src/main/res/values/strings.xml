@@ -3,4 +3,14 @@
     <string name="afisha_movies">Afisha Movies</string>
     <string name="skip">Пропустить</string>
     <string name="welcome_image">welcome image</string>
+    <string name="all">Все</string>
+    <string name="poster">poster</string>
+    <string name="popular">Популярное</string>
+    <string name="action_usa">Боевики США</string>
+    <string name="top250">Топ 250</string>
+    <string name="drama_france">Драмы Франции</string>
+    <string name="series">Сериалы</string>
+    <string name="russian_comedy">Русские комедии</string>
+    <string name="retry">Повторить</string>
+    <string name="show_all">Показать все</string>
 </resources>
