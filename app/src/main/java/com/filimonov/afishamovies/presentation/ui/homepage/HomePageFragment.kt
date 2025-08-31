@@ -25,7 +25,14 @@ class HomePageFragment : Fragment() {
         ViewModelProvider(this)[HomePageViewModel::class.java]
     }
 
-    private val sectionAdapter = SectionAdapter()
+    private val sectionAdapter = SectionAdapter(
+        onShowAllClick = {
+            // TODO: launch ListPageFragment
+        },
+        onMediaClick = {
+            // TODO: launch MediaPageFragment
+        }
+    )
 
 
     override fun onCreateView(
