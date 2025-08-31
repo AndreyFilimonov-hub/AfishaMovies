@@ -1,14 +1,18 @@
 package com.filimonov.afishamovies.presentation.ui.homepage
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.transition.Slide
+import androidx.transition.TransitionManager
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentHomePageBinding
 import com.filimonov.afishamovies.presentation.ui.MainActivity
@@ -34,6 +38,15 @@ class HomePageFragment : Fragment() {
         }
     )
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        enterTransition = Slide(Gravity.END).apply {
+            duration = 500L
+            interpolator = AccelerateInterpolator()
+            propagation = null
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,6 +86,7 @@ class HomePageFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.state.collect {
+                    TransitionManager.beginDelayedTransition(binding.root)
                     when (it) {
                         is HomePageState.Loading -> {
                             binding.error.visibility = View.INVISIBLE
@@ -100,8 +114,15 @@ class HomePageFragment : Fragment() {
     }
 
     private fun onBottomNav() {
-        val bindingMain = (requireActivity() as MainActivity).binging
-        bindingMain.bNav.visibility = View.VISIBLE
+        val bNav = (requireActivity() as MainActivity).binging.bNav
+        bNav.apply {
+            visibility = View.VISIBLE
+            translationY = height.toFloat()
+        }
+            .animate()
+            .translationY(0f)
+            .setDuration(1000)
+            .start()
     }
 
     override fun onDestroyView() {
