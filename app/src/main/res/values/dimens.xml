@@ -33,4 +33,8 @@
     <dimen name="padding_top2dp">2dp</dimen>
     <dimen name="margin_end10dp">10dp</dimen>
     <dimen name="margin_bottom36dp">36dp</dimen>
+    <dimen name="margin_start60dp">60dp</dimen>
+    <dimen name="margin_end60dp">60dp</dimen>
+    <dimen name="margin_between16dp">16dp</dimen>
+    <dimen name="margin_bottom16dp">16dp</dimen>
 </resources>
