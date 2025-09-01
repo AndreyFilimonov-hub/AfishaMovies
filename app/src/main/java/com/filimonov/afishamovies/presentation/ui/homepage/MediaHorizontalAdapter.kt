@@ -13,8 +13,8 @@ import com.filimonov.afishamovies.databinding.ItemShowAllBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 
 class MediaHorizontalAdapter(
-    private val sectionTitle: String,
-    private val onShowAllClick: (String) -> Unit,
+    private val mediaSection: MediaSection,
+    private val onShowAllClick: (MediaSection) -> Unit,
     private val onMediaClick: (MediaBannerEntity) -> Unit,
 ) :
     ListAdapter<Media, RecyclerView.ViewHolder>(MediaDiffCallback()) {
@@ -45,7 +45,7 @@ class MediaHorizontalAdapter(
                         parent,
                         false
                     ),
-                    sectionTitle,
+                    mediaSection,
                     onShowAllClick
                 )
             }
@@ -107,14 +107,14 @@ class MediaHorizontalAdapter(
 
     class ShowAllViewHolder(
         private val binding: ItemShowAllBinding,
-        private val sectionTitle: String,
-        private val onShowAllClick: (String) -> Unit
+        private val mediaSection: MediaSection,
+        private val onShowAllClick: (MediaSection) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind() {
             binding.ibShowAll.setOnClickListener {
-                onShowAllClick(sectionTitle)
+                onShowAllClick(mediaSection)
             }
         }
     }
