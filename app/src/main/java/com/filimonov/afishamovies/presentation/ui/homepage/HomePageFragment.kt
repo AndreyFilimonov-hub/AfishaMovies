@@ -16,6 +16,7 @@ import androidx.transition.TransitionManager
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentHomePageBinding
 import com.filimonov.afishamovies.presentation.ui.MainActivity
+import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
@@ -31,7 +32,10 @@ class HomePageFragment : Fragment() {
 
     private val sectionAdapter = SectionAdapter(
         onShowAllClick = {
-            // TODO: launch ListPageFragment
+            requireActivity().supportFragmentManager.beginTransaction()
+                .addToBackStack(null)
+                .add(R.id.fragment_container, ListPageFragment.newInstance(it.categoryId))
+                .commit()
         },
         onMediaClick = {
             // TODO: launch MediaPageFragment
@@ -42,6 +46,11 @@ class HomePageFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         enterTransition = Slide(Gravity.END).apply {
+            duration = 500L
+            interpolator = AccelerateInterpolator()
+            propagation = null
+        }
+        exitTransition = Slide(Gravity.START).apply {
             duration = 500L
             interpolator = AccelerateInterpolator()
             propagation = null

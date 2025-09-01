@@ -10,7 +10,7 @@ import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.presentation.ui.HorizontalSpaceItemDecoration
 
 class SectionAdapter(
-    private val onShowAllClick: (String) -> Unit,
+    private val onShowAllClick: (MediaSection) -> Unit,
     private val onMediaClick: (MediaBannerEntity) -> Unit,
 ) :
     ListAdapter<MediaSection, SectionAdapter.MediaViewHolder>(MediaSectionDiffCallback()) {
@@ -31,7 +31,7 @@ class SectionAdapter(
 
     class MediaViewHolder(
         private val binding: ItemSectionBinding,
-        private val onShowAllClick: (String) -> Unit,
+        private val onShowAllClick: (MediaSection) -> Unit,
         private val onMediaClick: (MediaBannerEntity) -> Unit,
     ) :
         RecyclerView.ViewHolder(binding.root) {
@@ -40,7 +40,7 @@ class SectionAdapter(
             binding.tvTitle.text = mediaSection.title
 
             val mediaHorizontalAdapter =
-                MediaHorizontalAdapter(mediaSection.title, onShowAllClick, onMediaClick)
+                MediaHorizontalAdapter(mediaSection, onShowAllClick, onMediaClick)
             binding.rvSection.adapter = mediaHorizontalAdapter
 
             binding.rvSection.addItemDecoration(
@@ -55,7 +55,7 @@ class SectionAdapter(
             )
 
             binding.tvAll.setOnClickListener {
-                onShowAllClick(binding.tvTitle.text.toString())
+                onShowAllClick(mediaSection)
             }
         }
     }

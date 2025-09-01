@@ -15,38 +15,29 @@ import com.filimonov.afishamovies.databinding.FragmentListPageBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.presentation.ui.homepage.Media
 import com.filimonov.afishamovies.presentation.ui.homepage.MediaHorizontalAdapter
+import com.filimonov.afishamovies.presentation.ui.homepage.MediaSection
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val CATEGORY_ID = "category_id"
+private const val TITLE = "title"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ListPageFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ListPageFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     private var _binding: FragmentListPageBinding? = null
 
     private val binding: FragmentListPageBinding
         get() = _binding ?: throw RuntimeException("FragmentListPageBinding == null")
 
-    private val mediaHorizontalAdapter = MediaHorizontalAdapter("", {}, {
+    private var categoryId: Int = UNDEFINED_ID
+    private var title: String = UNDEFINED_TITLE
+
+    private val mediaHorizontalAdapter = MediaHorizontalAdapter(MediaSection(0, "", listOf()), {}, {
         Log.d("AAA", "${it.id}")
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        parseArgs()
         enterTransition = Slide(Gravity.END).apply {
             duration = 500L
             interpolator = AccelerateInterpolator()
@@ -123,22 +114,37 @@ class ListPageFragment : Fragment() {
         }
     }
 
+    private fun parseArgs() {
+        val args = requireArguments()
+        if (!args.containsKey(CATEGORY_ID)) {
+            throw RuntimeException("Param category id is absent")
+        }
+        val categoryIdBundle = args.getInt(CATEGORY_ID)
+        if (categoryIdBundle < 0) {
+            throw RuntimeException("Category ID is wrong")
+        }
+        categoryId = categoryIdBundle
+
+        if (!args.containsKey(TITLE)) {
+            throw RuntimeException("Param title id is absent")
+        }
+        val titleBundle = args.getString(TITLE) ?: UNDEFINED_TITLE
+        if (titleBundle.isEmpty()) {
+            throw RuntimeException("Param title is empty")
+        }
+        title = titleBundle
+    }
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ListPageFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+        private const val UNDEFINED_ID = -1
+        private const val UNDEFINED_TITLE = ""
+
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(categoryId: Int, title: String) =
             ListPageFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putInt(CATEGORY_ID, categoryId)
+                    putString(TITLE, title)
                 }
             }
     }
