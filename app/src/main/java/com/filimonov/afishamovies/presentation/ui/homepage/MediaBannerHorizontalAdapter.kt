@@ -11,13 +11,15 @@ import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ItemImageBinding
 import com.filimonov.afishamovies.databinding.ItemShowAllBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
+import com.filimonov.afishamovies.presentation.model.MediaBannerUiModel
+import com.filimonov.afishamovies.presentation.utils.MediaDiffCallback
 
-class MediaHorizontalAdapter(
+class MediaBannerHorizontalAdapter(
     private val mediaSection: MediaSection,
     private val onShowAllClick: (MediaSection) -> Unit,
     private val onMediaClick: (MediaBannerEntity) -> Unit,
 ) :
-    ListAdapter<Media, RecyclerView.ViewHolder>(MediaDiffCallback()) {
+    ListAdapter<MediaBannerUiModel, RecyclerView.ViewHolder>(MediaDiffCallback()) {
 
     companion object {
 
@@ -58,18 +60,18 @@ class MediaHorizontalAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is Media.MediaBanner -> MEDIA_BANNER_TYPE
-            is Media.ShowAll -> SHOW_ALL_BUTTON_TYPE
+            is MediaBannerUiModel.Banner -> MEDIA_BANNER_TYPE
+            is MediaBannerUiModel.ShowAll -> SHOW_ALL_BUTTON_TYPE
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = getItem(position)) {
-            is Media.MediaBanner -> {
+            is MediaBannerUiModel.Banner -> {
                 (holder as MediaViewHolder).bind(item)
             }
 
-            Media.ShowAll -> {
+            MediaBannerUiModel.ShowAll -> {
                 (holder as ShowAllViewHolder).bind()
             }
         }
@@ -86,7 +88,7 @@ class MediaHorizontalAdapter(
             private const val RADIUS_PX = 4
         }
 
-        fun bind(mediaBanner: Media.MediaBanner) {
+        fun bind(mediaBanner: MediaBannerUiModel.Banner) {
             binding.tvName.text = mediaBanner.media.name
             Glide.with(binding.root)
                 .load(mediaBanner.media.posterUrl)

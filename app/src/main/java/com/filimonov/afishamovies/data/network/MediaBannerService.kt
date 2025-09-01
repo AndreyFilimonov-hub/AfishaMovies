@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
 
-interface HomePageService {
+interface MediaBannerService {
 
     @Headers("X-API-KEY:$API_KEY")
     @GET("movie")

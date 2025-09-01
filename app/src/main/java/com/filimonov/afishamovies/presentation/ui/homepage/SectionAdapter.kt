@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ItemSectionBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
-import com.filimonov.afishamovies.presentation.ui.HorizontalSpaceItemDecoration
+import com.filimonov.afishamovies.presentation.model.MediaBannerUiModel
+import com.filimonov.afishamovies.presentation.utils.HorizontalSpaceItemDecoration
 
 class SectionAdapter(
     private val onShowAllClick: (MediaSection) -> Unit,
@@ -39,9 +40,9 @@ class SectionAdapter(
         fun bind(mediaSection: MediaSection) {
             binding.tvTitle.text = mediaSection.title
 
-            val mediaHorizontalAdapter =
-                MediaHorizontalAdapter(mediaSection, onShowAllClick, onMediaClick)
-            binding.rvSection.adapter = mediaHorizontalAdapter
+            val mediaBannerHorizontalAdapter =
+                MediaBannerHorizontalAdapter(mediaSection, onShowAllClick, onMediaClick)
+            binding.rvSection.adapter = mediaBannerHorizontalAdapter
 
             binding.rvSection.addItemDecoration(
                 HorizontalSpaceItemDecoration(
@@ -50,8 +51,8 @@ class SectionAdapter(
                 )
             )
 
-            mediaHorizontalAdapter.submitList(
-                mediaSection.mediaList.map { Media.MediaBanner(it) } + Media.ShowAll
+            mediaBannerHorizontalAdapter.submitList(
+                mediaSection.mediaList.map { MediaBannerUiModel.Banner(it) } + MediaBannerUiModel.ShowAll
             )
 
             binding.tvAll.setOnClickListener {

@@ -3,7 +3,7 @@ package com.filimonov.afishamovies.presentation.ui.homepage
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.filimonov.afishamovies.data.repository.HomePageRepositoryImpl
+import com.filimonov.afishamovies.data.repository.MediaBannerRepositoryImpl
 import com.filimonov.afishamovies.domain.usecases.GetActionUSAMovieListUseCase
 import com.filimonov.afishamovies.domain.usecases.GetComedyRussiaMovieListUseCase
 import com.filimonov.afishamovies.domain.usecases.GetDramaFranceMovieListUseCase
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class HomePageViewModel : ViewModel() {
 
-    private val repository = HomePageRepositoryImpl()
+    private val repository = MediaBannerRepositoryImpl()
 
     private val getComedyRussiaMovieListUseCase = GetComedyRussiaMovieListUseCase(repository)
     private val getPopularMovieListUseCase = GetPopularMovieListUseCase(repository)

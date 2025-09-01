@@ -3,11 +3,11 @@ package com.filimonov.afishamovies.data.repository
 import com.filimonov.afishamovies.data.mapper.toEntity
 import com.filimonov.afishamovies.data.network.ApiFactory
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
-import com.filimonov.afishamovies.domain.repository.HomePageRepository
+import com.filimonov.afishamovies.domain.repository.MediaBannerRepository
 
-class HomePageRepositoryImpl : HomePageRepository {
+class MediaBannerRepositoryImpl : MediaBannerRepository {
 
-    private val apiService = ApiFactory.homePageService
+    private val apiService = ApiFactory.mediaBannerService
 
     override suspend fun getComedyRussiaMovieList(): List<MediaBannerEntity> {
         return apiService.getComedyRussiaMovieList().medias.map {

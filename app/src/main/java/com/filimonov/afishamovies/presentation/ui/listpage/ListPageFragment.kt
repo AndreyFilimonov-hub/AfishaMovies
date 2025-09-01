@@ -13,8 +13,8 @@ import androidx.transition.Slide
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentListPageBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
-import com.filimonov.afishamovies.presentation.ui.homepage.Media
-import com.filimonov.afishamovies.presentation.ui.homepage.MediaHorizontalAdapter
+import com.filimonov.afishamovies.presentation.model.MediaBannerUiModel
+import com.filimonov.afishamovies.presentation.ui.homepage.MediaBannerHorizontalAdapter
 import com.filimonov.afishamovies.presentation.ui.homepage.MediaSection
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -29,7 +29,7 @@ class ListPageFragment : Fragment() {
 
     private var categoryId: Int = UNDEFINED_ID
 
-    private val mediaHorizontalAdapter = MediaHorizontalAdapter(MediaSection(0, "", listOf()), {}, {
+    private val mediaHorizontalAdapter = MediaBannerHorizontalAdapter(MediaSection(0, "", listOf()), {}, {
         Log.d("AAA", "${it.id}")
     })
 
@@ -72,24 +72,24 @@ class ListPageFragment : Fragment() {
             )
         )
         mediaHorizontalAdapter.submitList(listOf(
-            Media.MediaBanner(MediaBannerEntity(1, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(2, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(3, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            Media.MediaBanner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(1, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(2, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(3, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
+            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
         ))
     }
 
