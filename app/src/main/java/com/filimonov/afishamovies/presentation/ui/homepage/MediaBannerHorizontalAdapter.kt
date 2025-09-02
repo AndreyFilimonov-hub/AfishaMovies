@@ -98,7 +98,7 @@ class MediaBannerHorizontalAdapter(
                 )
                 .placeholder(R.drawable.onboard_second)
                 .into(binding.ivPoster)
-            binding.tvGenre.text = mediaBanner.media.name
+            binding.tvGenre.text = mediaBanner.media.genreMain
             binding.tvRating.text = mediaBanner.media.rating.toString().substring(0, 3)
 
             binding.ivPoster.setOnClickListener {

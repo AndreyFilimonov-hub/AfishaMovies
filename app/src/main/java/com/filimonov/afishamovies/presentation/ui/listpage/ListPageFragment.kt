@@ -8,15 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.Slide
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentListPageBinding
-import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.presentation.model.MediaBannerUiModel
 import com.filimonov.afishamovies.presentation.ui.homepage.MediaBannerHorizontalAdapter
 import com.filimonov.afishamovies.presentation.ui.homepage.MediaSection
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
 
 private const val CATEGORY_ID = "category_id"
 private const val TITLE = "title"
@@ -31,13 +35,19 @@ class ListPageFragment : Fragment() {
     private var categoryId: Int = UNDEFINED_ID
     private var title: String = UNDEFINED_TITLE
 
-    private val mediaHorizontalAdapter = MediaBannerHorizontalAdapter(MediaSection(0, "", listOf()), {}, {
-        Log.d("AAA", "${it.id}")
-    })
+    private lateinit var viewModel: ListPageViewModel
+
+    private val mediaHorizontalAdapter =
+        MediaBannerHorizontalAdapter(MediaSection(0, "", listOf()), {}, {
+            Log.d("AAA", "${it.id}")
+        })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseArgs()
+        Log.d("AAA", "category id $categoryId")
+        val viewModelFactory = ListPageViewModelProvider(categoryId)
+        viewModel = ViewModelProvider(this, viewModelFactory)[ListPageViewModel::class.java]
         enterTransition = Slide(Gravity.END).apply {
             duration = 500L
             interpolator = AccelerateInterpolator()
@@ -73,26 +83,27 @@ class ListPageFragment : Fragment() {
                 resources.getDimensionPixelSize(R.dimen.margin_bottom16dp),
             )
         )
-        mediaHorizontalAdapter.submitList(listOf(
-            MediaBannerUiModel.Banner(MediaBannerEntity(1, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(2, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(3, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-            MediaBannerUiModel.Banner(MediaBannerEntity(4, "aaa", "aaa", 2.0, null)),
-        ))
+        observeViewModel()
+        viewModel.nextPage()
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.state.collect {
+                    when (it) {
+                        ListPageState.Error -> {}
+                        is ListPageState.Success -> {
+                            Log.d("AAA", it.mediaBanners.toString())
+                            mediaHorizontalAdapter.submitList(
+                                it.mediaBanners
+                                    .map { list -> MediaBannerUiModel.Banner(list) }
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun setToolbar() {

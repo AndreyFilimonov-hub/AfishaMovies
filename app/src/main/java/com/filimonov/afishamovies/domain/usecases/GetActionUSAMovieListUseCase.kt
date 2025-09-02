@@ -5,7 +5,7 @@ import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 
 class GetActionUSAMovieListUseCase(private val repository: MediaBannerRepository) {
 
-    suspend operator fun invoke(): List<MediaBannerEntity> {
-        return repository.getActionUSAMovieList()
+    suspend operator fun invoke(page: Int = 1): List<MediaBannerEntity> {
+        return repository.getActionUSAMovieList(page)
     }
 }

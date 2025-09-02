@@ -11,7 +11,7 @@ interface MediaBannerService {
     @Headers("X-API-KEY:$API_KEY")
     @GET("movie")
     suspend fun getComedyRussiaMovieList(
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int,
         @Query("limit") limit: Int = 20,
         @Query("selectedFields") selectedFieldId: String = "id",
         @Query("selectedFields") selectedFieldName: String = "name",
@@ -29,7 +29,7 @@ interface MediaBannerService {
     @Headers("X-API-KEY:$API_KEY")
     @GET("movie")
     suspend fun getPopularMovieList(
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int,
         @Query("limit") limit: Int = 20,
         @Query("selectedFields") selectedFieldId: String = "id",
         @Query("selectedFields") selectedFieldName: String = "name",
@@ -44,7 +44,7 @@ interface MediaBannerService {
     @Headers("X-API-KEY:$API_KEY")
     @GET("movie")
     suspend fun getActionMoviesUSAMovieList(
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int,
         @Query("limit") limit: Int = 20,
         @Query("selectedFields") selectedFieldId: String = "id",
         @Query("selectedFields") selectedFieldName: String = "name",
@@ -62,7 +62,7 @@ interface MediaBannerService {
     @Headers("X-API-KEY:$API_KEY")
     @GET("movie")
     suspend fun getTop250MovieList(
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int,
         @Query("limit") limit: Int = 20,
         @Query("selectedFields") selectedFieldId: String = "id",
         @Query("selectedFields") selectedFieldName: String = "name",
@@ -80,7 +80,7 @@ interface MediaBannerService {
     @Headers("X-API-KEY:$API_KEY")
     @GET("movie")
     suspend fun getDramaFranceMovieList(
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int,
         @Query("limit") limit: Int = 20,
         @Query("selectedFields") selectedFieldId: String = "id",
         @Query("selectedFields") selectedFieldName: String = "name",
@@ -98,7 +98,7 @@ interface MediaBannerService {
     @Headers("X-API-KEY:$API_KEY")
     @GET("movie")
     suspend fun getSeriesList(
-        @Query("page") page: Int = 1,
+        @Query("page") page: Int,
         @Query("limit") limit: Int = 20,
         @Query("selectedFields") selectedFieldId: String = "id",
         @Query("selectedFields") selectedFieldName: String = "name",
