@@ -19,6 +19,7 @@ import com.filimonov.afishamovies.presentation.ui.homepage.MediaSection
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 private const val CATEGORY_ID = "category_id"
+private const val TITLE = "title"
 
 class ListPageFragment : Fragment() {
 
@@ -28,6 +29,7 @@ class ListPageFragment : Fragment() {
         get() = _binding ?: throw RuntimeException("FragmentListPageBinding == null")
 
     private var categoryId: Int = UNDEFINED_ID
+    private var title: String = UNDEFINED_TITLE
 
     private val mediaHorizontalAdapter = MediaBannerHorizontalAdapter(MediaSection(0, "", listOf()), {}, {
         Log.d("AAA", "${it.id}")
@@ -35,7 +37,7 @@ class ListPageFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        parseInt()
+        parseArgs()
         enterTransition = Slide(Gravity.END).apply {
             duration = 500L
             interpolator = AccelerateInterpolator()
@@ -97,6 +99,7 @@ class ListPageFragment : Fragment() {
         binding.ivBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
+        binding.tvTitle.text = title
     }
 
     private fun setPaddingRootView() {
@@ -112,7 +115,7 @@ class ListPageFragment : Fragment() {
         }
     }
 
-    private fun parseInt() {
+    private fun parseArgs() {
         val args = requireArguments()
         if (!args.containsKey(CATEGORY_ID)) {
             throw RuntimeException("Param category id is absent")
@@ -122,16 +125,26 @@ class ListPageFragment : Fragment() {
             throw RuntimeException("Category ID is wrong")
         }
         categoryId = categoryIdBundle
+        if (!args.containsKey(TITLE)) {
+            throw RuntimeException("Param title is absent")
+        }
+        val titleBundle = args.getString(TITLE) ?: ""
+        if (titleBundle.isEmpty()) {
+            throw RuntimeException("Param title is empty")
+        }
+        title = titleBundle
     }
 
     companion object {
         private const val UNDEFINED_ID = -1
+        private const val UNDEFINED_TITLE = ""
 
         @JvmStatic
-        fun newInstance(categoryId: Int) =
+        fun newInstance(categoryId: Int, title: String) =
             ListPageFragment().apply {
                 arguments = Bundle().apply {
                     putInt(CATEGORY_ID, categoryId)
+                    putString(TITLE, title)
                 }
             }
     }
