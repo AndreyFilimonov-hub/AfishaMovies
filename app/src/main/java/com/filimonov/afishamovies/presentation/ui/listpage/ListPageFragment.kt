@@ -1,7 +1,6 @@
 package com.filimonov.afishamovies.presentation.ui.listpage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +12,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.Slide
+import androidx.transition.TransitionManager
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentListPageBinding
 import com.filimonov.afishamovies.presentation.model.MediaBannerUiModel
-import com.filimonov.afishamovies.presentation.ui.homepage.MediaBannerHorizontalAdapter
-import com.filimonov.afishamovies.presentation.ui.homepage.MediaSection
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
@@ -37,15 +36,16 @@ class ListPageFragment : Fragment() {
 
     private lateinit var viewModel: ListPageViewModel
 
-    private val mediaHorizontalAdapter =
-        MediaBannerHorizontalAdapter(MediaSection(0, "", listOf()), {}, {
-            Log.d("AAA", "${it.id}")
-        })
+    private val mediaBannerGridAdapter =
+        MediaBannerGridAdapter(
+            onMediaBannerClick = {
+                // TODO launch MediaPageFragment
+            }
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseArgs()
-        Log.d("AAA", "category id $categoryId")
         val viewModelFactory = ListPageViewModelProvider(categoryId)
         viewModel = ViewModelProvider(this, viewModelFactory)[ListPageViewModel::class.java]
         enterTransition = Slide(Gravity.END).apply {
@@ -73,8 +73,14 @@ class ListPageFragment : Fragment() {
 
         setPaddingRootView()
         setToolbar()
+        setupRecyclerView()
+        observeViewModel()
+        viewModel.nextPage()
+    }
+
+    private fun setupRecyclerView() {
         binding.rvContent.layoutManager = GridLayoutManager(this.context, 2)
-        binding.rvContent.adapter = mediaHorizontalAdapter
+        binding.rvContent.adapter = mediaBannerGridAdapter
         binding.rvContent.addItemDecoration(
             SpaceItemDecoration(
                 resources.getDimensionPixelSize(R.dimen.margin_start60dp),
@@ -83,19 +89,28 @@ class ListPageFragment : Fragment() {
                 resources.getDimensionPixelSize(R.dimen.margin_bottom16dp),
             )
         )
-        observeViewModel()
-        viewModel.nextPage()
+        binding.rvContent.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                val totalItemCount = layoutManager.itemCount
+                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+
+                if (!viewModel.isLoading.value && lastVisibleItem >= totalItemCount - 5) {
+                    viewModel.nextPage()
+                }
+            }
+        })
     }
 
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.state.collect {
+                    TransitionManager.beginDelayedTransition(binding.root)
                     when (it) {
                         ListPageState.Error -> {}
                         is ListPageState.Success -> {
-                            Log.d("AAA", it.mediaBanners.toString())
-                            mediaHorizontalAdapter.submitList(
+                            mediaBannerGridAdapter.submitList(
                                 it.mediaBanners
                                     .map { list -> MediaBannerUiModel.Banner(list) }
                             )

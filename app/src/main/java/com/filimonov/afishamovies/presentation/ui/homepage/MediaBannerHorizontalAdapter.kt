@@ -4,14 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ItemImageBinding
 import com.filimonov.afishamovies.databinding.ItemShowAllBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.presentation.model.MediaBannerUiModel
+import com.filimonov.afishamovies.presentation.utils.MediaBannerViewHolder
 import com.filimonov.afishamovies.presentation.utils.MediaDiffCallback
 
 class MediaBannerHorizontalAdapter(
@@ -30,7 +27,7 @@ class MediaBannerHorizontalAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             MEDIA_BANNER_TYPE -> {
-                MediaViewHolder(
+                MediaBannerViewHolder(
                     ItemImageBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
@@ -68,41 +65,11 @@ class MediaBannerHorizontalAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = getItem(position)) {
             is MediaBannerUiModel.Banner -> {
-                (holder as MediaViewHolder).bind(item)
+                (holder as MediaBannerViewHolder).bind(item)
             }
 
             MediaBannerUiModel.ShowAll -> {
                 (holder as ShowAllViewHolder).bind()
-            }
-        }
-    }
-
-    class MediaViewHolder(
-        private val binding: ItemImageBinding,
-        private val onMediaClick: (MediaBannerEntity) -> Unit
-        ) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        companion object {
-
-            private const val RADIUS_PX = 4
-        }
-
-        fun bind(mediaBanner: MediaBannerUiModel.Banner) {
-            binding.tvName.text = mediaBanner.media.name
-            Glide.with(binding.root)
-                .load(mediaBanner.media.posterUrl)
-                .transform(
-                    CenterCrop(),
-                    RoundedCorners((RADIUS_PX * binding.root.context.resources.displayMetrics.density).toInt())
-                )
-                .placeholder(R.drawable.onboard_second)
-                .into(binding.ivPoster)
-            binding.tvGenre.text = mediaBanner.media.genreMain
-            binding.tvRating.text = mediaBanner.media.rating.toString().substring(0, 3)
-
-            binding.ivPoster.setOnClickListener {
-                onMediaClick(mediaBanner.media)
             }
         }
     }
