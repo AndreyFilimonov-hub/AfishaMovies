@@ -34,7 +34,7 @@ class HomePageFragment : Fragment() {
         onShowAllClick = {
             requireActivity().supportFragmentManager.beginTransaction()
                 .addToBackStack(null)
-                .add(R.id.fragment_container, ListPageFragment.newInstance(it.categoryId))
+                .add(R.id.fragment_container, ListPageFragment.newInstance(it.categoryId, it.title))
                 .commit()
         },
         onMediaClick = {

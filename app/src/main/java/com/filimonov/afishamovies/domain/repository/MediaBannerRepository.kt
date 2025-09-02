@@ -4,15 +4,15 @@ import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 
 interface MediaBannerRepository {
 
-    suspend fun getComedyRussiaMovieList(): List<MediaBannerEntity>
+    suspend fun getComedyRussiaMovieList(page: Int): List<MediaBannerEntity>
 
-    suspend fun getPopularMovieList(): List<MediaBannerEntity>
+    suspend fun getPopularMovieList(page: Int): List<MediaBannerEntity>
 
-    suspend fun getActionUSAMovieList(): List<MediaBannerEntity>
+    suspend fun getActionUSAMovieList(page: Int): List<MediaBannerEntity>
 
-    suspend fun getTop250MovieList(): List<MediaBannerEntity>
+    suspend fun getTop250MovieList(page: Int): List<MediaBannerEntity>
 
-    suspend fun getDramaFranceMovieList(): List<MediaBannerEntity>
+    suspend fun getDramaFranceMovieList(page: Int): List<MediaBannerEntity>
 
-    suspend fun getSeriesList(): List<MediaBannerEntity>
+    suspend fun getSeriesList(page: Int): List<MediaBannerEntity>
 }

@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class HomePageViewModel : ViewModel() {
 
-    private val repository = MediaBannerRepositoryImpl()
+    private val repository = MediaBannerRepositoryImpl
 
     private val getComedyRussiaMovieListUseCase = GetComedyRussiaMovieListUseCase(repository)
     private val getPopularMovieListUseCase = GetPopularMovieListUseCase(repository)
