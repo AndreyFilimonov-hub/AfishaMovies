@@ -9,4 +9,8 @@ sealed class ListPageState {
     ) : ListPageState()
 
     data object Error : ListPageState()
+
+    data class Loading(
+        val currentList: List<MediaBannerEntity>
+    ) : ListPageState()
 }

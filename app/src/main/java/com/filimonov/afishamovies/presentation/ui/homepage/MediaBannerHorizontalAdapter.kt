@@ -58,7 +58,7 @@ class MediaBannerHorizontalAdapter(
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
             is MediaBannerUiModel.Banner -> MEDIA_BANNER_TYPE
-            is MediaBannerUiModel.ShowAll -> SHOW_ALL_BUTTON_TYPE
+            else -> SHOW_ALL_BUTTON_TYPE
         }
     }
 
@@ -68,7 +68,7 @@ class MediaBannerHorizontalAdapter(
                 (holder as MediaBannerViewHolder).bind(item)
             }
 
-            MediaBannerUiModel.ShowAll -> {
+            else -> {
                 (holder as ShowAllViewHolder).bind()
             }
         }

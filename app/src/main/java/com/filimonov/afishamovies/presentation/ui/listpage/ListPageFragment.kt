@@ -79,23 +79,28 @@ class ListPageFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        binding.rvContent.layoutManager = GridLayoutManager(this.context, 2)
+        val layoutManager = GridLayoutManager(this.context, 2)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return mediaBannerGridAdapter.getSpanPosition(position)
+            }
+        }
+        binding.rvContent.layoutManager = layoutManager
         binding.rvContent.adapter = mediaBannerGridAdapter
         binding.rvContent.addItemDecoration(
             SpaceItemDecoration(
-                resources.getDimensionPixelSize(R.dimen.margin_start60dp),
-                resources.getDimensionPixelSize(R.dimen.margin_end60dp),
+                mediaBannerGridAdapter,
                 resources.getDimensionPixelSize(R.dimen.margin_between16dp),
-                resources.getDimensionPixelSize(R.dimen.margin_bottom16dp),
+                resources.getDimensionPixelSize(R.dimen.margin_bottom16dp)
             )
         )
         binding.rvContent.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val layoutManager = recyclerView.layoutManager as GridLayoutManager
-                val totalItemCount = layoutManager.itemCount
-                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                val gridLayoutManager = recyclerView.layoutManager as GridLayoutManager
+                val totalItemCount = gridLayoutManager.itemCount
+                val lastVisibleItem = gridLayoutManager.findLastVisibleItemPosition()
 
-                if (!viewModel.isLoading.value && lastVisibleItem >= totalItemCount - 5) {
+                if (viewModel.state.value !is ListPageState.Loading && lastVisibleItem >= totalItemCount - 5) {
                     viewModel.nextPage()
                 }
             }
@@ -105,14 +110,23 @@ class ListPageFragment : Fragment() {
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                TransitionManager.beginDelayedTransition(binding.rvContent)
                 viewModel.state.collect {
-                    TransitionManager.beginDelayedTransition(binding.root)
                     when (it) {
                         ListPageState.Error -> {}
                         is ListPageState.Success -> {
                             mediaBannerGridAdapter.submitList(
                                 it.mediaBanners
-                                    .map { list -> MediaBannerUiModel.Banner(list) }
+                                    .map { banner -> MediaBannerUiModel.Banner(banner) }
+                            )
+                        }
+
+                        is ListPageState.Loading -> {
+                            mediaBannerGridAdapter.submitList(
+                                it.currentList
+                                    .map {
+                                        banner -> MediaBannerUiModel.Banner(banner)
+                                    } + MediaBannerUiModel.Loading
                             )
                         }
                     }

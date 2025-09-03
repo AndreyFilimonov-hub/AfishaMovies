@@ -46,20 +46,17 @@ class ListPageViewModel(
     )
     val state = _state.asStateFlow()
 
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading = _isLoading.asStateFlow()
-
     fun nextPage() {
-        if (_isLoading.value) return
+        if (_state.value is ListPageState.Loading) return
 
         val useCase = useCases[categoryId] ?: return
 
         viewModelScope.launch {
             try {
-                _isLoading.value = true
                 val currentList = (_state.value as ListPageState.Success)
                     .mediaBanners
                     .toMutableList()
+                _state.value = ListPageState.Loading(currentList)
                 val newList = useCase(page + 1)
                 if (newList.isNotEmpty()) {
                     page++
@@ -70,8 +67,6 @@ class ListPageViewModel(
                 throw e
             } catch (e: Exception) {
                 _state.value = ListPageState.Error
-            } finally {
-                _isLoading.value = false
             }
         }
     }

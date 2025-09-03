@@ -9,4 +9,6 @@ sealed class MediaBannerUiModel {
     ) : MediaBannerUiModel()
 
     data object ShowAll : MediaBannerUiModel()
+
+    data object Loading: MediaBannerUiModel()
 }
