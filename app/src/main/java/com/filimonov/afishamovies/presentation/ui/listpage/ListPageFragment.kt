@@ -40,6 +40,9 @@ class ListPageFragment : Fragment() {
         MediaBannerGridAdapter(
             onMediaBannerClick = {
                 // TODO launch MediaPageFragment
+            },
+            onRetryButtonClick = {
+                viewModel.nextPage()
             }
         )
 
@@ -113,19 +116,29 @@ class ListPageFragment : Fragment() {
                 TransitionManager.beginDelayedTransition(binding.rvContent)
                 viewModel.state.collect {
                     when (it) {
-                        ListPageState.Error -> {}
+                        is ListPageState.Error -> {
+                            mediaBannerGridAdapter.submitList(
+                                it.currentList
+                                    .map { banner ->
+                                        MediaBannerUiModel.Banner(banner)
+                                    } + MediaBannerUiModel.Error
+                            )
+                        }
+
                         is ListPageState.Success -> {
                             mediaBannerGridAdapter.submitList(
                                 it.mediaBanners
-                                    .map { banner -> MediaBannerUiModel.Banner(banner) }
+                                    .map { banner ->
+                                        MediaBannerUiModel.Banner(banner)
+                                    }
                             )
                         }
 
                         is ListPageState.Loading -> {
                             mediaBannerGridAdapter.submitList(
                                 it.currentList
-                                    .map {
-                                        banner -> MediaBannerUiModel.Banner(banner)
+                                    .map { banner ->
+                                        MediaBannerUiModel.Banner(banner)
                                     } + MediaBannerUiModel.Loading
                             )
                         }

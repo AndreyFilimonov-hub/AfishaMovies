@@ -39,11 +39,14 @@ class ListPageViewModel(
 
     private var page = 1
 
+    private var currentList = mutableListOf<MediaBannerEntity>()
+
     private val _state: MutableStateFlow<ListPageState> = MutableStateFlow(
         ListPageState.Success(
             repository.getMediaBannersByCategory(categoryId)
-        )
+        ).also { currentList = it.mediaBanners.toMutableList() }
     )
+
     val state = _state.asStateFlow()
 
     fun nextPage() {
@@ -53,20 +56,17 @@ class ListPageViewModel(
 
         viewModelScope.launch {
             try {
-                val currentList = (_state.value as ListPageState.Success)
-                    .mediaBanners
-                    .toMutableList()
                 _state.value = ListPageState.Loading(currentList)
                 val newList = useCase(page + 1)
                 if (newList.isNotEmpty()) {
                     page++
                     currentList.addAll(newList)
-                    _state.value = ListPageState.Success(currentList)
                 }
+                _state.value = ListPageState.Success(currentList)
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                _state.value = ListPageState.Error
+                _state.value = ListPageState.Error(currentList)
             }
         }
     }

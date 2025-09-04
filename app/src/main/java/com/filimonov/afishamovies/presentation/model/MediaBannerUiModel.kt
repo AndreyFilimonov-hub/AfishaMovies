@@ -11,4 +11,6 @@ sealed class MediaBannerUiModel {
     data object ShowAll : MediaBannerUiModel()
 
     data object Loading: MediaBannerUiModel()
+
+    data object Error: MediaBannerUiModel()
 }

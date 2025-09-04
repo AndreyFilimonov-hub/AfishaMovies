@@ -21,7 +21,7 @@ class SpaceItemDecoration(
         if (position == RecyclerView.NO_POSITION) return
         val viewType = adapter.getItemViewType(position)
 
-        if (viewType == MediaBannerGridAdapter.LOADING_TYPE) {
+        if (viewType == MediaBannerGridAdapter.LOADING_TYPE || viewType == MediaBannerGridAdapter.ERROR_TYPE) {
             outRect.set(0, 0, 0, 0)
             return
         }
