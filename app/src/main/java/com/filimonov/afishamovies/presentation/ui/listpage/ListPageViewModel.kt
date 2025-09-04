@@ -47,6 +47,8 @@ class ListPageViewModel(
     val state = _state.asStateFlow()
 
     fun nextPage() {
+        if (_state.value is ListPageState.Loading) return
+
         val useCase = useCases[categoryId] ?: return
 
         viewModelScope.launch {
@@ -54,9 +56,13 @@ class ListPageViewModel(
                 val currentList = (_state.value as ListPageState.Success)
                     .mediaBanners
                     .toMutableList()
-                val newList = useCase(++page)
-                currentList.addAll(newList)
-                _state.value = ListPageState.Success(currentList)
+                _state.value = ListPageState.Loading(currentList)
+                val newList = useCase(page + 1)
+                if (newList.isNotEmpty()) {
+                    page++
+                    currentList.addAll(newList)
+                    _state.value = ListPageState.Success(currentList)
+                }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {

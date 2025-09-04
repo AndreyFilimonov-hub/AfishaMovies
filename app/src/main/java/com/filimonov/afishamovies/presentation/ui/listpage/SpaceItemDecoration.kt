@@ -6,8 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
 class SpaceItemDecoration(
-    private val marginStart: Int,
-    private val marginEnd: Int,
+    private val adapter: MediaBannerGridAdapter,
     private val marginBetween: Int,
     private val marginBottom: Int
 ) : ItemDecoration() {
@@ -19,13 +18,21 @@ class SpaceItemDecoration(
         state: RecyclerView.State
     ) {
         val position = parent.getChildAdapterPosition(view)
+        if (position == RecyclerView.NO_POSITION) return
+        val viewType = adapter.getItemViewType(position)
+
+        if (viewType == MediaBannerGridAdapter.LOADING_TYPE) {
+            outRect.set(0, 0, 0, 0)
+            return
+        }
 
         when {
             position % 2 == 0 -> {
-                outRect.set(marginStart, 0, marginBetween, marginBottom)
+                outRect.set(0, 0, marginBetween, marginBottom)
             }
+
             else -> {
-                outRect.set(marginBetween, 0, marginEnd, marginBottom)
+                outRect.set(marginBetween, 0, 0, marginBottom)
             }
         }
     }
