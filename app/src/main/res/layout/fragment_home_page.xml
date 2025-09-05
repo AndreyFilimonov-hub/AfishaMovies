@@ -27,7 +27,7 @@
                 android:layout_marginTop="@dimen/margin_top"
                 android:layout_weight="1"
                 android:text="@string/afisha_movies"
-                android:textSize="@dimen/text_size_24"
+                android:textSize="@dimen/text_size24sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,7 +61,7 @@
             android:layout_marginTop="@dimen/margin_top"
             android:layout_weight="1"
             android:text="@string/afisha_movies"
-            android:textSize="@dimen/text_size_24"
+            android:textSize="@dimen/text_size24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -98,7 +98,7 @@
             android:layout_marginTop="@dimen/margin_top"
             android:layout_weight="1"
             android:text="@string/afisha_movies"
-            android:textSize="@dimen/text_size_24"
+            android:textSize="@dimen/text_size24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
