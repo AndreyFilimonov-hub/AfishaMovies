@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.filimonov.afishamovies.databinding.ItemBannerBinding
 import com.filimonov.afishamovies.databinding.ItemErrorLoadingBinding
-import com.filimonov.afishamovies.databinding.ItemImageBinding
 import com.filimonov.afishamovies.databinding.ItemLoadingProgressBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.presentation.model.MediaBannerUiModel
@@ -26,7 +26,7 @@ class MediaBannerGridAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             BANNER_TYPE -> MediaBannerViewHolder(
-                ItemImageBinding.inflate(
+                ItemBannerBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
