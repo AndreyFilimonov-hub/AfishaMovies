@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start"
         android:text="@string/russian_comedy"
-        android:textSize="@dimen/text_size_18"
+        android:textSize="@dimen/text_size18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/rv_section"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,13 +23,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_start"
-        android:background="@drawable/bg_ripple_circle"
+        android:background="@drawable/bg_ripple_rectangle"
         android:clickable="true"
         android:focusable="true"
-        android:padding="12dp"
+        android:padding="@dimen/padding_12dp"
         android:text="@string/all"
         android:textColor="@color/blue"
-        android:textSize="@dimen/text_size_14"
+        android:textSize="@dimen/text_size14sp"
         app:layout_constraintBaseline_toBaselineOf="@id/tv_title"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -45,6 +45,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
-        tools:listitem="@layout/item_image" />
+        tools:listitem="@layout/item_banner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.filimonov.afishamovies.databinding.ItemImageBinding
+import com.filimonov.afishamovies.databinding.ItemBannerBinding
 import com.filimonov.afishamovies.databinding.ItemShowAllBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.presentation.model.MediaBannerUiModel
@@ -28,7 +28,7 @@ class MediaBannerHorizontalAdapter(
         return when (viewType) {
             MEDIA_BANNER_TYPE -> {
                 MediaBannerViewHolder(
-                    ItemImageBinding.inflate(
+                    ItemBannerBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
                         false
