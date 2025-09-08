@@ -3,7 +3,7 @@ package com.filimonov.afishamovies.presentation.ui.homepage
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.filimonov.afishamovies.data.repository.HomePageRepositoryImpl
+import com.filimonov.afishamovies.data.repository.MediaBannerRepositoryImpl
 import com.filimonov.afishamovies.domain.usecases.GetActionUSAMovieListUseCase
 import com.filimonov.afishamovies.domain.usecases.GetComedyRussiaMovieListUseCase
 import com.filimonov.afishamovies.domain.usecases.GetDramaFranceMovieListUseCase
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class HomePageViewModel : ViewModel() {
 
-    private val repository = HomePageRepositoryImpl()
+    private val repository = MediaBannerRepositoryImpl
 
     private val getComedyRussiaMovieListUseCase = GetComedyRussiaMovieListUseCase(repository)
     private val getPopularMovieListUseCase = GetPopularMovieListUseCase(repository)
@@ -38,12 +38,12 @@ class HomePageViewModel : ViewModel() {
             try {
                 _state.value = HomePageState.Success(
                     listOf(
-                        MediaSection("Русские комедии", getComedyRussiaMovieListUseCase()),
-                        MediaSection("Популярное", getPopularMovieListUseCase()),
-                        MediaSection("Боевики США", getActionUSAMovieListUseCase()),
-                        MediaSection("Топ 250", getTop250MovieListUseCase()),
-                        MediaSection("Драма Франции", getDramaFranceMovieListUseCase()),
-                        MediaSection("Сериалы", getSeriesListUseCase())
+                        MediaSection(0, "Русские комедии", getComedyRussiaMovieListUseCase()),
+                        MediaSection(1, "Популярное", getPopularMovieListUseCase()),
+                        MediaSection(2, "Боевики США", getActionUSAMovieListUseCase()),
+                        MediaSection(3, "Топ 250", getTop250MovieListUseCase()),
+                        MediaSection(4, "Драма Франции", getDramaFranceMovieListUseCase()),
+                        MediaSection(5, "Сериалы", getSeriesListUseCase())
                     )
                 )
             } catch (e: CancellationException) {

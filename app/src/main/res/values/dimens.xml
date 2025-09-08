@@ -4,17 +4,16 @@
     <dimen name="zero_dp">0dp</dimen>
     <dimen name="margin_top">80dp</dimen>
     <dimen name="margin_end">26dp</dimen>
-    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size18sp">18sp</dimen>
     <dimen name="margin_bottom_dotsindicator">64dp</dimen>
     <dimen name="dots_spacing">4dp</dimen>
-    <dimen name="text_size_24">24sp</dimen>
+    <dimen name="text_size24sp">24sp</dimen>
     <dimen name="margin_horizontal">26dp</dimen>
     <dimen name="iv_height">270dp</dimen>
-    <dimen name="text_size_28">28sp</dimen>
+    <dimen name="text_size28sp">28sp</dimen>
     <dimen name="padding_horizontal_bottomnav">66dp</dimen>
     <dimen name="icon_size_bottomnav">34dp</dimen>
     <dimen name="margin_top_46dp">46dp</dimen>
-    <dimen name="text_size_14">14sp</dimen>
     <dimen name="space_between">4dp</dimen>
     <dimen name="media_banner">235dp</dimen>
     <dimen name="margin_top24">24dp</dimen>
@@ -33,4 +32,15 @@
     <dimen name="padding_top2dp">2dp</dimen>
     <dimen name="margin_end10dp">10dp</dimen>
     <dimen name="margin_bottom36dp">36dp</dimen>
+    <dimen name="margin_start60dp">60dp</dimen>
+    <dimen name="margin_end60dp">60dp</dimen>
+    <dimen name="margin_between16dp">16dp</dimen>
+    <dimen name="margin_bottom16dp">16dp</dimen>
+    <dimen name="banner_width">120dp</dimen>
+    <dimen name="padding_bottom4dp">4dp</dimen>
+    <dimen name="text_size12sp">12sp</dimen>
+    <dimen name="padding_12dp">12dp</dimen>
+    <dimen name="layout_height56dp">56dp</dimen>
+    <dimen name="padding_horizontal60dp">60dp</dimen>
+    <dimen name="radius16dp">16dp</dimen>
 </resources>
