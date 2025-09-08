@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.presentation.ui.listpage
+package com.filimonov.afishamovies.presentation.ui.listpage.mediabannergridadapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,14 +8,11 @@ import com.filimonov.afishamovies.databinding.ItemBannerBinding
 import com.filimonov.afishamovies.databinding.ItemErrorLoadingBinding
 import com.filimonov.afishamovies.databinding.ItemLoadingProgressBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
-import com.filimonov.afishamovies.presentation.model.MediaBannerUiModel
-import com.filimonov.afishamovies.presentation.ui.homepage.mediabannerhorizontaladapter.MediaBannerViewHolder
-import com.filimonov.afishamovies.presentation.ui.homepage.mediabannerhorizontaladapter.MediaDiffCallback
 
 class MediaBannerGridAdapter(
     private val onMediaBannerClick: (MediaBannerEntity) -> Unit,
     private val onRetryButtonClick: () -> Unit,
-) : ListAdapter<MediaBannerUiModel, RecyclerView.ViewHolder>(MediaDiffCallback()) {
+) : ListAdapter<ListPageMedia, RecyclerView.ViewHolder>(ListPageMediaDiffCallback()) {
 
     companion object {
         const val BANNER_TYPE = 0
@@ -25,7 +22,7 @@ class MediaBannerGridAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            BANNER_TYPE -> MediaBannerViewHolder(
+            BANNER_TYPE -> ListPageMediaBannerViewHolder(
                 ItemBannerBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -34,7 +31,7 @@ class MediaBannerGridAdapter(
                 onMediaBannerClick
             )
 
-            LOADING_TYPE -> LoadingViewHolder(
+            LOADING_TYPE -> ListPageLoadingViewHolder(
                 ItemLoadingProgressBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -42,7 +39,7 @@ class MediaBannerGridAdapter(
                 )
             )
 
-            else -> ErrorViewHolder(
+            else -> ListPageErrorViewHolder(
                 ItemErrorLoadingBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -55,8 +52,8 @@ class MediaBannerGridAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is MediaBannerUiModel.Banner -> BANNER_TYPE
-            MediaBannerUiModel.Loading -> LOADING_TYPE
+            is ListPageMedia.Banner -> BANNER_TYPE
+            ListPageMedia.Loading -> LOADING_TYPE
             else -> ERROR_TYPE
         }
     }
@@ -64,8 +61,8 @@ class MediaBannerGridAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         when (val item = getItem(position)) {
-            is MediaBannerUiModel.Banner -> (holder as MediaBannerViewHolder).bind(item)
-            is MediaBannerUiModel.Error -> (holder as ErrorViewHolder).bind()
+            is ListPageMedia.Banner -> (holder as ListPageMediaBannerViewHolder).bind(item)
+            is ListPageMedia.Error -> (holder as ListPageErrorViewHolder).bind()
             else -> {}
         }
     }
@@ -75,22 +72,6 @@ class MediaBannerGridAdapter(
             LOADING_TYPE -> 2
             ERROR_TYPE -> 2
             else -> 1
-        }
-    }
-
-    class LoadingViewHolder(binding: ItemLoadingProgressBinding) :
-        RecyclerView.ViewHolder(binding.root)
-
-    class ErrorViewHolder(
-        private val binding: ItemErrorLoadingBinding,
-        private val onRetryButtonClick: () -> Unit
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind() {
-            binding.buttonReload.setOnClickListener {
-                onRetryButtonClick()
-            }
         }
     }
 }

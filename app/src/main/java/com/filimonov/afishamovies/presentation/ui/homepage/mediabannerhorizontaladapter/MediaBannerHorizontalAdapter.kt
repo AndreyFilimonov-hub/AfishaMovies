@@ -14,7 +14,7 @@ class MediaBannerHorizontalAdapter(
     private val onShowAllClick: (MediaSection) -> Unit,
     private val onMediaClick: (MediaBannerEntity) -> Unit,
 ) :
-    ListAdapter<HomePageMediaBanner, RecyclerView.ViewHolder>(MediaDiffCallback()) {
+    ListAdapter<HomePageMedia, RecyclerView.ViewHolder>(HomePageMediaDiffCallback()) {
 
     companion object {
 
@@ -55,14 +55,14 @@ class MediaBannerHorizontalAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is HomePageMediaBanner.Banner -> MEDIA_BANNER_TYPE
+            is HomePageMedia.Banner -> MEDIA_BANNER_TYPE
             else -> SHOW_ALL_BUTTON_TYPE
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = getItem(position)) {
-            is HomePageMediaBanner.Banner -> {
+            is HomePageMedia.Banner -> {
                 (holder as MediaBannerViewHolder).bind(item)
             }
 

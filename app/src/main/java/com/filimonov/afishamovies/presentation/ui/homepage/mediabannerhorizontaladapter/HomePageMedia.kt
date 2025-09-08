@@ -2,11 +2,11 @@ package com.filimonov.afishamovies.presentation.ui.homepage.mediabannerhorizonta
 
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 
-sealed class HomePageMediaBanner {
+sealed class HomePageMedia {
 
     data class Banner(
         val media: MediaBannerEntity
-    ) : HomePageMediaBanner()
+    ) : HomePageMedia()
 
-    data object ShowAll : HomePageMediaBanner()
+    data object ShowAll : HomePageMedia()
 }
