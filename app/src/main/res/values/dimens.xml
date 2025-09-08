@@ -43,4 +43,5 @@
     <dimen name="layout_height56dp">56dp</dimen>
     <dimen name="padding_horizontal60dp">60dp</dimen>
     <dimen name="radius16dp">16dp</dimen>
+    <dimen name="radius4dp">4dp</dimen>
 </resources>
