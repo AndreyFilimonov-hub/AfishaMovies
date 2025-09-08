@@ -8,7 +8,7 @@ import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ItemBannerBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 
-class MediaBannerViewHolder(
+class HomePageMediaBannerViewHolder(
     private val binding: ItemBannerBinding,
     private val onMediaBannerClick: (MediaBannerEntity) -> Unit
 ) :

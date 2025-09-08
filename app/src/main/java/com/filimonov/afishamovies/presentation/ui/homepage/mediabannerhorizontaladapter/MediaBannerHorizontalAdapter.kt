@@ -25,7 +25,7 @@ class MediaBannerHorizontalAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             MEDIA_BANNER_TYPE -> {
-                MediaBannerViewHolder(
+                HomePageMediaBannerViewHolder(
                     ItemBannerBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
@@ -36,7 +36,7 @@ class MediaBannerHorizontalAdapter(
             }
 
             SHOW_ALL_BUTTON_TYPE -> {
-                ShowAllViewHolder(
+                HomePageShowAllViewHolder(
                     ItemShowAllBinding.inflate(
                         LayoutInflater.from(parent.context),
                         parent,
@@ -63,25 +63,11 @@ class MediaBannerHorizontalAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = getItem(position)) {
             is HomePageMedia.Banner -> {
-                (holder as MediaBannerViewHolder).bind(item)
+                (holder as HomePageMediaBannerViewHolder).bind(item)
             }
 
             else -> {
-                (holder as ShowAllViewHolder).bind()
-            }
-        }
-    }
-
-    class ShowAllViewHolder(
-        private val binding: ItemShowAllBinding,
-        private val mediaSection: MediaSection,
-        private val onShowAllClick: (MediaSection) -> Unit
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind() {
-            binding.ibShowAll.setOnClickListener {
-                onShowAllClick(mediaSection)
+                (holder as HomePageShowAllViewHolder).bind()
             }
         }
     }
