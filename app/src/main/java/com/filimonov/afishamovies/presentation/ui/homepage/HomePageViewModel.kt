@@ -3,13 +3,10 @@ package com.filimonov.afishamovies.presentation.ui.homepage
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.data.repository.MediaBannerRepositoryImpl
-import com.filimonov.afishamovies.domain.usecases.GetActionUSAMovieListUseCase
-import com.filimonov.afishamovies.domain.usecases.GetComedyRussiaMovieListUseCase
-import com.filimonov.afishamovies.domain.usecases.GetDramaFranceMovieListUseCase
-import com.filimonov.afishamovies.domain.usecases.GetPopularMovieListUseCase
-import com.filimonov.afishamovies.domain.usecases.GetSeriesListUseCase
-import com.filimonov.afishamovies.domain.usecases.GetTop250MovieListUseCase
+import com.filimonov.afishamovies.domain.enum.Category
+import com.filimonov.afishamovies.domain.usecases.GetMediaListByCategoryUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,12 +16,7 @@ class HomePageViewModel : ViewModel() {
 
     private val repository = MediaBannerRepositoryImpl
 
-    private val getComedyRussiaMovieListUseCase = GetComedyRussiaMovieListUseCase(repository)
-    private val getPopularMovieListUseCase = GetPopularMovieListUseCase(repository)
-    private val getActionUSAMovieListUseCase = GetActionUSAMovieListUseCase(repository)
-    private val getTop250MovieListUseCase = GetTop250MovieListUseCase(repository)
-    private val getDramaFranceMovieListUseCase = GetDramaFranceMovieListUseCase(repository)
-    private val getSeriesListUseCase = GetSeriesListUseCase(repository)
+    private val getMediaListByCategoryUseCase = GetMediaListByCategoryUseCase(repository)
 
     private val _state = MutableStateFlow<HomePageState>(HomePageState.Loading)
     val state: StateFlow<HomePageState> = _state
@@ -38,12 +30,36 @@ class HomePageViewModel : ViewModel() {
             try {
                 _state.value = HomePageState.Success(
                     listOf(
-                        MediaSection(0, "Русские комедии", getComedyRussiaMovieListUseCase()),
-                        MediaSection(1, "Популярное", getPopularMovieListUseCase()),
-                        MediaSection(2, "Боевики США", getActionUSAMovieListUseCase()),
-                        MediaSection(3, "Топ 250", getTop250MovieListUseCase()),
-                        MediaSection(4, "Драма Франции", getDramaFranceMovieListUseCase()),
-                        MediaSection(5, "Сериалы", getSeriesListUseCase())
+                        MediaSection(
+                            Category.COMEDY_RUSSIAN.id,
+                            R.string.russian_comedy,
+                            getMediaListByCategoryUseCase(category = Category.COMEDY_RUSSIAN)
+                        ),
+                        MediaSection(
+                            Category.POPULAR.id,
+                            R.string.popular,
+                            getMediaListByCategoryUseCase(category = Category.POPULAR)
+                        ),
+                        MediaSection(
+                            Category.ACTION_USA.id,
+                            R.string.action_usa,
+                            getMediaListByCategoryUseCase(category = Category.ACTION_USA)
+                        ),
+                        MediaSection(
+                            Category.TOP250.id,
+                            R.string.top250,
+                            getMediaListByCategoryUseCase(category = Category.TOP250)
+                        ),
+                        MediaSection(
+                            Category.DRAMA_FRANCE.id,
+                            R.string.drama_france,
+                            getMediaListByCategoryUseCase(category = Category.DRAMA_FRANCE)
+                        ),
+                        MediaSection(
+                            Category.SERIES.id,
+                            R.string.series,
+                            getMediaListByCategoryUseCase(category = Category.SERIES)
+                        )
                     )
                 )
             } catch (e: CancellationException) {

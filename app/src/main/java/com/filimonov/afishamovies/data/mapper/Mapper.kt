@@ -12,3 +12,7 @@ fun MediaBannerDto.toEntity(): MediaBannerEntity {
         posterUrl = this.poster.url,
     )
 }
+
+fun List<MediaBannerDto>.toListEntity(): List<MediaBannerEntity> {
+    return this.map { it.toEntity() }
+}
