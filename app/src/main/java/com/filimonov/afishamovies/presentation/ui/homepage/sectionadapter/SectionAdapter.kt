@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.presentation.ui.homepage
+package com.filimonov.afishamovies.presentation.ui.homepage.sectionadapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,30 +7,30 @@ import androidx.recyclerview.widget.RecyclerView
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ItemSectionBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
-import com.filimonov.afishamovies.presentation.model.MediaBannerUiModel
+import com.filimonov.afishamovies.presentation.ui.homepage.mediabannerhorizontaladapter.MediaBannerHorizontalAdapter
 import com.filimonov.afishamovies.presentation.utils.HorizontalSpaceItemDecoration
 
 class SectionAdapter(
     private val onShowAllClick: (MediaSection) -> Unit,
     private val onMediaClick: (MediaBannerEntity) -> Unit,
 ) :
-    ListAdapter<MediaSection, SectionAdapter.MediaViewHolder>(MediaSectionDiffCallback()) {
+    ListAdapter<MediaSection, SectionAdapter.SectionViewHolder>(MediaSectionDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MediaViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SectionViewHolder {
         val binding = ItemSectionBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return MediaViewHolder(binding, onShowAllClick, onMediaClick)
+        return SectionViewHolder(binding, onShowAllClick, onMediaClick)
     }
 
-    override fun onBindViewHolder(holder: MediaViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SectionViewHolder, position: Int) {
         val mediaSection = getItem(position)
         holder.bind(mediaSection)
     }
 
-    class MediaViewHolder(
+    class SectionViewHolder(
         private val binding: ItemSectionBinding,
         private val onShowAllClick: (MediaSection) -> Unit,
         private val onMediaClick: (MediaBannerEntity) -> Unit,
@@ -38,7 +38,7 @@ class SectionAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(mediaSection: MediaSection) {
-            binding.tvTitle.text = mediaSection.title
+            binding.tvTitle.text = binding.root.context.resources.getText(mediaSection.title)
 
             val mediaBannerHorizontalAdapter =
                 MediaBannerHorizontalAdapter(mediaSection, onShowAllClick, onMediaClick)
@@ -51,9 +51,7 @@ class SectionAdapter(
                 )
             )
 
-            mediaBannerHorizontalAdapter.submitList(
-                mediaSection.mediaList.map { MediaBannerUiModel.Banner(it) } + MediaBannerUiModel.ShowAll
-            )
+            mediaBannerHorizontalAdapter.submitList(mediaSection.mediaList)
 
             binding.tvAll.setOnClickListener {
                 onShowAllClick(mediaSection)

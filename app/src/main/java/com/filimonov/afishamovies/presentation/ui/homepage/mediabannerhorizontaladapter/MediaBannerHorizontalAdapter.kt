@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.presentation.ui.homepage
+package com.filimonov.afishamovies.presentation.ui.homepage.mediabannerhorizontaladapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,16 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.filimonov.afishamovies.databinding.ItemBannerBinding
 import com.filimonov.afishamovies.databinding.ItemShowAllBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
-import com.filimonov.afishamovies.presentation.model.MediaBannerUiModel
-import com.filimonov.afishamovies.presentation.utils.MediaBannerViewHolder
-import com.filimonov.afishamovies.presentation.utils.MediaDiffCallback
+import com.filimonov.afishamovies.presentation.ui.homepage.sectionadapter.MediaSection
 
 class MediaBannerHorizontalAdapter(
     private val mediaSection: MediaSection,
     private val onShowAllClick: (MediaSection) -> Unit,
     private val onMediaClick: (MediaBannerEntity) -> Unit,
 ) :
-    ListAdapter<MediaBannerUiModel, RecyclerView.ViewHolder>(MediaDiffCallback()) {
+    ListAdapter<HomePageMediaBanner, RecyclerView.ViewHolder>(MediaDiffCallback()) {
 
     companion object {
 
@@ -57,14 +55,14 @@ class MediaBannerHorizontalAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is MediaBannerUiModel.Banner -> MEDIA_BANNER_TYPE
+            is HomePageMediaBanner.Banner -> MEDIA_BANNER_TYPE
             else -> SHOW_ALL_BUTTON_TYPE
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = getItem(position)) {
-            is MediaBannerUiModel.Banner -> {
+            is HomePageMediaBanner.Banner -> {
                 (holder as MediaBannerViewHolder).bind(item)
             }
 

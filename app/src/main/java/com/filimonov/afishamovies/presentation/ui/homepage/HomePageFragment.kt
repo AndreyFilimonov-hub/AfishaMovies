@@ -16,6 +16,7 @@ import androidx.transition.TransitionManager
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentHomePageBinding
 import com.filimonov.afishamovies.presentation.ui.MainActivity
+import com.filimonov.afishamovies.presentation.ui.homepage.sectionadapter.SectionAdapter
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch

@@ -9,8 +9,8 @@ import com.filimonov.afishamovies.databinding.ItemErrorLoadingBinding
 import com.filimonov.afishamovies.databinding.ItemLoadingProgressBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.presentation.model.MediaBannerUiModel
-import com.filimonov.afishamovies.presentation.utils.MediaBannerViewHolder
-import com.filimonov.afishamovies.presentation.utils.MediaDiffCallback
+import com.filimonov.afishamovies.presentation.ui.homepage.mediabannerhorizontaladapter.MediaBannerViewHolder
+import com.filimonov.afishamovies.presentation.ui.homepage.mediabannerhorizontaladapter.MediaDiffCallback
 
 class MediaBannerGridAdapter(
     private val onMediaBannerClick: (MediaBannerEntity) -> Unit,
