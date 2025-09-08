@@ -1,7 +1,7 @@
 package com.filimonov.afishamovies.data.network
 
 import com.filimonov.afishamovies.BuildConfig
-import com.filimonov.afishamovies.data.model.homepage.MediaBannerResponse
+import com.filimonov.afishamovies.data.model.mediabanner.MediaBannerResponse
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query
