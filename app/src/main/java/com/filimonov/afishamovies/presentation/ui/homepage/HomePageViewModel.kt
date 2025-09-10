@@ -10,6 +10,9 @@ import com.filimonov.afishamovies.domain.usecases.GetMediaListByCategoryUseCase
 import com.filimonov.afishamovies.presentation.ui.homepage.mediabannerhorizontaladapter.HomePageMedia
 import com.filimonov.afishamovies.presentation.ui.homepage.sectionadapter.MediaSection
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -30,46 +33,32 @@ class HomePageViewModel : ViewModel() {
     private fun loadData() {
         viewModelScope.launch {
             try {
-                _state.value = HomePageState.Success(
-                    listOf(
-                        MediaSection(
-                            Category.COMEDY_RUSSIAN.id,
-                            R.string.russian_comedy,
-                            getMediaListByCategoryUseCase(category = Category.COMEDY_RUSSIAN)
-                                .map { HomePageMedia.Banner(it) } + HomePageMedia.ShowAll
-                        ),
-                        MediaSection(
-                            Category.POPULAR.id,
-                            R.string.popular,
-                            getMediaListByCategoryUseCase(category = Category.POPULAR)
-                                .map { HomePageMedia.Banner(it) } + HomePageMedia.ShowAll
-                        ),
-                        MediaSection(
-                            Category.ACTION_USA.id,
-                            R.string.action_usa,
-                            getMediaListByCategoryUseCase(category = Category.ACTION_USA)
-                                .map { HomePageMedia.Banner(it) } + HomePageMedia.ShowAll
-                        ),
-                        MediaSection(
-                            Category.TOP250.id,
-                            R.string.top250,
-                            getMediaListByCategoryUseCase(category = Category.TOP250)
-                                .map { HomePageMedia.Banner(it) } + HomePageMedia.ShowAll
-                        ),
-                        MediaSection(
-                            Category.DRAMA_FRANCE.id,
-                            R.string.drama_france,
-                            getMediaListByCategoryUseCase(category = Category.DRAMA_FRANCE)
-                                .map { HomePageMedia.Banner(it) } + HomePageMedia.ShowAll
-                        ),
-                        MediaSection(
-                            Category.SERIES.id,
-                            R.string.series,
-                            getMediaListByCategoryUseCase(category = Category.SERIES)
-                                .map { HomePageMedia.Banner(it) } + HomePageMedia.ShowAll
-                        )
+                val sections = coroutineScope {
+                    val categories = listOf(
+                        Category.COMEDY_RUSSIAN to R.string.russian_comedy,
+                        Category.POPULAR to R.string.popular,
+                        Category.ACTION_USA to R.string.action_usa,
+                        Category.TOP250 to R.string.top250,
+                        Category.DRAMA_FRANCE to R.string.drama_france,
+                        Category.SERIES to R.string.series,
                     )
-                )
+
+                    categories.map { (category, titleResId) ->
+                        async {
+                            val banners = getMediaListByCategoryUseCase(category = category)
+                            MediaSection(
+                                category.id,
+                                titleResId,
+                                banners.map {
+                                    HomePageMedia.Banner(it)
+                                } + HomePageMedia.ShowAll
+                            )
+                        }
+                    }.awaitAll()
+                }
+
+                _state.value = HomePageState.Success(sections)
+
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
