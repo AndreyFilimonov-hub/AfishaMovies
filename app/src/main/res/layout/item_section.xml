@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/margin_bottom36dp">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tv_title"
@@ -36,7 +35,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_section"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/media_banner"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top24"
         android:clipToPadding="false"
         android:nestedScrollingEnabled="false"

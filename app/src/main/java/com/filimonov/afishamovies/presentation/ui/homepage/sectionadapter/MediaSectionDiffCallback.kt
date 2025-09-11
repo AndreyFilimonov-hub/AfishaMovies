@@ -1,7 +1,6 @@
-package com.filimonov.afishamovies.presentation.ui.homepage
+package com.filimonov.afishamovies.presentation.ui.homepage.sectionadapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 
 class MediaSectionDiffCallback : DiffUtil.ItemCallback<MediaSection>() {
 

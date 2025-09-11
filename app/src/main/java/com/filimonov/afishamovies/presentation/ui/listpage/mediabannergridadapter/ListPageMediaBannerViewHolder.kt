@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.presentation.utils
+package com.filimonov.afishamovies.presentation.ui.listpage.mediabannergridadapter
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -7,9 +7,8 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ItemBannerBinding
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
-import com.filimonov.afishamovies.presentation.model.MediaBannerUiModel
 
-class MediaBannerViewHolder(
+class ListPageMediaBannerViewHolder(
     private val binding: ItemBannerBinding,
     private val onMediaBannerClick: (MediaBannerEntity) -> Unit
 ) :
@@ -20,7 +19,7 @@ class MediaBannerViewHolder(
         private const val RADIUS_PX = 4
     }
 
-    fun bind(mediaBanner: MediaBannerUiModel.Banner) {
+    fun bind(mediaBanner: ListPageMedia.Banner) {
         binding.tvName.text = mediaBanner.media.name
         Glide.with(binding.root)
             .load(mediaBanner.media.posterUrl)

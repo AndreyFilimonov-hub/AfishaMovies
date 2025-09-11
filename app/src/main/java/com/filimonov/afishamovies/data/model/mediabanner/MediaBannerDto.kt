@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.data.model.homepage
+package com.filimonov.afishamovies.data.model.mediabanner
 
 import com.filimonov.afishamovies.data.model.GenreDto
 import com.filimonov.afishamovies.data.model.PosterDto

@@ -17,7 +17,7 @@ import androidx.transition.Slide
 import androidx.transition.TransitionManager
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentListPageBinding
-import com.filimonov.afishamovies.presentation.model.MediaBannerUiModel
+import com.filimonov.afishamovies.presentation.ui.listpage.mediabannergridadapter.MediaBannerGridAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 
@@ -32,7 +32,7 @@ class ListPageFragment : Fragment() {
         get() = _binding ?: throw RuntimeException("FragmentListPageBinding == null")
 
     private var categoryId: Int = UNDEFINED_ID
-    private var title: String = UNDEFINED_TITLE
+    private var titleId: Int = UNDEFINED_TITLE
 
     private lateinit var viewModel: ListPageViewModel
 
@@ -117,30 +117,15 @@ class ListPageFragment : Fragment() {
                 viewModel.state.collect {
                     when (it) {
                         is ListPageState.Error -> {
-                            mediaBannerGridAdapter.submitList(
-                                it.currentList
-                                    .map { banner ->
-                                        MediaBannerUiModel.Banner(banner)
-                                    } + MediaBannerUiModel.Error
-                            )
+                            mediaBannerGridAdapter.submitList(it.currentList)
                         }
 
                         is ListPageState.Success -> {
-                            mediaBannerGridAdapter.submitList(
-                                it.mediaBanners
-                                    .map { banner ->
-                                        MediaBannerUiModel.Banner(banner)
-                                    }
-                            )
+                            mediaBannerGridAdapter.submitList(it.mediaBanners)
                         }
 
                         is ListPageState.Loading -> {
-                            mediaBannerGridAdapter.submitList(
-                                it.currentList
-                                    .map { banner ->
-                                        MediaBannerUiModel.Banner(banner)
-                                    } + MediaBannerUiModel.Loading
-                            )
+                            mediaBannerGridAdapter.submitList(it.currentList)
                         }
                     }
                 }
@@ -152,7 +137,7 @@ class ListPageFragment : Fragment() {
         binding.ivBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
-        binding.tvTitle.text = title
+        binding.tvTitle.text = requireContext().resources.getText(titleId)
     }
 
     private fun setPaddingRootView() {
@@ -181,23 +166,23 @@ class ListPageFragment : Fragment() {
         if (!args.containsKey(TITLE)) {
             throw RuntimeException("Param title is absent")
         }
-        val titleBundle = args.getString(TITLE) ?: ""
-        if (titleBundle.isEmpty()) {
+        val titleBundle = args.getInt(TITLE)
+        if (titleBundle < 0) {
             throw RuntimeException("Param title is empty")
         }
-        title = titleBundle
+        titleId = titleBundle
     }
 
     companion object {
         private const val UNDEFINED_ID = -1
-        private const val UNDEFINED_TITLE = ""
+        private const val UNDEFINED_TITLE = -1
 
         @JvmStatic
-        fun newInstance(categoryId: Int, title: String) =
+        fun newInstance(categoryId: Int, titleResId: Int) =
             ListPageFragment().apply {
                 arguments = Bundle().apply {
                     putInt(CATEGORY_ID, categoryId)
-                    putString(TITLE, title)
+                    putInt(TITLE, titleResId)
                 }
             }
     }

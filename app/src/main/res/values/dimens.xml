@@ -15,11 +15,11 @@
     <dimen name="icon_size_bottomnav">34dp</dimen>
     <dimen name="margin_top_46dp">46dp</dimen>
     <dimen name="space_between">4dp</dimen>
-    <dimen name="media_banner">235dp</dimen>
+    <dimen name="media_banner">250dp</dimen>
     <dimen name="margin_top24">24dp</dimen>
     <dimen name="margin_top26">26dp</dimen>
     <dimen name="margin_top36">36dp</dimen>
-    <dimen name="poster_height">156dp</dimen>
+    <dimen name="poster_height">180dp</dimen>
     <dimen name="margin6dp">6dp</dimen>
     <dimen name="margin_start4dp">4dp</dimen>
     <dimen name="margin_top8dp">8dp</dimen>
@@ -43,4 +43,5 @@
     <dimen name="layout_height56dp">56dp</dimen>
     <dimen name="padding_horizontal60dp">60dp</dimen>
     <dimen name="radius16dp">16dp</dimen>
+    <dimen name="radius4dp">4dp</dimen>
 </resources>
