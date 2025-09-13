@@ -1,11 +1,10 @@
 package com.filimonov.afishamovies.presentation.ui.homepage
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filimonov.afishamovies.R
-import com.filimonov.afishamovies.domain.enum.Category
-import com.filimonov.afishamovies.domain.usecases.GetMediaListByCategoryUseCase
+import com.filimonov.afishamovies.domain.enums.Category
+import com.filimonov.afishamovies.domain.usecases.GetMediaBannersByCategoryFromRemoteUseCase
 import com.filimonov.afishamovies.presentation.ui.homepage.mediabannerhorizontaladapter.HomePageMedia
 import com.filimonov.afishamovies.presentation.ui.homepage.sectionadapter.MediaSection
 import kotlinx.coroutines.CancellationException
@@ -18,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HomePageViewModel @Inject constructor(
-    private val getMediaListByCategoryUseCase: GetMediaListByCategoryUseCase
+    private val getMediaBannersByCategoryFromRemoteUseCase: GetMediaBannersByCategoryFromRemoteUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<HomePageState>(HomePageState.Loading)
@@ -43,7 +42,7 @@ class HomePageViewModel @Inject constructor(
 
                     categories.map { (category, titleResId) ->
                         async {
-                            val banners = getMediaListByCategoryUseCase(category = category)
+                            val banners = getMediaBannersByCategoryFromRemoteUseCase(category = category)
                             MediaSection(
                                 category.id,
                                 titleResId,
@@ -60,7 +59,6 @@ class HomePageViewModel @Inject constructor(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                Log.d("AAA", e.toString())
                 _state.value = HomePageState.Error
             }
         }
