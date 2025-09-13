@@ -1,18 +1,19 @@
 package com.filimonov.afishamovies.data.repository
 
 import com.filimonov.afishamovies.data.mapper.toListEntity
-import com.filimonov.afishamovies.data.network.ApiFactory
+import com.filimonov.afishamovies.data.network.MediaBannerService
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
-import com.filimonov.afishamovies.domain.enum.Category
+import com.filimonov.afishamovies.domain.enums.Category
 import com.filimonov.afishamovies.domain.repository.MediaBannerRepository
+import javax.inject.Inject
 
-object MediaBannerRepositoryImpl : MediaBannerRepository {
+class MediaBannerRepositoryImpl @Inject constructor(
+    private val apiService: MediaBannerService
+) : MediaBannerRepository {
 
-    private val apiService = ApiFactory.mediaBannerService
+    private val cachedMedias = mutableMapOf<Category, List<MediaBannerEntity>>()
 
-    private val cachedMedias = mutableMapOf<Int, List<MediaBannerEntity>>()
-
-    override suspend fun getMediaListByCategory(
+    override suspend fun getMediaBannersByCategoryFromRemote(
         page: Int,
         category: Category
     ): List<MediaBannerEntity> {
@@ -20,41 +21,41 @@ object MediaBannerRepositoryImpl : MediaBannerRepository {
             Category.COMEDY_RUSSIAN -> {
                apiService.getComedyRussiaMovieList(page).medias
                    .toListEntity()
-                   .also { if (page == 1) cachedMedias[category.id] = it }
+                   .also { if (page == 1) cachedMedias[category] = it }
             }
             Category.POPULAR -> {
                 apiService.getPopularMovieList(page).medias
                     .toListEntity()
-                    .also { if (page == 1) cachedMedias[category.id] = it }
+                    .also { if (page == 1) cachedMedias[category] = it }
 
             }
             Category.ACTION_USA -> {
                 apiService.getActionMoviesUSAMovieList(page).medias
                     .toListEntity()
-                    .also { if (page == 1) cachedMedias[category.id] = it }
+                    .also { if (page == 1) cachedMedias[category] = it }
 
             }
             Category.TOP250 -> {
                 apiService.getTop250MovieList(page).medias
                     .toListEntity()
-                    .also { if (page == 1) cachedMedias[category.id] = it }
+                    .also { if (page == 1) cachedMedias[category] = it }
 
             }
             Category.DRAMA_FRANCE -> {
                 apiService.getDramaFranceMovieList(page).medias
                     .toListEntity()
-                    .also { if (page == 1) cachedMedias[category.id] = it }
+                    .also { if (page == 1) cachedMedias[category] = it }
 
             }
             Category.SERIES -> {
                 apiService.getSeriesList(page).medias
                     .toListEntity()
-                    .also { if (page == 1) cachedMedias[category.id] = it }
+                    .also { if (page == 1) cachedMedias[category] = it }
             }
         }
     }
 
-    fun getMediaBannersByCategory(categoryId: Int): List<MediaBannerEntity> {
-        return cachedMedias[categoryId] ?: emptyList()
+    override fun getMediaBannersByCategoryFromLocal(category: Category): List<MediaBannerEntity> {
+        return cachedMedias[category] ?: emptyList()
         }
 }

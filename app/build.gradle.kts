@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kapt)
 }
 
 val apiKey = project.findProperty("API_KEY") ?: ""
@@ -45,6 +46,9 @@ android {
 }
 
 dependencies {
+
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
 
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 

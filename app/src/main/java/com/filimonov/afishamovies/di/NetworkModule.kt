@@ -1,0 +1,28 @@
+package com.filimonov.afishamovies.di
+
+import com.filimonov.afishamovies.data.network.MediaBannerService
+import dagger.Module
+import dagger.Provides
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
+@Module
+object NetworkModule {
+
+    private const val BASE_URL = "https://api.kinopoisk.dev/v1.4/"
+
+    @ApplicationScope
+    @Provides
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @ApplicationScope
+    @Provides
+    fun provideMediaBannerService(retrofit: Retrofit): MediaBannerService {
+        return retrofit.create(MediaBannerService::class.java)
+    }
+}

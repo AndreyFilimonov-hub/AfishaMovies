@@ -15,11 +15,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.Slide
 import androidx.transition.TransitionManager
+import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentListPageBinding
 import com.filimonov.afishamovies.presentation.ui.listpage.mediabannergridadapter.MediaBannerGridAdapter
+import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private const val CATEGORY_ID = "category_id"
 private const val TITLE = "title"
@@ -34,9 +37,20 @@ class ListPageFragment : Fragment() {
     private var categoryId: Int = UNDEFINED_ID
     private var titleId: Int = UNDEFINED_TITLE
 
-    private lateinit var viewModel: ListPageViewModel
+    private val component by lazy {
+        (requireActivity().application as AfishaMoviesApp).component
+            .listPageComponent()
+            .create(categoryId)
+    }
 
-    private val mediaBannerGridAdapter =
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[ListPageViewModel::class.java]
+    }
+
+    private val mediaBannerGridAdapter by lazy {
         MediaBannerGridAdapter(
             onMediaBannerClick = {
                 // TODO launch MediaPageFragment
@@ -45,12 +59,12 @@ class ListPageFragment : Fragment() {
                 viewModel.nextPage()
             }
         )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseArgs()
-        val viewModelFactory = ListPageViewModelProvider(categoryId)
-        viewModel = ViewModelProvider(this, viewModelFactory)[ListPageViewModel::class.java]
+        component.inject(this)
         enterTransition = Slide(Gravity.END).apply {
             duration = 500L
             interpolator = AccelerateInterpolator()
@@ -78,7 +92,6 @@ class ListPageFragment : Fragment() {
         setToolbar()
         setupRecyclerView()
         observeViewModel()
-        viewModel.nextPage()
     }
 
     private fun setupRecyclerView() {

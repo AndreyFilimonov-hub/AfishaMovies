@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.domain.enum
+package com.filimonov.afishamovies.domain.enums
 
 enum class Category(val id: Int) {
     COMEDY_RUSSIAN(0),
