@@ -1,14 +1,15 @@
 package com.filimonov.afishamovies.data.repository
 
 import com.filimonov.afishamovies.data.mapper.toListEntity
-import com.filimonov.afishamovies.data.network.ApiFactory
+import com.filimonov.afishamovies.data.network.MediaBannerService
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.enum.Category
 import com.filimonov.afishamovies.domain.repository.MediaBannerRepository
+import javax.inject.Inject
 
-object MediaBannerRepositoryImpl : MediaBannerRepository {
-
-    private val apiService = ApiFactory.mediaBannerService
+class MediaBannerRepositoryImpl @Inject constructor(
+    private val apiService: MediaBannerService
+) : MediaBannerRepository {
 
     private val cachedMedias = mutableMapOf<Int, List<MediaBannerEntity>>()
 
@@ -54,7 +55,7 @@ object MediaBannerRepositoryImpl : MediaBannerRepository {
         }
     }
 
-    fun getMediaBannersByCategory(categoryId: Int): List<MediaBannerEntity> {
+    override fun getMediaBannersByCategory(categoryId: Int): List<MediaBannerEntity> {
         return cachedMedias[categoryId] ?: emptyList()
         }
 }

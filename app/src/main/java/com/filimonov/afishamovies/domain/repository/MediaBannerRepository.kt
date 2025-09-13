@@ -6,4 +6,6 @@ import com.filimonov.afishamovies.domain.enum.Category
 interface MediaBannerRepository {
 
     suspend fun getMediaListByCategory(page: Int, category: Category): List<MediaBannerEntity>
+
+    fun getMediaBannersByCategory(categoryId: Int): List<MediaBannerEntity>
 }

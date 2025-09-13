@@ -3,22 +3,22 @@ package com.filimonov.afishamovies.presentation.ui.listpage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filimonov.afishamovies.data.mapper.toListPageMediaList
-import com.filimonov.afishamovies.data.repository.MediaBannerRepositoryImpl
+import com.filimonov.afishamovies.di.CategoryIdQualifier
 import com.filimonov.afishamovies.domain.enum.Category
+import com.filimonov.afishamovies.domain.repository.MediaBannerRepository
 import com.filimonov.afishamovies.domain.usecases.GetMediaListByCategoryUseCase
 import com.filimonov.afishamovies.presentation.ui.listpage.mediabannergridadapter.ListPageMedia
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ListPageViewModel(
-    private val categoryId: Int
+class ListPageViewModel @Inject constructor(
+    repository: MediaBannerRepository,
+    private val getMediaListByCategoryUseCase: GetMediaListByCategoryUseCase,
+    @CategoryIdQualifier private val categoryId: Int
 ) : ViewModel() {
-
-    private val repository = MediaBannerRepositoryImpl
-
-    private val getMediaListByCategoryUseCase = GetMediaListByCategoryUseCase(repository)
 
     private var page = 1
 
