@@ -15,4 +15,8 @@
     <string name="show_all">Показать все</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="person_in_film">В фильме снимались</string>
+    <string name="worker_in_film">Над фильмом работали</string>
+    <string name="gallery">Галерея</string>
+    <string name="similar_movie">Похожие фильмы</string>
 </resources>
