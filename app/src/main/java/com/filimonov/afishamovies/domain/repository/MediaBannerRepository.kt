@@ -1,9 +1,11 @@
 package com.filimonov.afishamovies.domain.repository
 
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
-import com.filimonov.afishamovies.domain.enum.Category
+import com.filimonov.afishamovies.domain.enums.Category
 
 interface MediaBannerRepository {
 
-    suspend fun getMediaListByCategory(page: Int, category: Category): List<MediaBannerEntity>
+    suspend fun getMediaBannersByCategoryFromRemote(page: Int, category: Category): List<MediaBannerEntity>
+
+    fun getMediaBannersByCategoryFromLocal(category: Category): List<MediaBannerEntity>
 }

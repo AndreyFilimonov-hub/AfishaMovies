@@ -13,13 +13,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.transition.Slide
 import androidx.transition.TransitionManager
+import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentHomePageBinding
 import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.ui.homepage.sectionadapter.SectionAdapter
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
+import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class HomePageFragment : Fragment() {
 
@@ -27,8 +30,15 @@ class HomePageFragment : Fragment() {
     private val binding: FragmentHomePageBinding
         get() = _binding ?: throw RuntimeException("FragmentHomePageBinding == null")
 
+    private val component by lazy {
+        (requireActivity().application as AfishaMoviesApp).component
+    }
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
     private val viewModel by lazy {
-        ViewModelProvider(this)[HomePageViewModel::class.java]
+        ViewModelProvider(this, viewModelFactory)[HomePageViewModel::class.java]
     }
 
     private val sectionAdapter = SectionAdapter(
@@ -45,7 +55,7 @@ class HomePageFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        component.inject(this)
         enterTransition = Slide(Gravity.END).apply {
             duration = 500L
             interpolator = AccelerateInterpolator()
