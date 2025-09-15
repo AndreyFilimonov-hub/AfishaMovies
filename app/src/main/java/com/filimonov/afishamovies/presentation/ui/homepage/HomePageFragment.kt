@@ -79,7 +79,7 @@ class HomePageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setPaddingNestedScroll()
+        setPaddingRootView()
         observeViewModel()
 
         binding.rvSections.adapter = sectionAdapter
@@ -89,16 +89,16 @@ class HomePageFragment : Fragment() {
         }
     }
 
-    private fun setPaddingNestedScroll() {
+    private fun setPaddingRootView() {
         val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bNav)
-        val nestedScroll = binding.root
+        val rootView = binding.root
 
         bottomNavigationView.post {
             val bottomHeight = bottomNavigationView.height
 
-            val layoutParams = nestedScroll.layoutParams as ViewGroup.MarginLayoutParams
+            val layoutParams = rootView.layoutParams as ViewGroup.MarginLayoutParams
             layoutParams.bottomMargin = bottomHeight
-            nestedScroll.layoutParams = layoutParams
+            rootView.layoutParams = layoutParams
         }
     }
 

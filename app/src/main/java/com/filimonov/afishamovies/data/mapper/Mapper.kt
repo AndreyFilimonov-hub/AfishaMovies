@@ -1,9 +1,11 @@
 package com.filimonov.afishamovies.data.mapper
 
 import com.filimonov.afishamovies.data.model.filmpage.FilmPageDto
+import com.filimonov.afishamovies.data.model.filmpage.ImagePreviewDto
 import com.filimonov.afishamovies.data.model.filmpage.PersonBannerDto
 import com.filimonov.afishamovies.data.model.mediabanner.MediaBannerDto
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
+import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
 import com.filimonov.afishamovies.presentation.ui.listpage.mediabannergridadapter.ListPageMedia
@@ -18,7 +20,7 @@ fun MediaBannerDto.toEntity(): MediaBannerEntity {
     )
 }
 
-fun List<MediaBannerDto>.toListEntity(): List<MediaBannerEntity> {
+fun List<MediaBannerDto>.toMediaBannerListEntity(): List<MediaBannerEntity> {
     return this.map { it.toEntity() }
 }
 
@@ -39,8 +41,8 @@ fun FilmPageDto.toEntity(): FilmPageEntity {
         posterUrl = this.poster.url,
         genres = this.genres.map { it.toString() },
         countries = this.countries.map { it.toString() },
-        persons = this.persons.toEntityList(),
-        similarMovies = this.similarMovies.toListEntity()
+        persons = this.persons.toPersonBannerListEntity(),
+        similarMovies = this.similarMovies.toMediaBannerListEntity()
     )
 }
 
@@ -53,6 +55,14 @@ fun PersonBannerDto.toEntity(): PersonBannerEntity {
     )
 }
 
-fun List<PersonBannerDto>.toEntityList(): List<PersonBannerEntity> {
+fun List<PersonBannerDto>.toPersonBannerListEntity(): List<PersonBannerEntity> {
+    return this.map { it.toEntity() }
+}
+
+fun ImagePreviewDto.toEntity(): ImagePreviewEntity {
+    return ImagePreviewEntity(this.movieId, this.url)
+}
+
+fun List<ImagePreviewDto>.toImagePreviewListEntity(): List<ImagePreviewEntity> {
     return this.map { it.toEntity() }
 }

@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentFilmPageBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -33,6 +35,25 @@ class FilmPageFragment : Fragment() {
     ): View {
         _binding = FragmentFilmPageBinding.inflate(inflater)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setPaddingRootView()
+    }
+
+    private fun setPaddingRootView() {
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bNav)
+        val rootView = binding.root
+
+        bottomNavigationView.post {
+            val bottomHeight = bottomNavigationView.height
+
+            val layoutParams = rootView.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.bottomMargin = bottomHeight
+            rootView.layoutParams = layoutParams
+        }
     }
 
     companion object {
