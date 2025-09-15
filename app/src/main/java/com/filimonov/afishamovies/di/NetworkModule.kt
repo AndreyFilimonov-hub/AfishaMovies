@@ -1,5 +1,6 @@
 package com.filimonov.afishamovies.di
 
+import com.filimonov.afishamovies.data.network.FilmPageService
 import com.filimonov.afishamovies.data.network.MediaBannerService
 import dagger.Module
 import dagger.Provides
@@ -24,5 +25,11 @@ object NetworkModule {
     @Provides
     fun provideMediaBannerService(retrofit: Retrofit): MediaBannerService {
         return retrofit.create(MediaBannerService::class.java)
+    }
+
+    @ApplicationScope
+    @Provides
+    fun provideFilmPageService(retrofit: Retrofit): FilmPageService {
+        return retrofit.create(FilmPageService::class.java)
     }
 }
