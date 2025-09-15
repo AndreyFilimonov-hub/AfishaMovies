@@ -17,6 +17,7 @@ import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentHomePageBinding
 import com.filimonov.afishamovies.presentation.ui.MainActivity
+import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.homepage.sectionadapter.SectionAdapter
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
@@ -49,7 +50,10 @@ class HomePageFragment : Fragment() {
                 .commit()
         },
         onMediaClick = {
-            // TODO: launch MediaPageFragment
+            requireActivity().supportFragmentManager.beginTransaction()
+                .addToBackStack(null)
+                .add(R.id.fragment_container, FilmPageFragment.newInstance(it.id))
+                .commit()
         }
     )
 
