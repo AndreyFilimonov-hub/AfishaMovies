@@ -10,5 +10,5 @@ data class MediaBannerDto(
     @SerializedName("name") val name: String,
     @SerializedName("rating") val rating: RatingDto,
     @SerializedName("poster") val poster: PosterDto,
-    @SerializedName("genres") val genres: List<GenreDto>,
+    @SerializedName("genres") val genres: List<GenreDto>?,
 )
