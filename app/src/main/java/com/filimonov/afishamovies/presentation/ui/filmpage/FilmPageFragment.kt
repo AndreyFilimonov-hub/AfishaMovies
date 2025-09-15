@@ -1,20 +1,22 @@
 package com.filimonov.afishamovies.presentation.ui.filmpage
 
 import android.os.Bundle
+import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.Fragment
+import androidx.transition.Slide
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentFilmPageBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val MOVIE_ID = "movieId"
 
 class FilmPageFragment : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
+    private var movieId = UNDEFINED_ID
 
     private var _binding: FragmentFilmPageBinding? = null
 
@@ -23,9 +25,17 @@ class FilmPageFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        parseInt()
+
+        enterTransition = Slide(Gravity.END).apply {
+            duration = 500L
+            interpolator = AccelerateInterpolator()
+            propagation = null
+        }
+        exitTransition = Slide(Gravity.START).apply {
+            duration = 500L
+            interpolator = AccelerateInterpolator()
+            propagation = null
         }
     }
 
@@ -41,6 +51,19 @@ class FilmPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setPaddingRootView()
+        Log.d("AAA", "id $movieId")
+    }
+
+    private fun parseInt() {
+        val args = requireArguments()
+        if (!args.containsKey(MOVIE_ID)) {
+            throw RuntimeException("param movie id is absent")
+        }
+        val idBundle = args.getInt(MOVIE_ID)
+        if (idBundle < 0) {
+            throw RuntimeException("wrong id")
+        }
+        movieId = idBundle
     }
 
     private fun setPaddingRootView() {
@@ -58,12 +81,13 @@ class FilmPageFragment : Fragment() {
 
     companion object {
 
+        private const val UNDEFINED_ID = -1
+
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(movieId: Int) =
             FilmPageFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putInt(MOVIE_ID, movieId)
                 }
             }
     }
