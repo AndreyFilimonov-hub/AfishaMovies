@@ -9,5 +9,7 @@ interface AppComponent {
 
     fun listPageComponent(): ListPageComponent.Factory
 
+    fun filmPageComponent(): FilmPageComponent.Factory
+
     fun inject(fragment: HomePageFragment)
 }
