@@ -39,8 +39,8 @@ fun FilmPageDto.toEntity(): FilmPageEntity {
         movieLength = this.movieLength,
         ageRating = this.ageRating,
         posterUrl = this.poster.url,
-        genres = this.genres.map { it.toString() },
-        countries = this.countries.map { it.toString() },
+        genres = this.genres.map { it.name },
+        countries = this.countries.map { it.name },
         persons = this.persons.toPersonBannerListEntity(),
         similarMovies = this.similarMovies?.toMediaBannerListEntity()
     )
@@ -50,6 +50,7 @@ fun PersonBannerDto.toEntity(): PersonBannerEntity {
     return PersonBannerEntity(
         id = this.id,
         name = this.name ?: this.enName,
+        photo = this.photo,
         character = this.description,
         profession = this.profession
     )
