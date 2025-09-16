@@ -8,10 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.transition.Slide
+import androidx.transition.TransitionManager
+import com.bumptech.glide.Glide
+import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentFilmPageBinding
+import com.filimonov.afishamovies.domain.entities.FilmPageEntity
+import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private const val MOVIE_ID = "movieId"
 
@@ -23,10 +34,23 @@ class FilmPageFragment : Fragment() {
     private val binding: FragmentFilmPageBinding
         get() = _binding ?: throw RuntimeException("FragmentFilmPageBinding == null")
 
+    private val component by lazy {
+        (requireActivity().application as AfishaMoviesApp).component
+            .filmPageComponent()
+            .create(movieId)
+    }
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[FilmPageViewModel::class.java]
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseInt()
-
+        component.inject(this)
         enterTransition = Slide(Gravity.END).apply {
             duration = 500L
             interpolator = AccelerateInterpolator()
@@ -51,7 +75,46 @@ class FilmPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setPaddingRootView()
+        observeViewModel()
         Log.d("AAA", "id $movieId")
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                TransitionManager.beginDelayedTransition(binding.root)
+                viewModel.state.collect { state ->
+                    when (state) {
+                        FilmPageState.Error -> {}
+                        FilmPageState.Loading -> {}
+                        is FilmPageState.Success -> {
+                            setupFilmPageEntity(state.filmPage)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setupFilmPageEntity(filmPage: FilmPageEntity) {
+        with(filmPage) {
+            if (this.shortDescription == null) {
+                binding.tvShortDescription.visibility = View.GONE
+            }
+            binding.tvShortDescription.text = this.shortDescription
+            binding.tvFullDescription.text = this.description
+            binding.tvAllPersonInFilm.text = viewModel.actorsCount().toString()
+            binding.tvAllWorkersInFilm.text = viewModel.workersCount().toString()
+            if (this.similarMovies != null) {
+                binding.tvAllSimilarMovie.text = this.similarMovies.size.toString()
+            } else {
+                binding.tvSimilarMovie.visibility = View.GONE
+                binding.tvAllSimilarMovie.visibility = View.GONE
+            }
+            Glide.with(binding.ivPoster)
+                .load(this.posterUrl)
+                .into(binding.ivPoster)
+        }
     }
 
     private fun parseInt() {

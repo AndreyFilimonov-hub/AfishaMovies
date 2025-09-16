@@ -1,8 +1,10 @@
 package com.filimonov.afishamovies.presentation.ui.filmpage
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filimonov.afishamovies.di.MovieIdQualifier
+import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
 import com.filimonov.afishamovies.domain.usecases.GetFilmPageByIdUseCase
 import com.filimonov.afishamovies.domain.usecases.GetImagePreviewListByMovieId
 import kotlinx.coroutines.CancellationException
@@ -41,7 +43,39 @@ class FilmPageViewModel @Inject constructor(
                 throw e
             } catch (e: Exception) {
                 _state.value = FilmPageState.Error
+                Log.d("AAA", e.toString())
             }
         }
+    }
+
+    fun getFirst20Actors(): List<PersonBannerEntity> {
+        return (_state.value as FilmPageState.Success).filmPage.persons
+            .filter { it.profession == PROFESSION_ACTOR }
+            .take(20)
+    }
+
+    fun getFirst10Workers(): List<PersonBannerEntity> {
+        return (_state.value as FilmPageState.Success).filmPage.persons
+            .filter { it.profession != PROFESSION_ACTOR }
+            .take(10)
+    }
+
+    fun actorsCount(): Int {
+        return (_state.value as FilmPageState.Success).filmPage
+            .persons
+            .filter { it.profession == PROFESSION_ACTOR }
+            .size
+    }
+
+    fun workersCount(): Int {
+        return (_state.value as FilmPageState.Success).filmPage
+            .persons
+            .filter { it.profession != PROFESSION_ACTOR }
+            .size
+    }
+
+    companion object {
+
+        private const val PROFESSION_ACTOR = "актеры"
     }
 }
