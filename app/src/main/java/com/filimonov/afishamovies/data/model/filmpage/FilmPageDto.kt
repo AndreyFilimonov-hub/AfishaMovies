@@ -20,5 +20,5 @@ data class FilmPageDto(
     @SerializedName("genres") val genres: List<GenreDto>,
     @SerializedName("countries") val countries: List<CountryDto>,
     @SerializedName("persons") val persons: List<PersonBannerDto>,
-    @SerializedName("similarMovies") val similarMovies: List<MediaBannerDto>
+    @SerializedName("similarMovies") val similarMovies: List<MediaBannerDto>?
 )

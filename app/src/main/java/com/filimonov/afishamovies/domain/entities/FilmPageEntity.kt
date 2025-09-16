@@ -5,7 +5,7 @@ data class FilmPageEntity(
     val name: String,
     val year: Int,
     val description: String,
-    val shortDescription: String,
+    val shortDescription: String?,
     val rating: Double,
     val movieLength: Int,
     val ageRating: Int,
@@ -13,5 +13,5 @@ data class FilmPageEntity(
     val genres: List<String>,
     val countries: List<String>,
     val persons: List<PersonBannerEntity>,
-    val similarMovies: List<MediaBannerEntity>
+    val similarMovies: List<MediaBannerEntity>?
 )

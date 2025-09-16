@@ -42,14 +42,14 @@ fun FilmPageDto.toEntity(): FilmPageEntity {
         genres = this.genres.map { it.toString() },
         countries = this.countries.map { it.toString() },
         persons = this.persons.toPersonBannerListEntity(),
-        similarMovies = this.similarMovies.toMediaBannerListEntity()
+        similarMovies = this.similarMovies?.toMediaBannerListEntity()
     )
 }
 
 fun PersonBannerDto.toEntity(): PersonBannerEntity {
     return PersonBannerEntity(
         id = this.id,
-        name = this.name,
+        name = this.name ?: this.enName,
         character = this.description,
         profession = this.profession
     )
