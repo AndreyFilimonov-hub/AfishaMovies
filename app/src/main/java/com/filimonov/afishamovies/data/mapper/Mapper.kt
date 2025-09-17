@@ -36,7 +36,7 @@ fun FilmPageDto.toEntity(): FilmPageEntity {
         description = this.description,
         shortDescription = this.shortDescription,
         rating = this.rating.kp,
-        movieLength = this.movieLength,
+        movieLength = this.movieLength ?: this.seriesLength,
         ageRating = this.ageRating,
         posterUrl = this.poster.url,
         genres = this.genres.map { it.name },

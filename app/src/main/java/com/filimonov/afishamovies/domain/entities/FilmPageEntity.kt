@@ -7,7 +7,7 @@ data class FilmPageEntity(
     val description: String,
     val shortDescription: String?,
     val rating: Double,
-    val movieLength: Int,
+    val movieLength: Int?,
     val ageRating: Int,
     val posterUrl: String?,
     val genres: List<String>,
