@@ -26,6 +26,7 @@ import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.Workers
 import com.filimonov.afishamovies.presentation.ui.filmpage.similarmovieadapter.SimilarMovieAdapter
 import com.filimonov.afishamovies.presentation.utils.HorizontalSpaceItemDecoration
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
+import com.filimonov.afishamovies.presentation.utils.toMovieLengthFormat
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -147,12 +148,12 @@ class FilmPageFragment : Fragment() {
             binding.tvYearGenres.text = String.format(
                 "%s, %s",
                 this.year,
-                this.genres.joinToString(",")
+                this.genres.take(2).joinToString(", ")
             )
             binding.tvCountryTimeAge.text = String.format(
                 "%s, %s, %s+",
                 this.countries.first(),
-                this.movieLength,
+                this.movieLength?.toMovieLengthFormat(),
                 this.ageRating
             )
 

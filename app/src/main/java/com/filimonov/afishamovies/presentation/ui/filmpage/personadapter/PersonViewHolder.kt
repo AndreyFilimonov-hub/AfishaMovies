@@ -6,6 +6,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.filimonov.afishamovies.databinding.ItemPersonBinding
 import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
+import com.filimonov.afishamovies.presentation.utils.cutWordEnd
 
 class PersonViewHolder(
     private val binding: ItemPersonBinding
@@ -23,7 +24,7 @@ class PersonViewHolder(
         if (person.profession == "актеры") {
             binding.tvCharacter.text = person.character
         } else {
-            binding.tvCharacter.text = person.profession.substring(0, person.profession.lastIndex)
+            binding.tvCharacter.text = person.profession.cutWordEnd()
         }
         Glide.with(binding.ivAvatar)
             .load(person.photo)
