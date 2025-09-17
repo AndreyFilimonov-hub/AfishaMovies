@@ -322,7 +322,7 @@
             tools:text="4 >" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_section"
+            android:id="@+id/rv_similar_movie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_top24"
