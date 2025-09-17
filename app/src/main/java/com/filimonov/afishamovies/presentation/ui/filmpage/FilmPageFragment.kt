@@ -1,7 +1,6 @@
 package com.filimonov.afishamovies.presentation.ui.filmpage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +18,13 @@ import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentFilmPageBinding
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
+import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
+import com.filimonov.afishamovies.presentation.ui.filmpage.imagepreviewadapter.ImagePreviewAdapter
+import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.ActorsItemDecoration
+import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.PersonAdapter
+import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.WorkersItemDecoration
+import com.filimonov.afishamovies.presentation.ui.filmpage.similarmovieadapter.SimilarMovieAdapter
+import com.filimonov.afishamovies.presentation.utils.HorizontalSpaceItemDecoration
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -46,6 +52,29 @@ class FilmPageFragment : Fragment() {
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[FilmPageViewModel::class.java]
     }
+
+    private val actorsAdapter = PersonAdapter(
+        onClick = {
+            // TODO: launch ActerPageFragment
+        }
+    )
+
+    private val workersAdapter = PersonAdapter(
+        onClick = {
+            // TODO: launch ActerPageFragment
+        }
+    )
+
+    private val similarMovieAdapter = SimilarMovieAdapter(
+        onClick = {
+            requireActivity().supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_container, newInstance(it.id))
+                .addToBackStack(null)
+                .commit()
+        }
+    )
+
+    private val imagePreviewAdapter = ImagePreviewAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,8 +104,8 @@ class FilmPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setPaddingRootView()
+        setClickListenerOnBack()
         observeViewModel()
-        Log.d("AAA", "id $movieId")
     }
 
     private fun observeViewModel() {
@@ -89,6 +118,7 @@ class FilmPageFragment : Fragment() {
                         FilmPageState.Loading -> {}
                         is FilmPageState.Success -> {
                             setupFilmPageEntity(state.filmPage)
+                            setupImagesToGallery(state.imagePreviews)
                         }
                     }
                 }
@@ -96,24 +126,90 @@ class FilmPageFragment : Fragment() {
         }
     }
 
+    private fun setupImagesToGallery(list: List<ImagePreviewEntity>) {
+        binding.rvGallery.adapter = imagePreviewAdapter
+        binding.rvGallery.addItemDecoration(
+            HorizontalSpaceItemDecoration(
+                requireContext().resources.getDimensionPixelSize(R.dimen.margin_start),
+                requireContext().resources.getDimensionPixelSize(R.dimen.space_between)
+            )
+        )
+        imagePreviewAdapter.submitList(list)
+    }
+
     private fun setupFilmPageEntity(filmPage: FilmPageEntity) {
         with(filmPage) {
+            binding.tvRatingName.text = String.format(
+                "%s %s",
+                this.rating.toString().substring(0, 3),
+                this.name
+            )
+            binding.tvYearGenres.text = String.format(
+                "%s, %s",
+                this.year,
+                this.genres.joinToString(",")
+            )
+            binding.tvCountryTimeAge.text = String.format(
+                "%s, %s, %s+",
+                this.countries.first(),
+                this.movieLength,
+                this.ageRating
+            )
+
             if (this.shortDescription == null) {
                 binding.tvShortDescription.visibility = View.GONE
             }
             binding.tvShortDescription.text = this.shortDescription
             binding.tvFullDescription.text = this.description
+
             binding.tvAllPersonInFilm.text = viewModel.actorsCount().toString()
             binding.tvAllWorkersInFilm.text = viewModel.workersCount().toString()
+
             if (this.similarMovies != null) {
                 binding.tvAllSimilarMovie.text = this.similarMovies.size.toString()
+                binding.rvSimilarMovie.adapter = similarMovieAdapter
+                binding.rvSimilarMovie.addItemDecoration(
+                    HorizontalSpaceItemDecoration(
+                        requireContext().resources.getDimensionPixelSize(R.dimen.margin_start),
+                        requireContext().resources.getDimensionPixelSize(R.dimen.space_between)
+                    )
+                )
+                similarMovieAdapter.submitList(viewModel.getFirst10SimilarMovies())
             } else {
                 binding.tvSimilarMovie.visibility = View.GONE
                 binding.tvAllSimilarMovie.visibility = View.GONE
+                binding.rvSimilarMovie.visibility = View.GONE
             }
+
             Glide.with(binding.ivPoster)
                 .load(this.posterUrl)
                 .into(binding.ivPoster)
+
+            binding.rvActors.adapter = actorsAdapter
+            binding.rvActors.addItemDecoration(
+                ActorsItemDecoration(
+                    requireContext().resources.getDimensionPixelSize(R.dimen.margin_start),
+                    requireContext().resources.getDimensionPixelSize(R.dimen.space_between),
+                    requireContext().resources.getDimensionPixelSize(R.dimen.space_top_bottom)
+                )
+            )
+            actorsAdapter.submitList(viewModel.getFirst20Actors())
+
+            binding.rvWorker.adapter = workersAdapter
+            binding.rvWorker.addItemDecoration(
+                WorkersItemDecoration(
+                    requireContext().resources.getDimensionPixelSize(R.dimen.margin_start),
+                    requireContext().resources.getDimensionPixelSize(R.dimen.space_between),
+                    requireContext().resources.getDimensionPixelSize(R.dimen.space_top_bottom)
+                )
+            )
+            workersAdapter.submitList(viewModel.getFirst10Workers())
+        }
+    }
+
+    private fun setClickListenerOnBack() {
+        binding.ivBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filimonov.afishamovies.di.MovieIdQualifier
+import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
 import com.filimonov.afishamovies.domain.usecases.GetFilmPageByIdUseCase
 import com.filimonov.afishamovies.domain.usecases.GetImagePreviewListByMovieId
@@ -46,6 +47,11 @@ class FilmPageViewModel @Inject constructor(
                 Log.d("AAA", e.toString())
             }
         }
+    }
+
+    fun getFirst10SimilarMovies(): List<MediaBannerEntity>? {
+        return (_state.value as FilmPageState.Success).filmPage.similarMovies
+            ?.take(10)
     }
 
     fun getFirst20Actors(): List<PersonBannerEntity> {
