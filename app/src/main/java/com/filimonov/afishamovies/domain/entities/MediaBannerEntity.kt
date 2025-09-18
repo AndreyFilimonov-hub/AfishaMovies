@@ -4,6 +4,6 @@ data class MediaBannerEntity(
     val id: Int,
     val name: String,
     val genreMain: String?,
-    val rating: Double,
+    val rating: String?,
     val posterUrl: String?,
 )

@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.transition.Slide
 import androidx.transition.TransitionManager
-import com.bumptech.glide.Glide
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentFilmPageBinding
@@ -26,7 +25,7 @@ import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.Workers
 import com.filimonov.afishamovies.presentation.ui.filmpage.similarmovieadapter.SimilarMovieAdapter
 import com.filimonov.afishamovies.presentation.utils.HorizontalSpaceItemDecoration
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
-import com.filimonov.afishamovies.presentation.utils.toMovieLengthFormat
+import com.filimonov.afishamovies.presentation.utils.loadImage
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -140,22 +139,9 @@ class FilmPageFragment : Fragment() {
 
     private fun setupFilmPageEntity(filmPage: FilmPageEntity) {
         with(filmPage) {
-            binding.tvRatingName.text = String.format(
-                "%s %s",
-                this.rating.toString().substring(0, 3),
-                this.name
-            )
-            binding.tvYearGenres.text = String.format(
-                "%s, %s",
-                this.year,
-                this.genres.take(2).joinToString(", ")
-            )
-            binding.tvCountryTimeAge.text = String.format(
-                "%s, %s, %s+",
-                this.countries.first(),
-                this.movieLength?.toMovieLengthFormat(),
-                this.ageRating
-            )
+            binding.tvRatingName.text = this.ratingName
+            binding.tvYearGenres.text = this.yearGenres
+            binding.tvCountryTimeAge.text = this.countryMovieLengthAgeRating
 
             if (this.shortDescription == null) {
                 binding.tvShortDescription.visibility = View.GONE
@@ -182,9 +168,7 @@ class FilmPageFragment : Fragment() {
                 binding.rvSimilarMovie.visibility = View.GONE
             }
 
-            Glide.with(binding.ivPoster)
-                .load(this.posterUrl)
-                .into(binding.ivPoster)
+            binding.ivPoster.loadImage(this.posterUrl)
 
             binding.rvActors.adapter = actorsAdapter
             binding.rvActors.addItemDecoration(

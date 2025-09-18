@@ -1,5 +1,6 @@
 package com.filimonov.afishamovies.presentation.ui.filmpage.similarmovieadapter
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -30,7 +31,12 @@ class MovieBannerViewHolder(
             .placeholder(R.drawable.onboard_second)
             .into(binding.ivPoster)
         binding.tvGenre.text = mediaBanner.genreMain
-        binding.tvRating.text = mediaBanner.rating.toString().substring(0, 3)
+
+        if (mediaBanner.rating == null) {
+            binding.tvRating.visibility = View.GONE
+        } else {
+            binding.tvRating.text = mediaBanner.rating
+        }
 
         binding.bannerContainer.setOnClickListener {
             onMediaBannerClick(mediaBanner)
