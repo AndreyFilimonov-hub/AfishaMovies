@@ -55,13 +55,13 @@ class FilmPageFragment : Fragment() {
 
     private val actorsAdapter = PersonAdapter(
         onClick = {
-            // TODO: launch ActerPageFragment
+            // TODO: launch ActorPageFragment
         }
     )
 
     private val workersAdapter = PersonAdapter(
         onClick = {
-            // TODO: launch ActerPageFragment
+            // TODO: launch ActorPageFragment
         }
     )
 
@@ -135,6 +135,10 @@ class FilmPageFragment : Fragment() {
             )
         )
         imagePreviewAdapter.submitList(list)
+
+        binding.tvAllGallery.setOnClickListener {
+            // TODO: launch GalleryFragment
+        }
     }
 
     private fun setupFilmPageEntity(filmPage: FilmPageEntity) {
@@ -145,8 +149,10 @@ class FilmPageFragment : Fragment() {
 
             if (this.shortDescription == null) {
                 binding.tvShortDescription.visibility = View.GONE
+            } else {
+                binding.tvShortDescription.text = this.shortDescription
             }
-            binding.tvShortDescription.text = this.shortDescription
+
             binding.tvFullDescription.text = this.description
 
             binding.tvAllPersonInFilm.text = viewModel.actorsCount().toString()
@@ -189,6 +195,14 @@ class FilmPageFragment : Fragment() {
                 )
             )
             workersAdapter.submitList(viewModel.getFirst10Workers())
+
+            binding.tvAllPersonInFilm.setOnClickListener {
+                // TODO: launch ListPageFragment
+            }
+
+            binding.tvAllWorkersInFilm.setOnClickListener {
+                // TODO: launch ListPageFragment
+            }
         }
     }
 
