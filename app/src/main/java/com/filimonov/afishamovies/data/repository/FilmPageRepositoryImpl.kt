@@ -1,6 +1,6 @@
 package com.filimonov.afishamovies.data.repository
 
-import com.filimonov.afishamovies.data.mapper.toEntity
+import com.filimonov.afishamovies.data.mapper.toFilmPageEntity
 import com.filimonov.afishamovies.data.mapper.toImagePreviewListEntity
 import com.filimonov.afishamovies.data.network.FilmPageService
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
@@ -12,7 +12,7 @@ class FilmPageRepositoryImpl @Inject constructor(
     private val apiService: FilmPageService
 ) : FilmPageRepository {
     override suspend fun getFilmPageById(id: Int): FilmPageEntity {
-        return apiService.getFilmPageById(id).toEntity()
+        return apiService.getFilmPageById(id).toFilmPageEntity()
     }
 
     override suspend fun getImagePreviewsByMovieId(movieId: Int): List<ImagePreviewEntity> {

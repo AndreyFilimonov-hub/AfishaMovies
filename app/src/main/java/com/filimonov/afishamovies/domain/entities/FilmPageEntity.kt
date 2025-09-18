@@ -2,16 +2,12 @@ package com.filimonov.afishamovies.domain.entities
 
 data class FilmPageEntity(
     val id: Int,
-    val name: String,
-    val year: Int,
+    val ratingName: String,
+    val yearGenres: String,
     val description: String,
-    val shortDescription: String,
-    val rating: Double,
-    val movieLength: Int,
-    val ageRating: Int,
+    val shortDescription: String?,
     val posterUrl: String?,
-    val genres: List<String>,
-    val countries: List<String>,
+    val countryMovieLengthAgeRating: String,
     val persons: List<PersonBannerEntity>,
-    val similarMovies: List<MediaBannerEntity>
+    val similarMovies: List<MediaBannerEntity>?
 )

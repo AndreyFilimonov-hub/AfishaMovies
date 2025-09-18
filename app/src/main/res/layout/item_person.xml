@@ -2,13 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="210dp"
-    android:layout_height="70dp">
+    android:layout_width="@dimen/width210dp"
+    android:layout_height="@dimen/height70dp"
+    android:background="@drawable/bg_ripple_person"
+    android:clickable="true"
+    android:focusable="true">
 
     <ImageView
         android:id="@+id/iv_avatar"
-        android:layout_width="50dp"
-        android:layout_height="70dp"
+        android:layout_width="@dimen/width50dp"
+        android:layout_height="@dimen/width70dp"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
         android:scaleType="centerCrop"
@@ -18,24 +21,30 @@
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginStart="@dimen/margins_start16dp"
+        android:layout_marginTop="@dimen/margin_top18dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textSize="@dimen/text_size14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_avatar"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Владимир Онохов" />
 
     <TextView
         android:id="@+id/tv_character"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/margins_start16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@android:color/darker_gray"
         android:textSize="@dimen/text_size12sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_avatar"
         app:layout_constraintTop_toBottomOf="@id/tv_name"
-        tools:text="Лешка"
-        android:textColor="@android:color/darker_gray"/>
+        tools:text="Лешка" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,11 +14,12 @@ data class FilmPageDto(
     @SerializedName("description") val description: String,
     @SerializedName("shortDescription") val shortDescription: String,
     @SerializedName("rating") val rating: RatingDto,
-    @SerializedName("movieLength") val movieLength: Int,
+    @SerializedName("movieLength") val movieLength: Int?,
+    @SerializedName("seriesLength") val seriesLength: Int?,
     @SerializedName("ageRating") val ageRating: Int,
     @SerializedName("poster") val poster: PosterDto,
     @SerializedName("genres") val genres: List<GenreDto>,
     @SerializedName("countries") val countries: List<CountryDto>,
     @SerializedName("persons") val persons: List<PersonBannerDto>,
-    @SerializedName("similarMovies") val similarMovies: List<MediaBannerDto>
+    @SerializedName("similarMovies") val similarMovies: List<MediaBannerDto>?
 )

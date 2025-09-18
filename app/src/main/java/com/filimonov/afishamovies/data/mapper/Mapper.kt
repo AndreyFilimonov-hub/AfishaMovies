@@ -9,60 +9,61 @@ import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
 import com.filimonov.afishamovies.presentation.ui.listpage.mediabannergridadapter.ListPageMedia
+import com.filimonov.afishamovies.presentation.utils.roundRating
+import com.filimonov.afishamovies.presentation.utils.toMovieLengthFormat
 
-fun MediaBannerDto.toEntity(): MediaBannerEntity {
+fun MediaBannerDto.toMediaBannerEntity(): MediaBannerEntity {
     return MediaBannerEntity(
         id = this.id,
         name = this.name,
         genreMain = this.genres?.first()?.name,
-        rating = this.rating.kp,
+        rating = this.rating?.kp?.roundRating(),
         posterUrl = this.poster.url,
     )
 }
 
 fun List<MediaBannerDto>.toMediaBannerListEntity(): List<MediaBannerEntity> {
-    return this.map { it.toEntity() }
+    return this.map { it.toMediaBannerEntity() }
 }
 
 fun List<MediaBannerEntity>.toListPageMediaList(): List<ListPageMedia> {
     return this.map { ListPageMedia.Banner(it) }
 }
 
-fun FilmPageDto.toEntity(): FilmPageEntity {
+fun FilmPageDto.toFilmPageEntity(): FilmPageEntity {
     return FilmPageEntity(
         id = this.id,
-        name = this.name,
-        year = this.year,
         description = this.description,
         shortDescription = this.shortDescription,
-        rating = this.rating.kp,
-        movieLength = this.movieLength,
-        ageRating = this.ageRating,
         posterUrl = this.poster.url,
-        genres = this.genres.map { it.toString() },
-        countries = this.countries.map { it.toString() },
         persons = this.persons.toPersonBannerListEntity(),
-        similarMovies = this.similarMovies.toMediaBannerListEntity()
+        similarMovies = this.similarMovies?.toMediaBannerListEntity(),
+        ratingName = "${this.rating.kp?.roundRating()} ${this.name}",
+        yearGenres = "${this.year}, ${this.genres.joinToString { it.name }}",
+        countryMovieLengthAgeRating = "${
+            this.countries.map { it.name }.first()
+        }, ${(movieLength ?: seriesLength)?.toMovieLengthFormat()}, ${this.ageRating}+"
     )
 }
 
-fun PersonBannerDto.toEntity(): PersonBannerEntity {
+fun PersonBannerDto.toPersonBannerEntity(): PersonBannerEntity {
     return PersonBannerEntity(
         id = this.id,
-        name = this.name,
+        name = this.name ?: this.enName,
+        photo = this.photo,
         character = this.description,
         profession = this.profession
     )
 }
 
 fun List<PersonBannerDto>.toPersonBannerListEntity(): List<PersonBannerEntity> {
-    return this.map { it.toEntity() }
+    return this.map { it.toPersonBannerEntity() }
 }
 
-fun ImagePreviewDto.toEntity(): ImagePreviewEntity {
+fun ImagePreviewDto.toImagePreviewEntity(): ImagePreviewEntity {
     return ImagePreviewEntity(this.movieId, this.url)
 }
 
 fun List<ImagePreviewDto>.toImagePreviewListEntity(): List<ImagePreviewEntity> {
-    return this.map { it.toEntity() }
+    return this.map { it.toImagePreviewEntity() }
 }
