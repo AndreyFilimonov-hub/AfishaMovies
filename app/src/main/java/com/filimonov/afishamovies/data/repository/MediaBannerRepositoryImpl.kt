@@ -1,6 +1,6 @@
 package com.filimonov.afishamovies.data.repository
 
-import com.filimonov.afishamovies.data.mapper.toListEntity
+import com.filimonov.afishamovies.data.mapper.toMediaBannerListEntity
 import com.filimonov.afishamovies.data.network.MediaBannerService
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.enums.Category
@@ -20,36 +20,36 @@ class MediaBannerRepositoryImpl @Inject constructor(
         return when (category) {
             Category.COMEDY_RUSSIAN -> {
                apiService.getComedyRussiaMovieList(page).medias
-                   .toListEntity()
+                   .toMediaBannerListEntity()
                    .also { if (page == 1) cachedMedias[category] = it }
             }
             Category.POPULAR -> {
                 apiService.getPopularMovieList(page).medias
-                    .toListEntity()
+                    .toMediaBannerListEntity()
                     .also { if (page == 1) cachedMedias[category] = it }
 
             }
             Category.ACTION_USA -> {
                 apiService.getActionMoviesUSAMovieList(page).medias
-                    .toListEntity()
+                    .toMediaBannerListEntity()
                     .also { if (page == 1) cachedMedias[category] = it }
 
             }
             Category.TOP250 -> {
                 apiService.getTop250MovieList(page).medias
-                    .toListEntity()
+                    .toMediaBannerListEntity()
                     .also { if (page == 1) cachedMedias[category] = it }
 
             }
             Category.DRAMA_FRANCE -> {
                 apiService.getDramaFranceMovieList(page).medias
-                    .toListEntity()
+                    .toMediaBannerListEntity()
                     .also { if (page == 1) cachedMedias[category] = it }
 
             }
             Category.SERIES -> {
                 apiService.getSeriesList(page).medias
-                    .toListEntity()
+                    .toMediaBannerListEntity()
                     .also { if (page == 1) cachedMedias[category] = it }
             }
         }

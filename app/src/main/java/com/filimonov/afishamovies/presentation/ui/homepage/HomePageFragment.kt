@@ -17,6 +17,7 @@ import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentHomePageBinding
 import com.filimonov.afishamovies.presentation.ui.MainActivity
+import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.homepage.sectionadapter.SectionAdapter
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
@@ -49,7 +50,10 @@ class HomePageFragment : Fragment() {
                 .commit()
         },
         onMediaClick = {
-            // TODO: launch MediaPageFragment
+            requireActivity().supportFragmentManager.beginTransaction()
+                .addToBackStack(null)
+                .add(R.id.fragment_container, FilmPageFragment.newInstance(it.id))
+                .commit()
         }
     )
 
@@ -79,7 +83,7 @@ class HomePageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setPaddingNestedScroll()
+        setPaddingRootView()
         observeViewModel()
 
         binding.rvSections.adapter = sectionAdapter
@@ -89,16 +93,16 @@ class HomePageFragment : Fragment() {
         }
     }
 
-    private fun setPaddingNestedScroll() {
+    private fun setPaddingRootView() {
         val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bNav)
-        val nestedScroll = binding.root
+        val rootView = binding.root
 
         bottomNavigationView.post {
             val bottomHeight = bottomNavigationView.height
 
-            val layoutParams = nestedScroll.layoutParams as ViewGroup.MarginLayoutParams
+            val layoutParams = rootView.layoutParams as ViewGroup.MarginLayoutParams
             layoutParams.bottomMargin = bottomHeight
-            nestedScroll.layoutParams = layoutParams
+            rootView.layoutParams = layoutParams
         }
     }
 

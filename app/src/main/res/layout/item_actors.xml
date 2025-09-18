@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_person_in_film"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_start"
+        android:text="@string/person_in_film"
+        android:textSize="@dimen/text_size18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/rv_section"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_start"
+        android:background="@drawable/bg_ripple_rectangle"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="@dimen/padding_12dp"
+        tools:text="27 >"
+        android:textColor="@color/blue"
+        android:textSize="@dimen/text_size14sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_person_in_film"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_section"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top24"
+        android:clipToPadding="false"
+        android:nestedScrollingEnabled="false"
+        android:orientation="horizontal"
+        app:spanCount="4"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_person_in_film"
+        tools:listitem="@layout/item_person" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
