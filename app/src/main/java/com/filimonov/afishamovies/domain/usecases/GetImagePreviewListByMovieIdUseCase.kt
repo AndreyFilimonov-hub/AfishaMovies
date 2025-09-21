@@ -4,7 +4,7 @@ import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
 import com.filimonov.afishamovies.domain.repository.FilmPageRepository
 import javax.inject.Inject
 
-class GetImagePreviewListByMovieId @Inject constructor(private val repository: FilmPageRepository) {
+class GetImagePreviewListByMovieIdUseCase @Inject constructor(private val repository: FilmPageRepository) {
 
     suspend operator fun invoke(movieId: Int): List<ImagePreviewEntity> {
         return repository.getImagePreviewsByMovieId(movieId)
