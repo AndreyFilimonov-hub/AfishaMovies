@@ -1,6 +1,7 @@
 package com.filimonov.afishamovies.di
 
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
+import com.filimonov.afishamovies.presentation.ui.listpage.ListPageMode
 import dagger.BindsInstance
 import dagger.Subcomponent
 
@@ -15,7 +16,8 @@ interface ListPageComponent {
     interface Factory {
 
         fun create(
-            @BindsInstance @CategoryIdQualifier categoryId: Int
+            @BindsInstance @CategoryOrMovieIdQualifier categoryId: Int,
+            @BindsInstance @ModeQualifier mode: ListPageMode
         ): ListPageComponent
     }
 }

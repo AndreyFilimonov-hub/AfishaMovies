@@ -25,8 +25,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val CATEGORY_ID = "category_id"
+private const val CATEGORY_OR_MOVIE_ID = "category_or_movie_id"
 private const val TITLE = "title"
+private const val MODE = "mode"
 
 class ListPageFragment : Fragment() {
 
@@ -35,13 +36,14 @@ class ListPageFragment : Fragment() {
     private val binding: FragmentListPageBinding
         get() = _binding ?: throw RuntimeException("FragmentListPageBinding == null")
 
-    private var categoryId: Int = UNDEFINED_ID
+    private var id: Int = UNDEFINED_ID
     private var titleId: Int = UNDEFINED_TITLE
+    private lateinit var mode: ListPageMode
 
     private val component by lazy {
         (requireActivity().application as AfishaMoviesApp).component
             .listPageComponent()
-            .create(categoryId)
+            .create(id, mode)
     }
 
     @Inject
@@ -120,7 +122,7 @@ class ListPageFragment : Fragment() {
                 val totalItemCount = gridLayoutManager.itemCount
                 val lastVisibleItem = gridLayoutManager.findLastVisibleItemPosition()
 
-                if (viewModel.state.value !is ListPageState.Loading && lastVisibleItem >= totalItemCount - 5) {
+                if (mode == ListPageMode.MEDIA && viewModel.state.value !is ListPageState.Loading && lastVisibleItem >= totalItemCount - 5) {
                     viewModel.nextPage()
                 }
             }
@@ -172,14 +174,14 @@ class ListPageFragment : Fragment() {
 
     private fun parseArgs() {
         val args = requireArguments()
-        if (!args.containsKey(CATEGORY_ID)) {
+        if (!args.containsKey(CATEGORY_OR_MOVIE_ID)) {
             throw RuntimeException("Param category id is absent")
         }
-        val categoryIdBundle = args.getInt(CATEGORY_ID)
-        if (categoryIdBundle < 0) {
+        val idBundle = args.getInt(CATEGORY_OR_MOVIE_ID)
+        if (idBundle < 0) {
             throw RuntimeException("Category ID is wrong")
         }
-        categoryId = categoryIdBundle
+        id = idBundle
         if (!args.containsKey(TITLE)) {
             throw RuntimeException("Param title is absent")
         }
@@ -188,6 +190,14 @@ class ListPageFragment : Fragment() {
             throw RuntimeException("Param title is empty")
         }
         titleId = titleBundle
+        if (!args.containsKey(MODE)) {
+            throw RuntimeException("Param mode is absent")
+        }
+        val modeBundle = args.getString(MODE) ?: ""
+        if (modeBundle.isEmpty()) {
+            throw RuntimeException("Param mode is empty")
+        }
+        mode = ListPageMode.valueOf(modeBundle)
     }
 
     companion object {
@@ -195,11 +205,12 @@ class ListPageFragment : Fragment() {
         private const val UNDEFINED_TITLE = -1
 
         @JvmStatic
-        fun newInstance(categoryId: Int, titleResId: Int) =
+        fun newInstance(id: Int, titleResId: Int, mode: ListPageMode) =
             ListPageFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(CATEGORY_ID, categoryId)
+                    putInt(CATEGORY_OR_MOVIE_ID, id)
                     putInt(TITLE, titleResId)
+                    putString(MODE, mode.name)
                 }
             }
     }
