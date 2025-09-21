@@ -1,6 +1,7 @@
 package com.filimonov.afishamovies.data.network
 
-import com.filimonov.afishamovies.BuildConfig
+
+import com.filimonov.afishamovies.BuildConfig.API_KEY
 import com.filimonov.afishamovies.data.model.filmpage.FilmPageDto
 import com.filimonov.afishamovies.data.model.filmpage.ImagePreviewResponse
 import retrofit2.http.GET
@@ -25,9 +26,4 @@ interface FilmPageService {
         @Query("selectedFields") selectedFieldId: String = "movieId",
         @Query("selectedFields") selectedFieldName: String = "url",
     ) : ImagePreviewResponse
-
-    companion object {
-
-        private const val API_KEY = BuildConfig.API_KEY
-    }
 }

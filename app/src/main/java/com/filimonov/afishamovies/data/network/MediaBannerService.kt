@@ -1,6 +1,6 @@
 package com.filimonov.afishamovies.data.network
 
-import com.filimonov.afishamovies.BuildConfig
+import com.filimonov.afishamovies.BuildConfig.API_KEY
 import com.filimonov.afishamovies.data.model.mediabanner.MediaBannerResponse
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -110,9 +110,4 @@ interface MediaBannerService {
         @Query("sortType") sortType: Int = -1,
         @Query("type") type: String = "tv-series"
     ): MediaBannerResponse
-
-    companion object {
-
-        private const val API_KEY = BuildConfig.API_KEY
-    }
 }
