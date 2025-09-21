@@ -26,8 +26,8 @@ fun List<MediaBannerDto>.toMediaBannerListEntity(): List<MediaBannerEntity> {
     return this.map { it.toMediaBannerEntity() }
 }
 
-fun List<MediaBannerEntity>.toListPageMediaList(): List<ListPageMedia> {
-    return this.map { ListPageMedia.Banner(it) }
+fun List<MediaBannerEntity>.toListPageMediaBannerList(): List<ListPageMedia> {
+    return this.map { ListPageMedia.MediaBanner(it) }
 }
 
 fun FilmPageDto.toFilmPageEntity(): FilmPageEntity {
@@ -58,6 +58,14 @@ fun PersonBannerDto.toPersonBannerEntity(): PersonBannerEntity {
 
 fun List<PersonBannerDto>.toPersonBannerListEntity(): List<PersonBannerEntity> {
     return this.map { it.toPersonBannerEntity() }
+}
+
+fun List<PersonBannerEntity>.toListPageMediaActorBanners(): List<ListPageMedia> {
+    return this.map { ListPageMedia.ActorBanner(it) }
+}
+
+fun List<PersonBannerEntity>.toListPageMediaWorkerBanners(): List<ListPageMedia> {
+    return this.map { ListPageMedia.WorkerBanner(it) }
 }
 
 fun ImagePreviewDto.toImagePreviewEntity(): ImagePreviewEntity {
