@@ -21,11 +21,13 @@ class PersonViewHolder(
     fun bind(person: PersonBannerEntity) {
 
         binding.tvName.text = person.name
-        if (person.profession == "актеры") {
+
+        if (person.character != null) {
             binding.tvCharacter.text = person.character
         } else {
             binding.tvCharacter.text = person.profession.cutWordEnd()
         }
+
         Glide.with(binding.ivAvatar)
             .load(person.photo)
             .transform(

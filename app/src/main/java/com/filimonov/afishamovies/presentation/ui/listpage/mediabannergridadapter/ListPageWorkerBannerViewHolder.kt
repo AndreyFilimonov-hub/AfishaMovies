@@ -7,11 +7,12 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ItemBannerBinding
-import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
+import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
+import com.filimonov.afishamovies.presentation.utils.cutWordEnd
 
-class ListPageMediaBannerViewHolder(
+class ListPageWorkerBannerViewHolder(
     private val binding: ItemBannerBinding,
-    private val onMediaBannerClick: (MediaBannerEntity) -> Unit
+    private val onPersonBannerClick: (PersonBannerEntity) -> Unit
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
@@ -20,10 +21,10 @@ class ListPageMediaBannerViewHolder(
         private const val RADIUS_PX = 4
     }
 
-    fun bind(mediaBanner: ListPageMedia.MediaBanner) {
-        binding.tvName.text = mediaBanner.media.name
+    fun bind(workerBanner: ListPageMedia.WorkerBanner) {
+        binding.tvName.text = workerBanner.worker.name
         Glide.with(binding.root)
-            .load(mediaBanner.media.posterUrl)
+            .load(workerBanner.worker.photo)
             .transform(
                 CenterCrop(),
                 RoundedCorners((RADIUS_PX * binding.root.context.resources.displayMetrics.density).toInt())
@@ -31,16 +32,12 @@ class ListPageMediaBannerViewHolder(
             .placeholder(R.drawable.onboard_second)
             .into(binding.ivPoster)
 
-        if (mediaBanner.media.rating == null) {
-            binding.tvRating.visibility = View.GONE
-        } else {
-            binding.tvRating.text = mediaBanner.media.rating
-        }
+        binding.tvRating.visibility = View.GONE
 
-        binding.tvGenre.text = mediaBanner.media.genreMain
+        binding.tvGenre.text = workerBanner.worker.profession.cutWordEnd()
 
         binding.bannerContainer.setOnClickListener {
-            onMediaBannerClick(mediaBanner.media)
+            onPersonBannerClick(workerBanner.worker)
         }
     }
 }

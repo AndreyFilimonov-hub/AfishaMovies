@@ -23,6 +23,8 @@ import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.ActorsI
 import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.PersonAdapter
 import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.WorkersItemDecoration
 import com.filimonov.afishamovies.presentation.ui.filmpage.similarmovieadapter.SimilarMovieAdapter
+import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
+import com.filimonov.afishamovies.presentation.ui.listpage.ListPageMode
 import com.filimonov.afishamovies.presentation.utils.HorizontalSpaceItemDecoration
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.filimonov.afishamovies.presentation.utils.loadImage
@@ -197,11 +199,31 @@ class FilmPageFragment : Fragment() {
             workersAdapter.submitList(viewModel.getFirst10Workers())
 
             binding.tvAllPersonInFilm.setOnClickListener {
-                // TODO: launch ListPageFragment
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .add(
+                        R.id.fragment_container,
+                        ListPageFragment.newInstance(
+                            this.id,
+                            R.string.person_in_film,
+                            ListPageMode.ACTOR
+                        )
+                    )
+                    .addToBackStack(null)
+                    .commit()
             }
 
             binding.tvAllWorkersInFilm.setOnClickListener {
-                // TODO: launch ListPageFragment
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .add(
+                        R.id.fragment_container,
+                        ListPageFragment.newInstance(
+                            this.id,
+                            R.string.worker_in_film,
+                            ListPageMode.WORKER
+                        )
+                    )
+                    .addToBackStack(null)
+                    .commit()
             }
         }
     }

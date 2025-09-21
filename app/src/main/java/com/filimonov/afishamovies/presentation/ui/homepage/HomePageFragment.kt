@@ -20,6 +20,7 @@ import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.homepage.sectionadapter.SectionAdapter
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
+import com.filimonov.afishamovies.presentation.ui.listpage.ListPageMode
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -46,7 +47,7 @@ class HomePageFragment : Fragment() {
         onShowAllClick = {
             requireActivity().supportFragmentManager.beginTransaction()
                 .addToBackStack(null)
-                .add(R.id.fragment_container, ListPageFragment.newInstance(it.categoryId, it.title))
+                .add(R.id.fragment_container, ListPageFragment.newInstance(it.categoryId, it.title, ListPageMode.MEDIA))
                 .commit()
         },
         onMediaClick = {

@@ -7,11 +7,11 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ItemBannerBinding
-import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
+import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
 
-class ListPageMediaBannerViewHolder(
+class ListPageActorBannerViewHolder(
     private val binding: ItemBannerBinding,
-    private val onMediaBannerClick: (MediaBannerEntity) -> Unit
+    private val onPersonBannerClick: (PersonBannerEntity) -> Unit
 ) :
     RecyclerView.ViewHolder(binding.root) {
 
@@ -20,10 +20,10 @@ class ListPageMediaBannerViewHolder(
         private const val RADIUS_PX = 4
     }
 
-    fun bind(mediaBanner: ListPageMedia.MediaBanner) {
-        binding.tvName.text = mediaBanner.media.name
+    fun bind(actorBanner: ListPageMedia.ActorBanner) {
+        binding.tvName.text = actorBanner.actor.name
         Glide.with(binding.root)
-            .load(mediaBanner.media.posterUrl)
+            .load(actorBanner.actor.photo)
             .transform(
                 CenterCrop(),
                 RoundedCorners((RADIUS_PX * binding.root.context.resources.displayMetrics.density).toInt())
@@ -31,16 +31,12 @@ class ListPageMediaBannerViewHolder(
             .placeholder(R.drawable.onboard_second)
             .into(binding.ivPoster)
 
-        if (mediaBanner.media.rating == null) {
-            binding.tvRating.visibility = View.GONE
-        } else {
-            binding.tvRating.text = mediaBanner.media.rating
-        }
+        binding.tvRating.visibility = View.GONE
 
-        binding.tvGenre.text = mediaBanner.media.genreMain
+        binding.tvGenre.text = actorBanner.actor.character
 
         binding.bannerContainer.setOnClickListener {
-            onMediaBannerClick(mediaBanner.media)
+            onPersonBannerClick(actorBanner.actor)
         }
     }
 }

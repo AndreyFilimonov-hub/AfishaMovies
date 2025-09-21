@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.filimonov.afishamovies.di.MovieIdQualifier
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
+import com.filimonov.afishamovies.domain.usecases.ClearCachedPersonListUseCase
 import com.filimonov.afishamovies.domain.usecases.GetFilmPageByIdUseCase
 import com.filimonov.afishamovies.domain.usecases.GetImagePreviewListByMovieId
 import kotlinx.coroutines.CancellationException
@@ -19,7 +20,8 @@ import javax.inject.Inject
 class FilmPageViewModel @Inject constructor(
     @MovieIdQualifier private val movieId: Int,
     private val getFilmPageByIdUseCase: GetFilmPageByIdUseCase,
-    private val getImagePreviewListByMovieId: GetImagePreviewListByMovieId
+    private val getImagePreviewListByMovieId: GetImagePreviewListByMovieId,
+    private val clearCachedPersonListUseCase: ClearCachedPersonListUseCase
 ) : ViewModel() {
 
 
@@ -56,32 +58,32 @@ class FilmPageViewModel @Inject constructor(
 
     fun getFirst20Actors(): List<PersonBannerEntity> {
         return (_state.value as FilmPageState.Success).filmPage.persons
-            .filter { it.profession == PROFESSION_ACTOR }
+            .filter { it.character != null }
             .take(20)
     }
 
     fun getFirst10Workers(): List<PersonBannerEntity> {
         return (_state.value as FilmPageState.Success).filmPage.persons
-            .filter { it.profession != PROFESSION_ACTOR }
+            .filter { it.character == null }
             .take(10)
     }
 
     fun actorsCount(): Int {
         return (_state.value as FilmPageState.Success).filmPage
             .persons
-            .filter { it.profession == PROFESSION_ACTOR }
+            .filter { it.character != null }
             .size
     }
 
     fun workersCount(): Int {
         return (_state.value as FilmPageState.Success).filmPage
             .persons
-            .filter { it.profession != PROFESSION_ACTOR }
+            .filter { it.character == null }
             .size
     }
 
-    companion object {
-
-        private const val PROFESSION_ACTOR = "актеры"
+    override fun onCleared() {
+        super.onCleared()
+        clearCachedPersonListUseCase(movieId)
     }
 }
