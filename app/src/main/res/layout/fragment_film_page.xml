@@ -305,7 +305,7 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/tv_gallery"
-            tools:listitem="@layout/item_image" />
+            tools:listitem="@layout/item_image_small" />
 
         <TextView
             android:id="@+id/tv_similar_movie"

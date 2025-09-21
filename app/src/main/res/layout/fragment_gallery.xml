@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".presentation.ui.gallery.GalleryFragment">
 
     <Toolbar
@@ -18,9 +19,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:text="@string/gallery"
             android:textSize="@dimen/text_size18sp"
-            android:textStyle="bold"
-            android:text="@string/gallery" />
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/iv_back"
@@ -34,7 +35,26 @@
 
     </Toolbar>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_selector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top8dp"
+        android:clipToPadding="false"
+        android:nestedScrollingEnabled="false"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        tools:listitem="@layout/item_selector" />
 
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_top24"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/rv_selector"
+        app:spanCount="2"
+        tools:listitem="@layout/item_image_small" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
