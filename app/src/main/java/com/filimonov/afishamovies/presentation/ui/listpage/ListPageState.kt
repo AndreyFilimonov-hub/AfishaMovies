@@ -4,6 +4,8 @@ import com.filimonov.afishamovies.presentation.ui.listpage.mediabannergridadapte
 
 sealed class ListPageState {
 
+    data object Initial : ListPageState()
+
     data class Success(
         val mediaBanners: List<ListPageMedia>
     ) : ListPageState()

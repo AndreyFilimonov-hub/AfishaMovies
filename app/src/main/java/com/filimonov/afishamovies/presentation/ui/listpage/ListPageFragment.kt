@@ -61,6 +61,9 @@ class ListPageFragment : Fragment() {
                     .add(R.id.fragment_container, FilmPageFragment.newInstance(it.id))
                     .commit()
             },
+            onPersonBannerClick = {
+                // TODO: launch ActorPageFragment
+            },
             onRetryButtonClick = {
                 viewModel.nextPage()
             }
@@ -146,6 +149,8 @@ class ListPageFragment : Fragment() {
                         is ListPageState.Loading -> {
                             mediaBannerGridAdapter.submitList(it.currentList)
                         }
+
+                        ListPageState.Initial -> {}
                     }
                 }
             }
