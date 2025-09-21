@@ -46,13 +46,13 @@ class HomePageFragment : Fragment() {
     private val sectionAdapter = SectionAdapter(
         onShowAllClick = {
             requireActivity().supportFragmentManager.beginTransaction()
-                .addToBackStack("HomePageFragment")
+                .addToBackStack(null)
                 .add(R.id.fragment_container, ListPageFragment.newInstance(it.categoryId, it.title, ListPageMode.MEDIA))
                 .commit()
         },
         onMediaClick = {
             requireActivity().supportFragmentManager.beginTransaction()
-                .addToBackStack("HomePageFragment")
+                .addToBackStack(null)
                 .add(R.id.fragment_container, FilmPageFragment.newInstance(it.id))
                 .commit()
         }
@@ -160,9 +160,5 @@ class HomePageFragment : Fragment() {
         @JvmStatic
         fun newInstance() =
             HomePageFragment()
-    }
-
-    fun scrollToTop() {
-        binding.success.smoothScrollTo(0, 0)
     }
 }
