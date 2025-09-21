@@ -7,6 +7,6 @@ data class PersonBannerDto(
     @SerializedName("name") val name: String?,
     @SerializedName("enName") val enName: String?,
     @SerializedName("photo") val photo: String,
-    @SerializedName("description") val description: String,
+    @SerializedName("description") val description: String?,
     @SerializedName("profession") val profession: String
 )
