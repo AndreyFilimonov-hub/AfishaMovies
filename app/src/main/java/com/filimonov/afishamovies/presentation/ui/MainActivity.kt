@@ -3,7 +3,6 @@ package com.filimonov.afishamovies.presentation.ui
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ActivityMainBinding
 import com.filimonov.afishamovies.presentation.ui.homepage.HomePageFragment
@@ -27,16 +26,30 @@ class MainActivity : AppCompatActivity() {
         binging.bNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.item_home -> {
-                    val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+                    val fragmentManager = supportFragmentManager
+                    val currentFragment = fragmentManager.findFragmentById(R.id.fragment_container)
 
-                    if (fragment is HomePageFragment) {
-                        fragment.scrollToTop()
+                    if (currentFragment !is HomePageFragment) {
+                        val fragments = fragmentManager.fragments
+                        if (fragments.isNotEmpty()) {
+                            val topFragment = fragments.last()
+                            val homePageFragment =
+                                fragmentManager.findFragmentByTag("HomePageFragment")
+                            val transaction = fragmentManager.beginTransaction()
+
+                            fragments.forEach { fragment ->
+                                if (fragment != topFragment && fragment != homePageFragment) {
+                                    transaction.remove(fragment)
+                                }
+                            }
+
+                            transaction.remove(topFragment)
+                            transaction.commit()
+                        }
                     } else {
-                        supportFragmentManager.popBackStack(
-                            "HomePageFragment",
-                            FragmentManager.POP_BACK_STACK_INCLUSIVE
-                        )
+                        currentFragment.scrollToTop()
                     }
+
                     true
                 }
 
@@ -58,6 +71,13 @@ class MainActivity : AppCompatActivity() {
     private fun launchOnBoardFragment() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, OnBoardFragment())
+            .commit()
+    }
+
+    private fun launchHomePageFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, HomePageFragment.newInstance(), "HomePageFragment")
+            .addToBackStack("HomePageFragment")
             .commit()
     }
 }

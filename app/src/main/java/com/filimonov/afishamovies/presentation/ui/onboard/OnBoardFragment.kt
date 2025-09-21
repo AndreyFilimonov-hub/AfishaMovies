@@ -68,7 +68,8 @@ class OnBoardFragment : Fragment() {
 
     private fun launchHomePageFragment() {
         requireActivity().supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, HomePageFragment.newInstance())
+            .replace(R.id.fragment_container, HomePageFragment.newInstance(), "HomePageFragment")
+            .addToBackStack(null)
             .commit()
     }
 
