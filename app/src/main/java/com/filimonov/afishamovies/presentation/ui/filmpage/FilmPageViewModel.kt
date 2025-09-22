@@ -8,7 +8,7 @@ import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
 import com.filimonov.afishamovies.domain.usecases.ClearCachedPersonListUseCase
 import com.filimonov.afishamovies.domain.usecases.GetFilmPageByIdUseCase
-import com.filimonov.afishamovies.domain.usecases.GetImagePreviewListByMovieId
+import com.filimonov.afishamovies.domain.usecases.GetImagePreviewListByMovieIdUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class FilmPageViewModel @Inject constructor(
     @MovieIdQualifier private val movieId: Int,
     private val getFilmPageByIdUseCase: GetFilmPageByIdUseCase,
-    private val getImagePreviewListByMovieId: GetImagePreviewListByMovieId,
+    private val getImagePreviewListByMovieIdUseCase: GetImagePreviewListByMovieIdUseCase,
     private val clearCachedPersonListUseCase: ClearCachedPersonListUseCase
 ) : ViewModel() {
 
@@ -38,7 +38,7 @@ class FilmPageViewModel @Inject constructor(
             try {
                 coroutineScope {
                     val filmPage = async { getFilmPageByIdUseCase(movieId) }
-                    val imagePreviews = async { getImagePreviewListByMovieId(movieId) }
+                    val imagePreviews = async { getImagePreviewListByMovieIdUseCase(movieId) }
 
                     _state.value = FilmPageState.Success(filmPage.await(), imagePreviews.await())
                 }

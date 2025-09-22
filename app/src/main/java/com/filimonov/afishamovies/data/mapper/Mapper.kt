@@ -3,8 +3,10 @@ package com.filimonov.afishamovies.data.mapper
 import com.filimonov.afishamovies.data.model.filmpage.FilmPageDto
 import com.filimonov.afishamovies.data.model.filmpage.ImagePreviewDto
 import com.filimonov.afishamovies.data.model.filmpage.PersonBannerDto
+import com.filimonov.afishamovies.data.model.gallery.GalleryImageDto
 import com.filimonov.afishamovies.data.model.mediabanner.MediaBannerDto
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
+import com.filimonov.afishamovies.domain.entities.GalleryImageEntity
 import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
@@ -74,4 +76,16 @@ fun ImagePreviewDto.toImagePreviewEntity(): ImagePreviewEntity {
 
 fun List<ImagePreviewDto>.toImagePreviewListEntity(): List<ImagePreviewEntity> {
     return this.map { it.toImagePreviewEntity() }
+}
+
+fun GalleryImageDto.toGalleryImageEntity(): GalleryImageEntity {
+    return GalleryImageEntity(
+        id = this.id,
+        url = this.url,
+        type = this.type
+    )
+}
+
+fun List<GalleryImageDto>.toGalleryImageListEntity(): List<GalleryImageEntity> {
+    return this.map { it.toGalleryImageEntity() }
 }
