@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.filimonov.afishamovies.databinding.FragmentGalleryBinding
 
+private const val MOVIE_ID = "movie_id"
+
 class GalleryFragment : Fragment() {
 
     private var _binding: FragmentGalleryBinding? = null
@@ -14,8 +16,11 @@ class GalleryFragment : Fragment() {
     private val binding: FragmentGalleryBinding
         get() = _binding ?: throw RuntimeException("FragmentGalleryBinding == null")
 
+    private var movieId: Int = UNDEFINED_ID
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        parseInt()
     }
 
     override fun onCreateView(
@@ -31,13 +36,27 @@ class GalleryFragment : Fragment() {
 
     }
 
+    private fun parseInt() {
+        val args = requireArguments()
+        if (!args.containsKey(MOVIE_ID)) {
+            throw RuntimeException("Param movieId is absent")
+        }
+        val movieIdBundle = args.getInt(MOVIE_ID)
+        if (movieIdBundle < 0) {
+            throw RuntimeException("Param movieId is wrong")
+        }
+        movieId = movieIdBundle
+    }
+
     companion object {
 
+        private const val UNDEFINED_ID = -1
+
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(movieId: Int) =
             GalleryFragment().apply {
                 arguments = Bundle().apply {
-
+                    putInt(MOVIE_ID, movieId)
                 }
             }
     }
