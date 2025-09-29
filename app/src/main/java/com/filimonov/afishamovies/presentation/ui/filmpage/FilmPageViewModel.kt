@@ -1,6 +1,5 @@
 package com.filimonov.afishamovies.presentation.ui.filmpage
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filimonov.afishamovies.di.MovieIdQualifier
@@ -40,13 +39,12 @@ class FilmPageViewModel @Inject constructor(
                     val filmPage = async { getFilmPageByIdUseCase(movieId) }
                     val imagePreviews = async { getImagePreviewListByMovieIdUseCase(movieId) }
 
-                    _state.value = FilmPageState.Success(filmPage.await(), imagePreviews.await())
+                    _state.value = FilmPageState.Success(filmPage.await(), imagePreviews.await().take(10))
                 }
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
                 _state.value = FilmPageState.Error
-                Log.d("AAA", e.toString())
             }
         }
     }
