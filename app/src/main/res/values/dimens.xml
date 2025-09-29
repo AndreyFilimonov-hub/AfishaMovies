@@ -16,6 +16,7 @@
     <dimen name="margin_top_46dp">46dp</dimen>
     <dimen name="space_between">4dp</dimen>
     <dimen name="space_top_bottom">4dp</dimen>
+    <dimen name="space_top_bottom8dp">8dp</dimen>
     <dimen name="media_banner">250dp</dimen>
     <dimen name="margin_top24">24dp</dimen>
     <dimen name="margin_top26">26dp</dimen>
@@ -56,4 +57,7 @@
     <dimen name="width70dp">70dp</dimen>
     <dimen name="margins_start16dp">16dp</dimen>
     <dimen name="margin_top18dp">18dp</dimen>
+    <dimen name="width_46dp">46dp</dimen>
+    <dimen name="height_46dp">46dp</dimen>
+    <dimen name="text_size20sp">20sp</dimen>
 </resources>
