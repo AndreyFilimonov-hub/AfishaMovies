@@ -23,6 +23,7 @@ interface FilmPageService {
         @Query("movieId") movieId: Int,
         @Query("page") page: Int = 1,
         @Query("limit") limit: Int = 10,
+        @Query("type") type: String,
         @Query("selectedFields") selectedFieldId: String = "movieId",
         @Query("selectedFields") selectedFieldName: String = "url",
     ) : ImagePreviewResponse
