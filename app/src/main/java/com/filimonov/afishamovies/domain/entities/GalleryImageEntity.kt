@@ -1,7 +1,7 @@
 package com.filimonov.afishamovies.domain.entities
 
 data class GalleryImageEntity(
-    private val id: String,
-    private val url: String,
-    private val type: String
+    val id: String,
+    val url: String,
+    val type: String
 )

@@ -15,10 +15,16 @@ class GalleryRepositoryImpl @Inject constructor(private val apiService: GalleryS
         movieId: Int,
         type: TypeImage
     ): List<GalleryImageEntity> {
-        return apiService.getImages(
-            page = page,
-            movieId = movieId,
-            type = type.typeName
-        ).images.toGalleryImageListEntity()
+        val images = mutableListOf<GalleryImageEntity>()
+        type.typeNames.forEach { typeName ->
+            images.addAll(
+                apiService.getImages(
+                    page = page,
+                    movieId = movieId,
+                    type = typeName
+                ).images.toGalleryImageListEntity()
+            )
+        }
+        return images
     }
 }

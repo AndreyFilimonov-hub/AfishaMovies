@@ -25,8 +25,8 @@
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
+            android:layout_width="@dimen/width_46dp"
+            android:layout_height="@dimen/height_46dp"
             android:background="@drawable/bg_ripple_rectangle"
             android:clickable="true"
             android:contentDescription="@null"
@@ -35,26 +35,104 @@
 
     </Toolbar>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_selector"
-        android:layout_width="match_parent"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/cg_type"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top8dp"
-        android:clipToPadding="false"
-        android:nestedScrollingEnabled="false"
-        android:orientation="horizontal"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        tools:listitem="@layout/item_selector" />
+        app:selectionRequired="true"
+        app:singleLine="true"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_frame"
+            style="@style/ChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="@string/frames" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_backstage"
+            style="@style/ChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/backstage" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_poster"
+            style="@style/ChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/posters" />
+
+    </com.google.android.material.chip.ChipGroup>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_gallery"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="@dimen/margin_top24"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintTop_toBottomOf="@id/rv_selector"
-        app:spanCount="2"
-        tools:listitem="@layout/item_image_small" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cg_type"
+        tools:listitem="@layout/item_image_gallery_small" />
+
+    <TextView
+        android:id="@+id/tv_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/empty_images_by_type"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size20sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_no_internet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/error_load_data"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_size20sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/button_reload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_top8dp"
+            android:backgroundTint="@color/blue"
+            android:text="@string/retry" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/blue"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
