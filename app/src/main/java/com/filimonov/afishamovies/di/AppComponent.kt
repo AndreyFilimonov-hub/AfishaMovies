@@ -11,5 +11,7 @@ interface AppComponent {
 
     fun filmPageComponent(): FilmPageComponent.Factory
 
+    fun galleryComponent(): GalleryComponent.Factory
+
     fun inject(fragment: HomePageFragment)
 }
