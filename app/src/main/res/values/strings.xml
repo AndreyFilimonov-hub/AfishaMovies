@@ -13,10 +13,13 @@
     <string name="russian_comedy">Русские комедии</string>
     <string name="retry">Повторить</string>
     <string name="show_all">Показать все</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="person_in_film">В фильме снимались</string>
     <string name="worker_in_film">Над фильмом работали</string>
     <string name="gallery">Галерея</string>
     <string name="similar_movie">Похожие фильмы</string>
+    <string name="frames">Кадры</string>
+    <string name="backstage">Бэкстейдж</string>
+    <string name="posters">Постеры</string>
+    <string name="empty_images_by_type">Изображения \nпо данной категории отсутствуют</string>
+    <string name="error_load_data">Произошла ошибка\n при загрузке данных</string>
 </resources>
