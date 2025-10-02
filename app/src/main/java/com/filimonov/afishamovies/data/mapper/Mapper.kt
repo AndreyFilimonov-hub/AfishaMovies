@@ -5,11 +5,15 @@ import com.filimonov.afishamovies.data.model.filmpage.ImagePreviewDto
 import com.filimonov.afishamovies.data.model.filmpage.PersonBannerDto
 import com.filimonov.afishamovies.data.model.gallery.GalleryImageDto
 import com.filimonov.afishamovies.data.model.mediabanner.MediaBannerDto
+import com.filimonov.afishamovies.data.model.personpage.PersonDto
+import com.filimonov.afishamovies.data.model.personpage.PersonMovieDto
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
 import com.filimonov.afishamovies.domain.entities.GalleryImageEntity
 import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
+import com.filimonov.afishamovies.domain.entities.PersonEntity
+import com.filimonov.afishamovies.domain.entities.PersonMediaBannerEntity
 import com.filimonov.afishamovies.presentation.ui.listpage.mediabannergridadapter.ListPageMedia
 import com.filimonov.afishamovies.presentation.utils.roundRating
 import com.filimonov.afishamovies.presentation.utils.toMovieLengthFormat
@@ -88,4 +92,22 @@ fun GalleryImageDto.toGalleryImageEntity(): GalleryImageEntity {
 
 fun List<GalleryImageDto>.toGalleryImageListEntity(): List<GalleryImageEntity> {
     return this.map { it.toGalleryImageEntity() }
+}
+
+fun PersonMovieDto.toPersonMediaBannerEntity(): PersonMediaBannerEntity {
+    return PersonMediaBannerEntity(
+        id = this.id,
+        name = this.name ?: alternativeName,
+        description = this.description,
+        profession = this.profession
+    )
+}
+
+fun PersonDto.toPersonEntity(): PersonEntity {
+    return PersonEntity(
+        id = this.id,
+        name = this.name ?: this.enName,
+        photo = this.photo,
+        mediaBanners = this.movies.map { it.toPersonMediaBannerEntity() }
+    )
 }
