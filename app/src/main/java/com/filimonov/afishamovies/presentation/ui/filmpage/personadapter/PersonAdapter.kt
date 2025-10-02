@@ -20,7 +20,8 @@ class PersonAdapter(private val onClick: (Int) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: PersonViewHolder, position: Int) {
-        holder.bind(getItem(position))
-        holder.itemView.setOnClickListener { onClick(position) }
+        val item = getItem(position)
+        holder.bind(item)
+        holder.itemView.setOnClickListener { onClick(item.id) }
     }
 }
