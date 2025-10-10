@@ -23,6 +23,7 @@ import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.ActorsI
 import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.PersonAdapter
 import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.WorkersItemDecoration
 import com.filimonov.afishamovies.presentation.ui.filmpage.similarmovieadapter.SimilarMovieAdapter
+import com.filimonov.afishamovies.presentation.ui.gallery.GalleryFragment
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageMode
 import com.filimonov.afishamovies.presentation.utils.HorizontalSpaceItemDecoration
@@ -137,10 +138,6 @@ class FilmPageFragment : Fragment() {
             )
         )
         imagePreviewAdapter.submitList(list)
-
-        binding.tvAllGallery.setOnClickListener {
-            // TODO: launch GalleryFragment
-        }
     }
 
     private fun setupFilmPageEntity(filmPage: FilmPageEntity) {
@@ -222,6 +219,13 @@ class FilmPageFragment : Fragment() {
                             ListPageMode.WORKER
                         )
                     )
+                    .addToBackStack(null)
+                    .commit()
+            }
+
+            binding.tvAllGallery.setOnClickListener {
+                requireActivity().supportFragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, GalleryFragment.newInstance(this.id))
                     .addToBackStack(null)
                     .commit()
             }

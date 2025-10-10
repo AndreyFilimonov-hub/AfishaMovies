@@ -197,6 +197,8 @@ class GalleryFragment : Fragment() {
                 }
             }
         })
+
+        binding.rvGallery.itemAnimator = null
     }
 
     private fun setClickListenerOnBack() {
