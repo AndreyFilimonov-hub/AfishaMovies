@@ -1,5 +1,6 @@
 package com.filimonov.afishamovies.presentation.ui.filmpage
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -242,6 +243,18 @@ class FilmPageFragment : Fragment() {
                     .add(R.id.fragment_container, GalleryFragment.newInstance(this.id))
                     .addToBackStack(null)
                     .commit()
+            }
+
+            binding.ivRepost.setOnClickListener {
+                val deepLink = getString(R.string.deeplink_film, this.shortDescription, this.id)
+
+                val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, deepLink)
+                }
+
+                val shareIntent = Intent.createChooser(sendIntent, getString(R.string.share_via))
+                startActivity(shareIntent)
             }
         }
     }
