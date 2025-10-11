@@ -3,7 +3,6 @@ package com.filimonov.afishamovies.presentation.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
@@ -105,7 +104,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleDeepLink(intent: Intent): Boolean {
         val data: Uri? = intent.data
-        Log.d("AAA", data.toString())
 
         if (data == null) return false
 
