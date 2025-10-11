@@ -74,6 +74,8 @@ class HomePageFragment : Fragment() {
             interpolator = AccelerateInterpolator()
             propagation = null
         }
+
+        (requireActivity() as? MainActivity)?.setFirstLaunchShown()
     }
 
     override fun onCreateView(
