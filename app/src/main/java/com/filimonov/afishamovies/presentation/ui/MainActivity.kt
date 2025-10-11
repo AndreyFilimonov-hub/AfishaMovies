@@ -1,10 +1,15 @@
 package com.filimonov.afishamovies.presentation.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ActivityMainBinding
+import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.homepage.HomePageFragment
 import com.filimonov.afishamovies.presentation.ui.onboard.OnBoardFragment
 
@@ -18,8 +23,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binging.root)
-        launchOnBoardFragment()
+
+        val isHandled = handleDeepLink(intent)
+        if (!isHandled) {
+            if (isFirstLaunch()) {
+                launchOnBoardFragment()
+            } else {
+                launchHomePageFragment()
+            }
+        }
+
         setOnBottomNavigationBarItemsClickListener()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleDeepLink(intent)
     }
 
     private fun setOnBottomNavigationBarItemsClickListener() {
@@ -68,10 +87,40 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun isFirstLaunch(): Boolean {
+        val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        return prefs.getBoolean("is_first_launch", true)
+    }
+
+    fun setFirstLaunchShown() {
+        val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
+        prefs.edit { putBoolean("is_first_launch", false) }
+    }
+
     private fun launchOnBoardFragment() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, OnBoardFragment())
             .commit()
+    }
+
+    private fun handleDeepLink(intent: Intent): Boolean {
+        val data: Uri? = intent.data
+        Log.d("AAA", data.toString())
+
+        if (data == null) return false
+
+        if (data.host == "afisha.app" && data.path?.startsWith("/film") == true) {
+            val movieId = data.getQueryParameter("movieId")?.toIntOrNull()
+            if (movieId != null) {
+                supportFragmentManager.beginTransaction()
+                    .add(R.id.fragment_container, FilmPageFragment.newInstance(movieId))
+                    .addToBackStack(null)
+                    .commit()
+                return true
+            }
+        }
+
+        return false
     }
 
     private fun launchHomePageFragment() {
