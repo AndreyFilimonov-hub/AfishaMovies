@@ -36,6 +36,7 @@ import javax.inject.Inject
 private const val MOVIE_ID = "movieId"
 
 class FilmPageFragment : Fragment() {
+
     private var movieId = UNDEFINED_ID
 
     private var _binding: FragmentFilmPageBinding? = null
@@ -167,6 +168,19 @@ class FilmPageFragment : Fragment() {
                     )
                 )
                 similarMovieAdapter.submitList(viewModel.getFirst10SimilarMovies())
+                binding.tvAllSimilarMovie.setOnClickListener {
+                    requireActivity().supportFragmentManager.beginTransaction()
+                        .add(
+                            R.id.fragment_container,
+                            ListPageFragment.newInstance(
+                                this.id,
+                                R.string.similar_movie,
+                                ListPageMode.SIMILAR_MOVIES
+                            )
+                        )
+                        .addToBackStack(null)
+                        .commit()
+                }
             } else {
                 binding.tvSimilarMovie.visibility = View.GONE
                 binding.tvAllSimilarMovie.visibility = View.GONE

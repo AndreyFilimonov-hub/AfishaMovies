@@ -11,6 +11,7 @@ import com.filimonov.afishamovies.domain.enums.Category
 import com.filimonov.afishamovies.domain.usecases.GetMediaBannersByCategoryFromLocalUseCase
 import com.filimonov.afishamovies.domain.usecases.GetMediaBannersByCategoryFromRemoteUseCase
 import com.filimonov.afishamovies.domain.usecases.GetPersonsUseCase
+import com.filimonov.afishamovies.domain.usecases.GetSimilarMoviesUseCase
 import com.filimonov.afishamovies.presentation.ui.listpage.mediabannergridadapter.ListPageMedia
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,10 +19,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ListPageViewModel @Inject constructor(
+class ListPageViewModel @Inject constructor( //TODO: check di
     private val getMediaBannersByCategoryFromLocalUseCase: GetMediaBannersByCategoryFromLocalUseCase,
     private val getMediaBannersByCategoryFromRemoteUseCase: GetMediaBannersByCategoryFromRemoteUseCase,
     private val getPersonsUseCase: GetPersonsUseCase,
+    private val getSimilarMoviesUseCase: GetSimilarMoviesUseCase,
     @CategoryOrMovieIdQualifier private val id: Int,
     @ModeQualifier private val mode: ListPageMode
 ) : ViewModel() {
@@ -35,10 +37,10 @@ class ListPageViewModel @Inject constructor(
     val state = _state.asStateFlow()
 
     init {
-        loadDataFromCache()
+        loadData()
     }
 
-    private fun loadDataFromCache() {
+    private fun loadData() {
         when (mode) {
             ListPageMode.MEDIA -> {
                 val mediasFromCache =
@@ -55,6 +57,11 @@ class ListPageViewModel @Inject constructor(
             ListPageMode.WORKER -> {
                 val workers = getPersonsUseCase(id).filter { it.character == null }
                 _state.value = ListPageState.Success(workers.toListPageMediaWorkerBanners())
+            }
+
+            ListPageMode.SIMILAR_MOVIES -> {
+                val similarMovies = getSimilarMoviesUseCase(id)
+                _state.value = ListPageState.Success(similarMovies.toListPageMediaBannerList())
             }
         }
     }
