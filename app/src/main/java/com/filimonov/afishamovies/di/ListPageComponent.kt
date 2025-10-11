@@ -16,7 +16,7 @@ interface ListPageComponent {
     interface Factory {
 
         fun create(
-            @BindsInstance @CategoryOrMovieIdQualifier categoryId: Int,
+            @BindsInstance @CategoryOrMovieIdQualifier id: Int,
             @BindsInstance @ModeQualifier mode: ListPageMode
         ): ListPageComponent
     }

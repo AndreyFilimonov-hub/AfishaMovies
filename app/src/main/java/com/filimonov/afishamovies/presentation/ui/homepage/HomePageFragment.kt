@@ -34,6 +34,8 @@ class HomePageFragment : Fragment() {
 
     private val component by lazy {
         (requireActivity().application as AfishaMoviesApp).component
+            .homePageComponent()
+            .create()
     }
 
     @Inject
@@ -116,7 +118,7 @@ class HomePageFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.state.collect {
-                    TransitionManager.beginDelayedTransition(binding.root)
+                    TransitionManager.beginDelayedTransition(binding.success)
                     when (it) {
                         is HomePageState.Loading -> {
                             binding.error.visibility = View.INVISIBLE
