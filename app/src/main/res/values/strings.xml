@@ -22,4 +22,6 @@
     <string name="posters">Постеры</string>
     <string name="empty_images_by_type">Изображения \nпо данной категории отсутствуют</string>
     <string name="error_load_data">Произошла ошибка\n при загрузке данных</string>
+    <string name="deeplink_film">"\n                    Посмотри, %1$s\n                    https://afisha.app/film?movieId=%2$d\n                "</string>
+    <string name="share_via">Поделиться через</string>
 </resources>
