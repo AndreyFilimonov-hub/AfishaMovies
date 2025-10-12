@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -35,10 +36,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 private const val MOVIE_ID = "movieId"
+private const val MODE = "mode"
 
 class FilmPageFragment : Fragment() {
 
     private var movieId = UNDEFINED_ID
+    private var mode = UNDEFINED_MODE
 
     private var _binding: FragmentFilmPageBinding? = null
 
@@ -73,7 +76,7 @@ class FilmPageFragment : Fragment() {
     private val similarMovieAdapter = SimilarMovieAdapter(
         onClick = {
             requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, newInstance(it.id))
+                .add(R.id.fragment_container, newInstance(it.id, FilmPageMode.DEFAULT.name))
                 .addToBackStack(null)
                 .commit()
         }
@@ -83,7 +86,7 @@ class FilmPageFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        parseInt()
+        parseArgs()
         component.inject(this)
         enterTransition = Slide(Gravity.END).apply {
             duration = 500L
@@ -260,12 +263,28 @@ class FilmPageFragment : Fragment() {
     }
 
     private fun setClickListenerOnBack() {
-        binding.ivBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+        if (FilmPageMode.valueOf(mode) == FilmPageMode.DEFAULT) {
+            binding.ivBack.setOnClickListener {
+                requireActivity().supportFragmentManager.popBackStack()
+            }
+        } else {
+            binding.ivBack.visibility = View.INVISIBLE
+            requireActivity().onBackPressedDispatcher.addCallback(
+                viewLifecycleOwner,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        if (parentFragmentManager.backStackEntryCount > 1) {
+                            requireActivity().supportFragmentManager.popBackStack()
+                        } else {
+                            requireActivity().finish()
+                        }
+                    }
+                })
         }
     }
 
-    private fun parseInt() {
+
+    private fun parseArgs() {
         val args = requireArguments()
         if (!args.containsKey(MOVIE_ID)) {
             throw RuntimeException("param movie id is absent")
@@ -275,6 +294,14 @@ class FilmPageFragment : Fragment() {
             throw RuntimeException("wrong id")
         }
         movieId = idBundle
+        if (!args.containsKey(MODE)) {
+            throw RuntimeException("param mode is absent")
+        }
+        val modeBundle = args.getString(MODE) ?: ""
+        if (modeBundle.isEmpty()) {
+            throw RuntimeException("wrong mode")
+        }
+        mode = modeBundle
     }
 
     private fun setPaddingRootView() {
@@ -293,12 +320,14 @@ class FilmPageFragment : Fragment() {
     companion object {
 
         private const val UNDEFINED_ID = -1
+        private const val UNDEFINED_MODE = ""
 
         @JvmStatic
-        fun newInstance(movieId: Int) =
+        fun newInstance(movieId: Int, mode: String) =
             FilmPageFragment().apply {
                 arguments = Bundle().apply {
                     putInt(MOVIE_ID, movieId)
+                    putString(MODE, mode)
                 }
             }
     }

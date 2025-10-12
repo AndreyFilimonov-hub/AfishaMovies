@@ -19,6 +19,7 @@ import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentListPageBinding
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
+import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.listpage.mediabannergridadapter.MediaBannerGridAdapter
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -58,7 +59,10 @@ class ListPageFragment : Fragment() {
             onMediaBannerClick = {
                 requireActivity().supportFragmentManager.beginTransaction()
                     .addToBackStack(null)
-                    .add(R.id.fragment_container, FilmPageFragment.newInstance(it.id))
+                    .add(
+                        R.id.fragment_container,
+                        FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
+                    )
                     .commit()
             },
             onPersonBannerClick = {
