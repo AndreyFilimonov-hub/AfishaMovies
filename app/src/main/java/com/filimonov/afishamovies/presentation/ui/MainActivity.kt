@@ -57,8 +57,8 @@ class MainActivity : AppCompatActivity() {
 
                     if (currentFragment !is HomePageFragment) {
                         val fragments = fragmentManager.fragments
-                        val homePageFragment = fragments.filterIsInstance<HomePageFragment>()
-                        val exists = homePageFragment.isEmpty()
+                        val homePageFragments = fragments.filterIsInstance<HomePageFragment>()
+                        val exists = homePageFragments.isEmpty()
                         if (exists) {
                             launchHomePageFragment()
                             return@setOnItemSelectedListener true
@@ -111,11 +111,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun handleDeepLink(intent: Intent): Boolean {
-        val data: Uri? = intent.data
+        val data: Uri = intent.data ?: return false
 
-        if (data == null) return false
-
-        if (data.host == "afisha.app" && data.path.startsWith("/film") == true) {
+        if (data.host == "afisha.app" && data.path?.startsWith("/film") == true) {
             val movieId = data.getQueryParameter("movieId")?.toIntOrNull()
             if (movieId != null) {
                 supportFragmentManager.beginTransaction()
