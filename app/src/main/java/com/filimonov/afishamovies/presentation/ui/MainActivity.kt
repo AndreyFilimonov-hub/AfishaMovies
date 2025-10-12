@@ -9,10 +9,18 @@ import androidx.core.content.edit
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ActivityMainBinding
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
+import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.homepage.HomePageFragment
 import com.filimonov.afishamovies.presentation.ui.onboard.OnBoardFragment
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+
+        private const val IS_FIRST_LAUNCH = "is_first_launch"
+        private const val APP_PREFS = "app_prefs"
+        private const val HOME_PAGE_TAG = "HomePageFragment"
+    }
 
     val binging: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -49,10 +57,16 @@ class MainActivity : AppCompatActivity() {
 
                     if (currentFragment !is HomePageFragment) {
                         val fragments = fragmentManager.fragments
+                        val homePageFragment = fragments.filterIsInstance<HomePageFragment>()
+                        val exists = homePageFragment.isEmpty()
+                        if (exists) {
+                            launchHomePageFragment()
+                            return@setOnItemSelectedListener true
+                        }
                         if (fragments.isNotEmpty()) {
                             val topFragment = fragments.last()
                             val homePageFragment =
-                                fragmentManager.findFragmentByTag("HomePageFragment")
+                                fragmentManager.findFragmentByTag(HOME_PAGE_TAG)
                             val transaction = fragmentManager.beginTransaction()
 
                             fragments.forEach { fragment ->
@@ -87,19 +101,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isFirstLaunch(): Boolean {
-        val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        return prefs.getBoolean("is_first_launch", true)
+        val prefs = getSharedPreferences(APP_PREFS, MODE_PRIVATE)
+        return prefs.getBoolean(IS_FIRST_LAUNCH, true)
     }
 
     fun setFirstLaunchShown() {
-        val prefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
-        prefs.edit { putBoolean("is_first_launch", false) }
-    }
-
-    private fun launchOnBoardFragment() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, OnBoardFragment())
-            .commit()
+        val prefs = getSharedPreferences(APP_PREFS, MODE_PRIVATE)
+        prefs.edit { putBoolean(IS_FIRST_LAUNCH, false) }
     }
 
     private fun handleDeepLink(intent: Intent): Boolean {
@@ -107,11 +115,16 @@ class MainActivity : AppCompatActivity() {
 
         if (data == null) return false
 
-        if (data.host == "afisha.app" && data.path?.startsWith("/film") == true) {
+        if (data.host == "afisha.app" && data.path.startsWith("/film") == true) {
             val movieId = data.getQueryParameter("movieId")?.toIntOrNull()
             if (movieId != null) {
                 supportFragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, FilmPageFragment.newInstance(movieId))
+                    .add(
+                        R.id.fragment_container, FilmPageFragment.newInstance(
+                            movieId,
+                            FilmPageMode.FROM_DEEPLINK.name
+                        )
+                    )
                     .addToBackStack(null)
                     .commit()
                 return true
@@ -121,10 +134,15 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
+    private fun launchOnBoardFragment() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, OnBoardFragment())
+            .commit()
+    }
+
     private fun launchHomePageFragment() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, HomePageFragment.newInstance(), "HomePageFragment")
-            .addToBackStack("HomePageFragment")
+            .replace(R.id.fragment_container, HomePageFragment.newInstance(), HOME_PAGE_TAG)
             .commit()
     }
 }
