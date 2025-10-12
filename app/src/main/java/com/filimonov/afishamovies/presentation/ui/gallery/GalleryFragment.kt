@@ -1,7 +1,6 @@
 package com.filimonov.afishamovies.presentation.ui.gallery
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.Slide
+import androidx.transition.TransitionManager
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentGalleryBinding
@@ -95,6 +95,7 @@ class GalleryFragment : Fragment() {
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                TransitionManager.beginDelayedTransition(binding.rvGallery)
                 viewModel.state.collect { state ->
                     when (state) {
                         GalleryState.InitialLoading -> {
@@ -154,7 +155,6 @@ class GalleryFragment : Fragment() {
     }
 
     private fun reloadData() {
-        Log.d("AAA", "loadData from fragment")
         viewModel.loadData()
     }
 

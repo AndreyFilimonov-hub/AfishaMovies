@@ -7,10 +7,10 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 
 @Module
-interface ViewModelModule {
+interface HomePageViewModelModule {
 
     @IntoMap
     @ViewModelKey(HomePageViewModel::class)
     @Binds
-    fun bindHomePageViewModel(viewModel: HomePageViewModel): ViewModel
+    fun bindViewModel(viewModel: HomePageViewModel): ViewModel
 }
