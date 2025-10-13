@@ -13,4 +13,6 @@ interface AppComponent {
     fun filmPageComponent(): FilmPageComponent.Factory
 
     fun galleryComponent(): GalleryComponent.Factory
+
+    fun searchPageComponent(): SearchPageComponent.Factory
 }
