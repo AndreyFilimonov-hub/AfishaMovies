@@ -198,7 +198,7 @@ class FilmPageFragment : Fragment() {
                 ActorsItemDecoration(
                     requireContext().resources.getDimensionPixelSize(R.dimen.margin_start),
                     requireContext().resources.getDimensionPixelSize(R.dimen.space_between),
-                    requireContext().resources.getDimensionPixelSize(R.dimen.space_top_bottom)
+                    requireContext().resources.getDimensionPixelSize(R.dimen.space_top_bottom_4dp)
                 )
             )
             actorsAdapter.submitList(viewModel.getFirst20Actors())
@@ -208,7 +208,7 @@ class FilmPageFragment : Fragment() {
                 WorkersItemDecoration(
                     requireContext().resources.getDimensionPixelSize(R.dimen.margin_start),
                     requireContext().resources.getDimensionPixelSize(R.dimen.space_between),
-                    requireContext().resources.getDimensionPixelSize(R.dimen.space_top_bottom)
+                    requireContext().resources.getDimensionPixelSize(R.dimen.space_top_bottom_4dp)
                 )
             )
             workersAdapter.submitList(viewModel.getFirst10Workers())

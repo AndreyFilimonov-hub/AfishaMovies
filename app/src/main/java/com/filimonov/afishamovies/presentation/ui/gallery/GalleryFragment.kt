@@ -175,7 +175,7 @@ class GalleryFragment : Fragment() {
                 requireContext().resources.getDimensionPixelSize(R.dimen.margin_start),
                 requireContext().resources.getDimensionPixelSize(R.dimen.margin_end),
                 requireContext().resources.getDimensionPixelSize(R.dimen.space_between),
-                requireContext().resources.getDimensionPixelSize(R.dimen.space_top_bottom8dp)
+                requireContext().resources.getDimensionPixelSize(R.dimen.space_top_bottom_8dp)
             )
         )
 

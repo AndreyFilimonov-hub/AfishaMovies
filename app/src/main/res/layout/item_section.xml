@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start"
         android:text="@string/russian_comedy"
-        android:textSize="@dimen/text_size18sp"
+        android:textSize="@dimen/text_size_18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/rv_section"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +28,7 @@
         android:padding="@dimen/padding_12dp"
         android:text="@string/all"
         android:textColor="@color/blue"
-        android:textSize="@dimen/text_size14sp"
+        android:textSize="@dimen/text_size_14sp"
         app:layout_constraintBaseline_toBaselineOf="@id/tv_title"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -36,7 +36,7 @@
         android:id="@+id/rv_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top24"
+        android:layout_marginTop="@dimen/margin_top_24dp"
         android:clipToPadding="false"
         android:nestedScrollingEnabled="false"
         android:orientation="horizontal"
