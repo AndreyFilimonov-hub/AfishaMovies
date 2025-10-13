@@ -14,7 +14,7 @@
         android:layout_marginStart="@dimen/margin_start"
         android:layout_marginTop="@dimen/margin_top"
         android:text="@string/afisha_movies"
-        android:textSize="@dimen/text_size24sp"
+        android:textSize="@dimen/text_size_24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
