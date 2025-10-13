@@ -3,6 +3,7 @@ package com.filimonov.afishamovies.di
 import com.filimonov.afishamovies.data.network.FilmPageService
 import com.filimonov.afishamovies.data.network.GalleryService
 import com.filimonov.afishamovies.data.network.MediaBannerService
+import com.filimonov.afishamovies.data.network.SearchPageService
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -38,5 +39,11 @@ object NetworkModule {
     @Provides
     fun provideGalleryService(retrofit: Retrofit): GalleryService {
         return retrofit.create(GalleryService::class.java)
+    }
+
+    @ApplicationScope
+    @Provides
+    fun provideSearchPageService(retrofit: Retrofit): SearchPageService {
+        return retrofit.create(SearchPageService::class.java)
     }
 }
