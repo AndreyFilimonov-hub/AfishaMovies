@@ -1,7 +1,7 @@
 package com.filimonov.afishamovies.data.network
 
 import com.filimonov.afishamovies.BuildConfig.API_KEY
-import com.filimonov.afishamovies.data.model.mediabanner.MediaBannerResponse
+import com.filimonov.afishamovies.data.model.searchpage.SearchMediaBannerResponse
 import com.filimonov.afishamovies.data.model.searchpage.SearchPersonResponse
 import retrofit2.http.GET
 import retrofit2.http.Headers
@@ -15,7 +15,7 @@ interface SearchPageService {
         @Query("page") page: Int,
         @Query("limit") limit: Int = 20,
         @Query("query") query: String
-    ) : MediaBannerResponse
+    ) : SearchMediaBannerResponse
 
     @Headers("X-API-KEY:$API_KEY")
     @GET("person/search")
