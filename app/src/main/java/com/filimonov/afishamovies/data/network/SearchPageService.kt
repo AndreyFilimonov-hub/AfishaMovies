@@ -14,7 +14,7 @@ interface SearchPageService {
     suspend fun getMoviesByQuery(
         @Query("page") page: Int,
         @Query("limit") limit: Int = 20,
-        @Query("query", encoded = true) query: String
+        @Query("query") query: String
     ) : MediaBannerResponse
 
     @Headers("X-API-KEY:$API_KEY")
