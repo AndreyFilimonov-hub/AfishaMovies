@@ -8,4 +8,8 @@ sealed class SearchItem {
     data class MediaBanner(val mediaBanner: SearchMediaBannerEntity) : SearchItem()
 
     data class PersonBanner(val personBanner: PersonBannerEntity) : SearchItem()
+
+    data object Loading: SearchItem()
+
+    data object Error: SearchItem()
 }
