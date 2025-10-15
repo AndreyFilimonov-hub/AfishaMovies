@@ -52,10 +52,18 @@ class SearchPageViewModel @Inject constructor(
 
                                 val searchMediaBanners =
                                     medias.await()
-                                        .filter { it.name.isNotEmpty() }
+                                        .filter {
+                                            it.name.isNotEmpty()
+
+                                        }
+                                        .sortedByDescending { it.votes }
                                         .map { SearchItem.MediaBanner(it) }
                                 val searchPersonBanners =
-                                    persons.await().map { SearchItem.PersonBanner(it) }
+                                    persons.await()
+                                        .filter {
+                                            it.name?.isNotEmpty() == true
+                                        }
+                                        .map { SearchItem.PersonBanner(it) }
 
                                 mutableListOf<SearchItem>().apply {
                                     addAll(searchMediaBanners)
