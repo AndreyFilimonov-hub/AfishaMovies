@@ -66,4 +66,12 @@
     <dimen name="padding_start_46dp">46dp</dimen>
     <dimen name="padding_end_60dp">60dp</dimen>
     <dimen name="padding_end_16dp">16dp</dimen>
+    <dimen name="margin_top_16dp">16dp</dimen>
+    <dimen name="togglebutton_height_46dp">46dp</dimen>
+    <dimen name="materialbutton_center_width_170dp">170dp</dimen>
+    <dimen name="height_1dp">1dp</dimen>
+    <dimen name="margin_start_40dp">40dp</dimen>
+    <dimen name="margin_end_36dp">36dp</dimen>
+    <dimen name="height_4dp">4dp</dimen>
+    <dimen name="padding_vertical_16dp">16dp</dimen>
 </resources>

@@ -25,4 +25,13 @@
     <string name="deeplink_film">Смотри! %1$s\nhttps://afisha.app/film?movieId=%2$d\n</string>
     <string name="share_via">Поделиться через</string>
     <string name="sb_main_hint">Фильмы, актеры, режиссеры</string>
+    <string name="films">Фильмы</string>
+    <string name="search_settings">Настройки поиска</string>
+    <string name="show">Показывать</string>
+    <string name="country">Страна</string>
+    <string name="genre">Жанр</string>
+    <string name="any">Любой</string>
+    <string name="ten">10</string>
+    <string name="one">1</string>
+    <string name="rating">Рейтинг</string>
 </resources>
