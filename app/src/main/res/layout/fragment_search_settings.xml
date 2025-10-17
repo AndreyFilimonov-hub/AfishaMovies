@@ -88,7 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_top_16dp"
-        android:background="@drawable/bg_ripple_rectangle"
+        android:background="@drawable/bg_ripple_rectangle_straight"
         android:clickable="true"
         android:focusable="true"
         android:paddingVertical="@dimen/padding_vertical_16dp"
@@ -122,7 +122,7 @@
         android:id="@+id/ll_genre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_ripple_rectangle"
+        android:background="@drawable/bg_ripple_rectangle_straight"
         android:clickable="true"
         android:focusable="true"
         android:paddingVertical="@dimen/padding_vertical_16dp"
@@ -223,7 +223,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start"
         android:layout_marginTop="@dimen/margin_top_16dp"
-        android:text="Сортировать"
+        android:text="@string/sort"
         android:textColor="@android:color/darker_gray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/md_range_slider" />
@@ -247,7 +247,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:text="Дата" />
+            android:text="@string/date" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_popular"
@@ -255,7 +255,7 @@
             android:layout_width="@dimen/materialbutton_center_width_170dp"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:text="Популярность" />
+            android:text="@string/popular_sort_type" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_rating"
@@ -263,7 +263,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checkable="true"
-            android:text="Рейтинг" />
+            android:text="@string/rating" />
     </com.google.android.material.button.MaterialButtonToggleGroup>
 
     <com.google.android.material.divider.MaterialDivider
@@ -288,6 +288,7 @@
             android:layout_height="32dp"
             android:layout_marginStart="@dimen/margin_start"
             android:backgroundTint="@color/black"
+            android:contentDescription="@null"
             android:src="@drawable/dont_show_black" />
 
         <TextView
@@ -295,7 +296,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_start"
             android:layout_marginTop="@dimen/margin_top_2dp"
-            android:text="Не просмотрен"
+            android:text="@string/dont_watched"
             android:textSize="@dimen/text_size_18sp" />
     </LinearLayout>
 

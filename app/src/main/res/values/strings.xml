@@ -34,4 +34,8 @@
     <string name="ten">10</string>
     <string name="one">1</string>
     <string name="rating">Рейтинг</string>
+    <string name="date">Дата</string>
+    <string name="popular_sort_type">Популярность</string>
+    <string name="dont_watched">Не просмотрен</string>
+    <string name="sort">Сортировать</string>
 </resources>
