@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -16,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchPageBinding
+import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
+import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchpageadapter.SearchItemAdapter
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -45,6 +46,13 @@ class SearchPageFragment : Fragment() {
     private val searchItemAdapter = SearchItemAdapter(
         onMediaBannerClick = {
             Log.d("AAA", it.toString())
+            requireActivity().supportFragmentManager.beginTransaction()
+                .addToBackStack(null)
+                .add(
+                    R.id.fragment_container,
+                    FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
+                )
+                .commit()
         },
         onPersonBannerClick = {
             Log.d("AAA", it.toString())
@@ -110,7 +118,6 @@ class SearchPageFragment : Fragment() {
 
     private fun setupSearchBar() {
         binding.ivFilter.setOnClickListener {
-            Toast.makeText(requireContext(), "filter", Toast.LENGTH_SHORT).show()
             parentFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, SearchSettingsFragment.newInstance("", ""))
                 .addToBackStack(null)

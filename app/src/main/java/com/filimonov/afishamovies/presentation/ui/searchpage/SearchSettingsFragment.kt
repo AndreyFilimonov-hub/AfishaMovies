@@ -12,7 +12,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchSettingsBinding
-import androidx.core.graphics.toColorInt
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosefragment.FilterMode
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosefragment.SearchChooseFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -52,26 +53,61 @@ class SearchSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupBackButton()
         setupRangeSlider()
+        setupLinearLayoutsClickListeners()
+        setupFragmentResultListeners()
+    }
+
+    private fun setupLinearLayoutsClickListeners() {
         binding.llDontWatch.setOnClickListener {
             it.isSelected = !it.isSelected
             if (it.isSelected) {
-                animateBackgroundColor(it, Color.WHITE, "#22000000".toColorInt())
+                animateBackgroundColor(it, Color.WHITE, R.color.selected_item)
             } else {
-                animateBackgroundColor(it, "#22000000".toColorInt(), Color.WHITE)
+                animateBackgroundColor(it, R.color.selected_item, Color.WHITE)
             }
         }
-    }
-
-    private fun animateBackgroundColor(view: View, fromColor: Int, toColor: Int, duration: Long = 300) {
-        val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor)
-        colorAnimation.duration = duration
-        colorAnimation.addUpdateListener { animator ->
-            view.setBackgroundColor(animator.animatedValue as Int)
+        binding.llCountry.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .addToBackStack(null)
+                .add(
+                    R.id.fragment_container, SearchChooseFragment.newInstance(
+                        binding.tvCountry.text.toString(),
+                        FilterMode.COUNTRY.name
+                    )
+                )
+                .commit()
         }
-        colorAnimation.start()
+        binding.llGenre.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .addToBackStack(null)
+                .add(
+                    R.id.fragment_container, SearchChooseFragment.newInstance(
+                        binding.tvGenre.text.toString(),
+                        FilterMode.GENRE.name
+                    )
+                )
+                .commit()
+        }
     }
 
+    private fun setupFragmentResultListeners() {
+        parentFragmentManager.setFragmentResultListener(
+            COUNTRY_MODE_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val selectedCountry = bundle.getString(COUNTRY_NAME_KEY)
+            binding.tvCountry.text = selectedCountry
+        }
+        parentFragmentManager.setFragmentResultListener(
+            GENRE_MODE_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val selectedCountry = bundle.getString(GENRE_NAME_KEY)
+            binding.tvGenre.text = selectedCountry
+        }
+    }
 
     private fun setupRangeSlider() {
         with(binding.rangeSlider) {
@@ -92,7 +128,7 @@ class SearchSettingsFragment : Fragment() {
                 val max = slider.values[1].toInt()
                 val rating = if (min == 1 && max == 10) {
                     "Любой"
-                } else if (min == max){
+                } else if (min == max) {
                     "$min"
                 } else {
                     "$min - $max"
@@ -102,16 +138,33 @@ class SearchSettingsFragment : Fragment() {
         }
     }
 
+    private fun setupBackButton() {
+        binding.ivBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
+        }
+    }
+
+    private fun animateBackgroundColor(
+        view: View,
+        fromColor: Int,
+        toColor: Int,
+        duration: Long = 300
+    ) {
+        val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor)
+        colorAnimation.duration = duration
+        colorAnimation.addUpdateListener { animator ->
+            view.setBackgroundColor(animator.animatedValue as Int)
+        }
+        colorAnimation.start()
+    }
+
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchSettingsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+
+        const val COUNTRY_MODE_KEY = "country_mode_key"
+        const val COUNTRY_NAME_KEY = "country_name_key"
+        const val GENRE_MODE_KEY = "genre_mode_key"
+        const val GENRE_NAME_KEY = "genre_name_key"
+
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             SearchSettingsFragment().apply {
