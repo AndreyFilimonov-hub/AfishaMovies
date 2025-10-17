@@ -1,6 +1,9 @@
 package com.filimonov.afishamovies.presentation.ui.searchpage
 
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchSettingsBinding
+import androidx.core.graphics.toColorInt
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -49,7 +53,25 @@ class SearchSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRangeSlider()
+        binding.llDontWatch.setOnClickListener {
+            it.isSelected = !it.isSelected
+            if (it.isSelected) {
+                animateBackgroundColor(it, Color.WHITE, "#22000000".toColorInt())
+            } else {
+                animateBackgroundColor(it, "#22000000".toColorInt(), Color.WHITE)
+            }
+        }
     }
+
+    private fun animateBackgroundColor(view: View, fromColor: Int, toColor: Int, duration: Long = 300) {
+        val colorAnimation = ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor)
+        colorAnimation.duration = duration
+        colorAnimation.addUpdateListener { animator ->
+            view.setBackgroundColor(animator.animatedValue as Int)
+        }
+        colorAnimation.start()
+    }
+
 
     private fun setupRangeSlider() {
         with(binding.rangeSlider) {
@@ -68,8 +90,10 @@ class SearchSettingsFragment : Fragment() {
             addOnChangeListener { slider, _, _ ->
                 val min = slider.values[0].toInt()
                 val max = slider.values[1].toInt()
-                val rating = if (min == max) {
-                    min.toString()
+                val rating = if (min == 1 && max == 10) {
+                    "Любой"
+                } else if (min == max){
+                    "$min"
                 } else {
                     "$min - $max"
                 }

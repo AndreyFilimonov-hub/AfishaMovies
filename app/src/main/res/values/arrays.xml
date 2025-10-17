@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="range">
-        <item>0</item>
+        <item>1</item>
         <item>10</item>
     </array>
 </resources>

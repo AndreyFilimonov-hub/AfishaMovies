@@ -111,6 +111,10 @@ class SearchPageFragment : Fragment() {
     private fun setupSearchBar() {
         binding.ivFilter.setOnClickListener {
             Toast.makeText(requireContext(), "filter", Toast.LENGTH_SHORT).show()
+            parentFragmentManager.beginTransaction()
+                .add(R.id.fragment_container, SearchSettingsFragment.newInstance("", ""))
+                .addToBackStack(null)
+                .commit()
         }
         binding.sbMain.doOnTextChanged { query, _, _, _ ->
             viewModel.sendRequest(query.toString())
