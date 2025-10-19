@@ -38,4 +38,8 @@
     <string name="popular_sort_type">Популярность</string>
     <string name="dont_watched">Не просмотрен</string>
     <string name="sort">Сортировать</string>
+    <string name="any_v2">Любая</string>
+    <string name="reset_filter">Сбросить фильтр</string>
+    <string name="input_country">Введите страну</string>
+    <string name="input_genre">Введите жанр</string>
 </resources>

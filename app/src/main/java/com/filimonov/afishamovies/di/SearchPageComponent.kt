@@ -8,6 +8,8 @@ interface SearchPageComponent {
 
     fun inject(fragment: SearchPageFragment)
 
+    fun createSearchChooseComponent(): SearchChooseComponent.Factory
+
     @Subcomponent.Factory
     interface Factory {
         fun create() : SearchPageComponent

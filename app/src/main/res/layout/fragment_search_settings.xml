@@ -109,7 +109,7 @@
             android:layout_marginEnd="@dimen/margin_end"
             android:textColor="@android:color/darker_gray"
             android:textSize="@dimen/text_size_16sp"
-            tools:text="Россия" />
+            android:text="@string/any_v2" />
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
@@ -143,7 +143,7 @@
             android:layout_marginEnd="@dimen/margin_end"
             android:textColor="@android:color/darker_gray"
             android:textSize="@dimen/text_size_16sp"
-            tools:text="Комедия" />
+            android:text="@string/any" />
     </LinearLayout>
 
     <com.google.android.material.divider.MaterialDivider
