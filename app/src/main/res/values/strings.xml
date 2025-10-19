@@ -42,4 +42,5 @@
     <string name="reset_filter">Сбросить фильтр</string>
     <string name="input_country">Введите страну</string>
     <string name="input_genre">Введите жанр</string>
+    <string name="year">Год</string>
 </resources>
