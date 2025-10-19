@@ -2,13 +2,14 @@ package com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosefragme
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.graphics.toColorInt
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ChooseFilterItemBinding
 
 class SearchChooseAdapter(
-    private val launchItem: String?,
+    private val launchItem: String,
     private val onItemClick: (String) -> Unit
 ) : ListAdapter<String, SearchChooseAdapter.SearchChooseViewHolder>(
     SearchChooseDiffCallback()
@@ -44,11 +45,17 @@ class SearchChooseAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: String) {
-            launchItem?.let {
-                if (item == launchItem) {
-                    binding.root.setBackgroundColor("#22000000".toColorInt())
-                }
+            if (item == launchItem) {
+                binding.root.setBackgroundColor(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.selected_item
+                    )
+                )
+            } else {
+                binding.root.setBackgroundColor(android.graphics.Color.TRANSPARENT)
             }
+
             binding.tvFilterItem.text = item
             binding.root.setOnClickListener {
                 onItemClick(item)

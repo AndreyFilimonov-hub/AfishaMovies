@@ -63,9 +63,17 @@ class SearchSettingsFragment : Fragment() {
         binding.llDontWatch.setOnClickListener {
             it.isSelected = !it.isSelected
             if (it.isSelected) {
-                animateBackgroundColor(it, Color.WHITE, R.color.selected_item)
+                animateBackgroundColor(
+                    it,
+                    Color.WHITE,
+                    ContextCompat.getColor(requireContext(), R.color.selected_item)
+                )
             } else {
-                animateBackgroundColor(it, R.color.selected_item, Color.WHITE)
+                animateBackgroundColor(
+                    it,
+                    ContextCompat.getColor(requireContext(), R.color.selected_item),
+                    Color.WHITE
+                )
             }
         }
         binding.llCountry.setOnClickListener {

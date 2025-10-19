@@ -5,54 +5,53 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.Fade
+import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchChooseBinding
 import com.filimonov.afishamovies.presentation.ui.searchpage.SearchSettingsFragment
+import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class SearchChooseFragment : Fragment() {
+
+    private lateinit var filterItem: String
+    private lateinit var filterMode: FilterMode
 
     private var _binding: FragmentSearchChooseBinding? = null
 
     private val binding: FragmentSearchChooseBinding
         get() = _binding ?: throw RuntimeException("FragmentSearchChooseBinding == null")
 
-    private val viewModel by lazy {
-        ViewModelProvider(this)[SearchChooseViewModel::class.java]
+    private val component by lazy {
+        (requireActivity().application as AfishaMoviesApp).component
+            .searchPageComponent()
+            .create()
+            .createSearchChooseComponent()
+            .create(filterMode)
     }
 
-    private var filterItem: String? = null
-    private lateinit var filterMode: FilterMode
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[SearchChooseViewModel::class.java]
+    }
 
     private val searchChooseAdapter by lazy {
         SearchChooseAdapter(
             filterItem,
             onItemClick = { chooseFilterItem ->
                 filterItem = chooseFilterItem
-                when (filterMode) {
-                    FilterMode.COUNTRY -> {
-                        parentFragmentManager.setFragmentResult(
-                            SearchSettingsFragment.COUNTRY_MODE_KEY,
-                            Bundle().apply {
-                                putString(SearchSettingsFragment.COUNTRY_NAME_KEY, filterItem)
-                            }
-                        )
-                        parentFragmentManager.popBackStack()
-                    }
-
-                    FilterMode.GENRE -> {
-                        parentFragmentManager.setFragmentResult(
-                            SearchSettingsFragment.GENRE_MODE_KEY,
-                            Bundle().apply {
-                                putString(SearchSettingsFragment.GENRE_NAME_KEY, filterItem)
-                            }
-                        )
-                        parentFragmentManager.popBackStack()
-                    }
-                }
+                sendDataToPreviousFragment()
             }
         )
     }
@@ -60,10 +59,14 @@ class SearchChooseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            filterItem = it.getString(FILTER_ITEM)
-            val filterModeBundle = it.getString(FILTER_MODE) ?: ""
+            val filterItemBundle = it.getString(FILTER_ITEM) ?: ""
+            filterItem = filterItemBundle
+            val filterModeBundle =
+                it.getString(FILTER_MODE) ?: throw RuntimeException("param mode is absent")
             filterMode = FilterMode.valueOf(filterModeBundle)
         }
+
+        component.inject(this)
         enterTransition = Fade()
         exitTransition = Fade()
     }
@@ -78,26 +81,47 @@ class SearchChooseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupButtonReset()
+        setupToolbar()
         setupSearchBar()
         setupRecyclerView()
+        observeViewModel()
+        setupButtonReset()
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.state.collect { state ->
+                    when (state) {
+                        is SearchChooseState.Initial -> {
+                            searchChooseAdapter.submitList(state.list)
+                        }
+
+                        is SearchChooseState.Search -> {
+                            searchChooseAdapter.submitList(state.list)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setupToolbar() {
         setupBackButton()
+        when (filterMode) {
+            FilterMode.COUNTRY -> {
+                binding.tvTitle.text = getString(R.string.country)
+            }
+
+            FilterMode.GENRE -> {
+                binding.tvTitle.text = getString(R.string.genre)
+            }
+        }
     }
 
     private fun setupRecyclerView() {
         binding.rvFilterItems.layoutManager = LinearLayoutManager(requireContext())
         binding.rvFilterItems.adapter = searchChooseAdapter
-        when (filterMode) {
-            FilterMode.COUNTRY -> {
-                binding.tvTitle.text = getString(R.string.country)
-                searchChooseAdapter.submitList(viewModel.getListOfCountries())
-            }
-
-            FilterMode.GENRE -> {
-                binding.tvTitle.text = getString(R.string.genre)
-                searchChooseAdapter.submitList(viewModel.getListOfGenres())
-            }
-        }
     }
 
     private fun setupBackButton() {
@@ -107,12 +131,40 @@ class SearchChooseFragment : Fragment() {
     }
 
     private fun setupSearchBar() {
+        binding.sbMain.doOnTextChanged { query, _, _, _ ->
+            viewModel.sendRequest(query.toString())
+        }
         when (filterMode) {
             FilterMode.COUNTRY -> {
                 binding.sbMain.hint = getString(R.string.input_country)
             }
+
             FilterMode.GENRE -> {
                 binding.sbMain.hint = getString(R.string.input_genre)
+            }
+        }
+    }
+
+    private fun sendDataToPreviousFragment() {
+        when (filterMode) {
+            FilterMode.COUNTRY -> {
+                parentFragmentManager.setFragmentResult(
+                    SearchSettingsFragment.COUNTRY_MODE_KEY,
+                    Bundle().apply {
+                        putString(SearchSettingsFragment.COUNTRY_NAME_KEY, filterItem)
+                    }
+                )
+                parentFragmentManager.popBackStack()
+            }
+
+            FilterMode.GENRE -> {
+                parentFragmentManager.setFragmentResult(
+                    SearchSettingsFragment.GENRE_MODE_KEY,
+                    Bundle().apply {
+                        putString(SearchSettingsFragment.GENRE_NAME_KEY, filterItem)
+                    }
+                )
+                parentFragmentManager.popBackStack()
             }
         }
     }
@@ -125,33 +177,37 @@ class SearchChooseFragment : Fragment() {
             binding.buttonReset.backgroundTintList =
                 ContextCompat.getColorStateList(requireContext(), R.color.blue)
             binding.buttonReset.setOnClickListener {
-                when (filterMode) {
-                    FilterMode.COUNTRY -> {
-                        parentFragmentManager.setFragmentResult(
-                            SearchSettingsFragment.COUNTRY_MODE_KEY,
-                            Bundle().apply {
-                                putString(
-                                    SearchSettingsFragment.COUNTRY_NAME_KEY,
-                                    getString(R.string.any_v2)
-                                )
-                            }
-                        )
-                        parentFragmentManager.popBackStack()
-                    }
+                resetData()
+            }
+        }
+    }
 
-                    FilterMode.GENRE -> {
-                        parentFragmentManager.setFragmentResult(
-                            SearchSettingsFragment.GENRE_MODE_KEY,
-                            Bundle().apply {
-                                putString(
-                                    SearchSettingsFragment.GENRE_NAME_KEY,
-                                    getString(R.string.any)
-                                )
-                            }
+    private fun resetData() {
+        when (filterMode) {
+            FilterMode.COUNTRY -> {
+                parentFragmentManager.setFragmentResult(
+                    SearchSettingsFragment.COUNTRY_MODE_KEY,
+                    Bundle().apply {
+                        putString(
+                            SearchSettingsFragment.COUNTRY_NAME_KEY,
+                            getString(R.string.any_v2)
                         )
-                        parentFragmentManager.popBackStack()
                     }
-                }
+                )
+                parentFragmentManager.popBackStack()
+            }
+
+            FilterMode.GENRE -> {
+                parentFragmentManager.setFragmentResult(
+                    SearchSettingsFragment.GENRE_MODE_KEY,
+                    Bundle().apply {
+                        putString(
+                            SearchSettingsFragment.GENRE_NAME_KEY,
+                            getString(R.string.any)
+                        )
+                    }
+                )
+                parentFragmentManager.popBackStack()
             }
         }
     }
