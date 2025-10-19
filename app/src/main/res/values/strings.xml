@@ -43,4 +43,8 @@
     <string name="input_country">Введите страну</string>
     <string name="input_genre">Введите жанр</string>
     <string name="year">Год</string>
+    <string name="period">Период</string>
+    <string name="find_period_from">Искать в период с</string>
+    <string name="find_period_to">Искать в период до</string>
+    <string name="pick">Выбрать</string>
 </resources>
