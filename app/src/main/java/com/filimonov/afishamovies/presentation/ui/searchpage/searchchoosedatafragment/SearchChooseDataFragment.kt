@@ -1,59 +1,94 @@
 package com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosedatafragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import com.filimonov.afishamovies.R
+import com.filimonov.afishamovies.databinding.FragmentSearchChooseDataBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchChooseDataFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SearchChooseDataFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentSearchChooseDataBinding? = null
+
+    private val binding: FragmentSearchChooseDataBinding
+        get() = _binding ?: throw RuntimeException("FragmentSearchChooseDataBinding == null")
+
+    private var selectedYearFrom: Int = UNDEFINED_YEAR_FROM
+    private var selectedYearTo: Int = UNDEFINED_YEAR_TO
+
+    private val adapterFrom: YearsAdapter by lazy {
+        YearsAdapter(maxActiveYear = selectedYearTo, selectedYear = selectedYearFrom) {
+            selectedYearFrom = it ?: UNDEFINED_YEAR_FROM
+            adapterTo.setMinActiveYear(it)
+            adapterFrom.updateSelectedYear(it)
+            Log.d("AAA", it.toString())
+        }
+    }
+    private val adapterTo: YearsAdapter by lazy {
+        YearsAdapter(minActiveYear = selectedYearFrom, selectedYear = selectedYearTo) {
+            selectedYearTo = it ?: UNDEFINED_YEAR_TO
+            adapterFrom.setMaxActiveYear(it)
+            adapterTo.updateSelectedYear(it)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            selectedYearFrom = it.getInt(SELECTED_YEAR_FROM_KEY)
+            selectedYearTo = it.getInt(SELECTED_YEAR_TO_KEY)
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_choose_data, container, false)
+    ): View {
+        _binding = FragmentSearchChooseDataBinding.inflate(inflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setPaddingRootView()
+        binding.rvFrom.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.rvFrom.adapter = adapterFrom
+        adapterFrom.submitList((1998..2009).toList())
+        binding.rvTo.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.rvTo.adapter = adapterTo
+        adapterTo.submitList((1998..2009).toList())
+    }
+
+    private fun setPaddingRootView() {
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bNav)
+        val rootView = binding.root
+
+        bottomNavigationView.post {
+            val bottomHeight = bottomNavigationView.height
+
+            val layoutParams = rootView.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.bottomMargin = bottomHeight
+            rootView.layoutParams = layoutParams
+        }
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchChooseDataFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+
+        private const val SELECTED_YEAR_FROM_KEY = "selected_year_from"
+        private const val SELECTED_YEAR_TO_KEY = "selected_year_to"
+        private const val UNDEFINED_YEAR_FROM = Int.MIN_VALUE
+        private const val UNDEFINED_YEAR_TO = Int.MAX_VALUE
+
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(selectedYearFrom: Int?, selectedYearTo: Int?) =
             SearchChooseDataFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putInt(SELECTED_YEAR_FROM_KEY, selectedYearFrom ?: UNDEFINED_YEAR_FROM)
+                    putInt(SELECTED_YEAR_TO_KEY, selectedYearTo ?: UNDEFINED_YEAR_TO)
                 }
             }
     }
