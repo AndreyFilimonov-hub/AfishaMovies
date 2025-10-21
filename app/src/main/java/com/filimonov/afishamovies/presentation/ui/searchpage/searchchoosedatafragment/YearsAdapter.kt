@@ -10,7 +10,7 @@ import com.filimonov.afishamovies.databinding.ItemYearBinding
 class YearsAdapter(
     private var minActiveYear: Int = Int.MIN_VALUE,
     private var maxActiveYear: Int = Int.MAX_VALUE,
-    private var selectedYear: Int,
+    private var selectedYear: Int?,
     private val onClick: (Int?) -> Unit
 ) : ListAdapter<Int, YearsAdapter.YearViewHolder>(SearchChooseDateDiffCallback()) {
 
