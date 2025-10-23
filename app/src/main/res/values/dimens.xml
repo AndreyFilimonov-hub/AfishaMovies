@@ -74,4 +74,6 @@
     <dimen name="margin_end_36dp">36dp</dimen>
     <dimen name="height_4dp">4dp</dimen>
     <dimen name="padding_vertical_16dp">16dp</dimen>
+    <dimen name="margin_end_16dp">16dp</dimen>
+    <dimen name="margin_vertical_16dp">16dp</dimen>
 </resources>

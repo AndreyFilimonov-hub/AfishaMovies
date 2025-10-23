@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -171,11 +170,8 @@ class SearchChooseFragment : Fragment() {
 
     private fun setupButtonReset() {
         if (filterItem == getString(R.string.any) || filterItem == getString(R.string.any_v2)) {
-            binding.buttonReset.isEnabled = false
+            binding.buttonReset.visibility = View.GONE
         } else {
-            binding.buttonReset.isEnabled = true
-            binding.buttonReset.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.blue)
             binding.buttonReset.setOnClickListener {
                 resetData()
             }
