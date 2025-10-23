@@ -15,7 +15,6 @@ import androidx.transition.Fade
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchChooseBinding
-import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SearchSettingsFragment
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -148,9 +147,9 @@ class SearchChooseFragment : Fragment() {
         when (filterMode) {
             FilterMode.COUNTRY -> {
                 parentFragmentManager.setFragmentResult(
-                    SearchSettingsFragment.COUNTRY_MODE_KEY,
+                    CHOOSE_COUNTRY_MODE_KEY,
                     Bundle().apply {
-                        putString(SearchSettingsFragment.COUNTRY_NAME_KEY, filterItem)
+                        putString(CHOOSE_COUNTRY_NAME_KEY, filterItem)
                     }
                 )
                 parentFragmentManager.popBackStack()
@@ -158,9 +157,9 @@ class SearchChooseFragment : Fragment() {
 
             FilterMode.GENRE -> {
                 parentFragmentManager.setFragmentResult(
-                    SearchSettingsFragment.GENRE_MODE_KEY,
+                    CHOOSE_GENRE_MODE_KEY,
                     Bundle().apply {
-                        putString(SearchSettingsFragment.GENRE_NAME_KEY, filterItem)
+                        putString(CHOOSE_GENRE_NAME_KEY, filterItem)
                     }
                 )
                 parentFragmentManager.popBackStack()
@@ -169,7 +168,7 @@ class SearchChooseFragment : Fragment() {
     }
 
     private fun setupButtonReset() {
-        if (filterItem == getString(R.string.any) || filterItem == getString(R.string.any_v2)) {
+        if (filterItem.isEmpty() || filterItem.isEmpty()) {
             binding.buttonReset.visibility = View.GONE
         } else {
             binding.buttonReset.setOnClickListener {
@@ -182,10 +181,10 @@ class SearchChooseFragment : Fragment() {
         when (filterMode) {
             FilterMode.COUNTRY -> {
                 parentFragmentManager.setFragmentResult(
-                    SearchSettingsFragment.COUNTRY_MODE_KEY,
+                    CHOOSE_COUNTRY_MODE_KEY,
                     Bundle().apply {
                         putString(
-                            SearchSettingsFragment.COUNTRY_NAME_KEY,
+                            CHOOSE_COUNTRY_NAME_KEY,
                             getString(R.string.any_v2)
                         )
                     }
@@ -195,10 +194,10 @@ class SearchChooseFragment : Fragment() {
 
             FilterMode.GENRE -> {
                 parentFragmentManager.setFragmentResult(
-                    SearchSettingsFragment.GENRE_MODE_KEY,
+                    CHOOSE_GENRE_MODE_KEY,
                     Bundle().apply {
                         putString(
-                            SearchSettingsFragment.GENRE_NAME_KEY,
+                            CHOOSE_GENRE_NAME_KEY,
                             getString(R.string.any)
                         )
                     }
@@ -212,6 +211,12 @@ class SearchChooseFragment : Fragment() {
 
         private const val FILTER_ITEM = "filter_item_key"
         private const val FILTER_MODE = "filter_mode_key"
+
+        const val CHOOSE_COUNTRY_MODE_KEY = "choose_country_mode_key"
+        const val CHOOSE_COUNTRY_NAME_KEY = "choose_country_name_key"
+
+        const val CHOOSE_GENRE_MODE_KEY = "choose_genre_mode_key"
+        const val CHOOSE_GENRE_NAME_KEY = "choose_genre_name_key"
 
         @JvmStatic
         fun newInstance(filterItem: String?, filterMode: String) =

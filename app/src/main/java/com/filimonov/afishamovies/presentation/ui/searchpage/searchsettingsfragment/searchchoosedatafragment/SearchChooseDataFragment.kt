@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.transition.Fade
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.databinding.FragmentSearchChooseDataBinding
 import com.filimonov.afishamovies.presentation.ui.MainActivity
-import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SearchSettingsFragment
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import javax.inject.Inject
 
@@ -66,6 +66,8 @@ class SearchChooseDataFragment : Fragment() {
         super.onCreate(savedInstanceState)
         parseArgs()
         component.inject(this)
+        enterTransition = Fade()
+        exitTransition = Fade()
     }
 
     override fun onCreateView(
@@ -80,6 +82,7 @@ class SearchChooseDataFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         checkButtonEnable()
         offBottomNav()
+        setupBackButton()
         setupRecyclerView()
         setupClickListeners()
         observeViewModel()
@@ -105,15 +108,12 @@ class SearchChooseDataFragment : Fragment() {
         binding.ivNextTo.setOnClickListener {
             viewModel.nextStep(DateRangeType.TO)
         }
-        binding.buttonPick.setOnClickListener {// check param selectedYearFrom and selectedYearTo
+        binding.buttonPick.setOnClickListener {
             parentFragmentManager.setFragmentResult(
-                SearchSettingsFragment.YEAR_MODE_KEY,
+                CHOOSE_YEAR_MODE_KEY,
                 Bundle().apply {
-                    putInt(
-                        SearchSettingsFragment.YEAR_FROM_NAME_KEY,
-                        selectedYearFrom ?: Int.MIN_VALUE
-                    )
-                    putInt(SearchSettingsFragment.YEAR_TO_NAME_KEY, selectedYearTo ?: Int.MAX_VALUE)
+                    putInt(CHOOSE_YEAR_FROM_NAME_KEY, selectedYearFrom ?: Int.MIN_VALUE)
+                    putInt(CHOOSE_YEAR_TO_NAME_KEY, selectedYearTo ?: Int.MAX_VALUE)
                 }
             )
             parentFragmentManager.popBackStack()
@@ -121,13 +121,8 @@ class SearchChooseDataFragment : Fragment() {
     }
 
     private fun checkButtonEnable() {
-        with(binding.buttonPick) {
-            if (!(selectedYearFrom == null && selectedYearTo != null || selectedYearFrom != null && selectedYearTo == null)) {
-                isEnabled = true
-            } else {
-                isEnabled = false
-            }
-        }
+        binding.buttonPick.isEnabled =
+            !(selectedYearFrom == null && selectedYearTo != null || selectedYearFrom != null && selectedYearTo == null)
     }
 
     private fun observeViewModel() {
@@ -138,6 +133,12 @@ class SearchChooseDataFragment : Fragment() {
         viewModel.yearsToLd.observe(viewLifecycleOwner) {
             adapterTo.submitList(it)
             binding.tvPeriodTo.text = String.format("%s - %s", it.first(), it.last())
+        }
+    }
+
+    private fun setupBackButton() {
+        binding.ivBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStack()
         }
     }
 
@@ -171,6 +172,10 @@ class SearchChooseDataFragment : Fragment() {
     }
 
     companion object {
+
+        const val CHOOSE_YEAR_MODE_KEY = "choose_year_mode_key"
+        const val CHOOSE_YEAR_FROM_NAME_KEY = "choose_year_from_name_key"
+        const val CHOOSE_YEAR_TO_NAME_KEY = "choose_year_to_name_key"
 
         private const val SELECTED_YEAR_FROM_KEY = "selected_year_from"
         private const val SELECTED_YEAR_TO_KEY = "selected_year_to"
