@@ -80,6 +80,7 @@
         android:layout_marginTop="@dimen/margin_top_18dp"
         android:layout_marginBottom="@dimen/margin_bottom_36dp"
         android:text="@string/reset_filter"
+        android:backgroundTint="@color/blue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/rv_filter_items" />
