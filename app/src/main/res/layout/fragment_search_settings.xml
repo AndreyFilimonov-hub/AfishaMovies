@@ -34,304 +34,345 @@
             android:src="@drawable/arrow_back" />
     </Toolbar>
 
-    <TextView
-        android:id="@+id/tv_show"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_start"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="@dimen/margin_top_16dp"
-        android:text="@string/show"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-    <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/tg_show"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/togglebutton_height_46dp"
-        android:layout_marginHorizontal="@dimen/margin_horizontal"
-        android:layout_marginTop="@dimen/margin_top_16dp"
-        app:checkedButton="@id/btn_all"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_show"
-        app:selectionRequired="true"
-        app:singleSelection="true">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_all"
-            style="@style/ToggleButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="@string/all" />
+            <TextView
+                android:id="@+id/tv_show"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start"
+                android:text="@string/show"
+                android:textColor="@android:color/darker_gray"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_film"
-            style="@style/ToggleButtonStyle"
-            android:layout_width="@dimen/materialbutton_center_width_170dp"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="@string/films" />
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/tg_show"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/togglebutton_height_46dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal"
+                android:layout_marginTop="@dimen/margin_top_16dp"
+                app:checkedButton="@id/btn_all"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_show"
+                app:selectionRequired="true"
+                app:singleSelection="true">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_series"
-            style="@style/ToggleButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="@string/series" />
-    </com.google.android.material.button.MaterialButtonToggleGroup>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_all"
+                    style="@style/ToggleButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/all" />
 
-    <LinearLayout
-        android:id="@+id/ll_country"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top_16dp"
-        android:background="@drawable/bg_ripple_rectangle_straight"
-        android:clickable="true"
-        android:focusable="true"
-        android:paddingVertical="@dimen/padding_vertical_16dp"
-        app:layout_constraintTop_toBottomOf="@id/tg_show">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_film"
+                    style="@style/ToggleButtonStyle"
+                    android:layout_width="@dimen/materialbutton_center_width_170dp"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/films" />
 
-        <TextView
-            android:layout_width="@dimen/zero_dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_start"
-            android:layout_weight="1"
-            android:text="@string/country"
-            android:textSize="@dimen/text_size_16sp" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_series"
+                    style="@style/ToggleButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/series" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
 
-        <TextView
-            android:id="@+id/tv_country"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_end"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/text_size_16sp"
-            android:text="@string/any_v2" />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_16dp"
+                android:background="@drawable/bg_ripple_rectangle_straight"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingVertical="@dimen/padding_vertical_16dp"
+                app:layout_constraintTop_toBottomOf="@id/tg_show">
 
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_1dp"
-        app:dividerColor="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@id/ll_country" />
+                <TextView
+                    android:layout_width="@dimen/zero_dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_start"
+                    android:layout_weight="1"
+                    android:text="@string/country"
+                    android:textSize="@dimen/text_size_16sp" />
 
-    <LinearLayout
-        android:id="@+id/ll_genre"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_ripple_rectangle_straight"
-        android:clickable="true"
-        android:focusable="true"
-        android:paddingVertical="@dimen/padding_vertical_16dp"
-        app:layout_constraintTop_toBottomOf="@id/ll_country">
+                <TextView
+                    android:id="@+id/tv_country"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_end"
+                    android:text="@string/any_v2"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="@dimen/text_size_16sp" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="@dimen/zero_dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_start"
-            android:layout_weight="1"
-            android:text="@string/genre"
-            android:textSize="@dimen/text_size_16sp" />
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_1dp"
+                app:dividerColor="@android:color/darker_gray"
+                app:layout_constraintTop_toBottomOf="@id/ll_country" />
 
-        <TextView
-            android:id="@+id/tv_genre"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_end"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/text_size_16sp"
-            android:text="@string/any" />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_genre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_ripple_rectangle_straight"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingVertical="@dimen/padding_vertical_16dp"
+                app:layout_constraintTop_toBottomOf="@id/ll_country">
 
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_1dp"
-        app:dividerColor="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@id/ll_genre" />
+                <TextView
+                    android:layout_width="@dimen/zero_dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_start"
+                    android:layout_weight="1"
+                    android:text="@string/genre"
+                    android:textSize="@dimen/text_size_16sp" />
 
-    <LinearLayout
-        android:id="@+id/ll_period"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_ripple_rectangle_straight"
-        android:clickable="true"
-        android:focusable="true"
-        android:paddingVertical="@dimen/padding_vertical_16dp"
-        app:layout_constraintTop_toBottomOf="@id/ll_genre">
+                <TextView
+                    android:id="@+id/tv_genre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_end"
+                    android:text="@string/any"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="@dimen/text_size_16sp" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="@dimen/zero_dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_start"
-            android:layout_weight="1"
-            android:text="@string/year"
-            android:textSize="@dimen/text_size_16sp" />
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_1dp"
+                app:dividerColor="@android:color/darker_gray"
+                app:layout_constraintTop_toBottomOf="@id/ll_genre" />
 
-        <TextView
-            android:id="@+id/tv_period"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_end"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="@dimen/text_size_16sp"
-            android:text="@string/any" />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_period"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_ripple_rectangle_straight"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingVertical="@dimen/padding_vertical_16dp"
+                app:layout_constraintTop_toBottomOf="@id/ll_genre">
 
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_1dp"
-        app:dividerColor="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@id/ll_period" />
+                <TextView
+                    android:layout_width="@dimen/zero_dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_start"
+                    android:layout_weight="1"
+                    android:text="@string/year"
+                    android:textSize="@dimen/text_size_16sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_start"
-        android:layout_marginTop="@dimen/margin_top_16dp"
-        android:text="@string/rating"
-        android:textSize="@dimen/text_size_16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_period" />
+                <TextView
+                    android:id="@+id/tv_period"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_end"
+                    android:text="@string/any"
+                    android:textColor="@android:color/darker_gray"
+                    android:textSize="@dimen/text_size_16sp" />
+            </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_rating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_top_16dp"
-        android:layout_marginEnd="@dimen/margin_end"
-        android:text="@string/any"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_period" />
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_1dp"
+                app:dividerColor="@android:color/darker_gray"
+                app:layout_constraintTop_toBottomOf="@id/ll_period" />
 
-    <com.google.android.material.slider.RangeSlider
-        android:id="@+id/rangeSlider"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/margin_horizontal"
-        android:layout_marginTop="@dimen/margin_top_24dp"
-        android:stepSize="1"
-        android:valueFrom="1"
-        android:valueTo="10"
-        app:layout_constraintTop_toBottomOf="@id/tv_rating"
-        app:tickVisible="false"
-        app:trackHeight="@dimen/height_4dp"
-        app:values="@array/range" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start"
+                android:layout_marginTop="@dimen/margin_top_16dp"
+                android:text="@string/rating"
+                android:textSize="@dimen/text_size_16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_period" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_start_40dp"
-        android:text="@string/one"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rangeSlider" />
+            <TextView
+                android:id="@+id/tv_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_16dp"
+                android:layout_marginEnd="@dimen/margin_end"
+                android:text="@string/any"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="@dimen/text_size_16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ll_period" />
 
-    <TextView
-        android:id="@+id/tv_rating_ten"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_end_36dp"
-        android:text="@string/ten"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="@dimen/text_size_14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rangeSlider" />
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/rangeSlider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_horizontal"
+                android:layout_marginTop="@dimen/margin_top_24dp"
+                android:stepSize="1"
+                android:valueFrom="1"
+                android:valueTo="10"
+                app:layout_constraintTop_toBottomOf="@id/tv_rating"
+                app:tickVisible="false"
+                app:trackHeight="@dimen/height_4dp"
+                app:values="@array/range" />
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/md_range_slider"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_1dp"
-        android:layout_marginTop="@dimen/margin_top_16dp"
-        app:dividerColor="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@id/tv_rating_ten" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start_40dp"
+                android:text="@string/one"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="@dimen/text_size_14sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rangeSlider" />
 
-    <TextView
-        android:id="@+id/tv_sort"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_start"
-        android:layout_marginTop="@dimen/margin_top_16dp"
-        android:text="@string/sort"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/md_range_slider" />
+            <TextView
+                android:id="@+id/tv_rating_ten"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_end_36dp"
+                android:text="@string/ten"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="@dimen/text_size_14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rangeSlider" />
 
-    <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/tg_sort"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/togglebutton_height_46dp"
-        android:layout_marginHorizontal="@dimen/margin_horizontal"
-        android:layout_marginTop="@dimen/margin_top_16dp"
-        app:checkedButton="@id/btn_date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_sort"
-        app:selectionRequired="true"
-        app:singleSelection="true">
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/md_range_slider"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_1dp"
+                android:layout_marginTop="@dimen/margin_top_16dp"
+                app:dividerColor="@android:color/darker_gray"
+                app:layout_constraintTop_toBottomOf="@id/tv_rating_ten" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_date"
-            style="@style/ToggleButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="@string/date" />
+            <TextView
+                android:id="@+id/tv_sort"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_start"
+                android:layout_marginTop="@dimen/margin_top_16dp"
+                android:text="@string/sort"
+                android:textColor="@android:color/darker_gray"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/md_range_slider" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_popular"
-            style="@style/ToggleButtonStyle"
-            android:layout_width="@dimen/materialbutton_center_width_170dp"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="@string/popular_sort_type" />
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/tg_sort"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/togglebutton_height_46dp"
+                android:layout_marginHorizontal="@dimen/margin_horizontal"
+                android:layout_marginTop="@dimen/margin_top_16dp"
+                app:checkedButton="@id/btn_date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sort"
+                app:selectionRequired="true"
+                app:singleSelection="true">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_rating"
-            style="@style/ToggleButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checkable="true"
-            android:text="@string/rating" />
-    </com.google.android.material.button.MaterialButtonToggleGroup>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_date"
+                    style="@style/ToggleButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/date" />
 
-    <com.google.android.material.divider.MaterialDivider
-        android:id="@+id/md_sort"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_1dp"
-        android:layout_marginTop="@dimen/margin_top_16dp"
-        app:dividerColor="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@id/tg_sort" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_popular"
+                    style="@style/ToggleButtonStyle"
+                    android:layout_width="@dimen/materialbutton_center_width_170dp"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/popular_sort_type" />
 
-    <LinearLayout
-        android:id="@+id/ll_dont_watch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingVertical="@dimen/padding_vertical_16dp"
-        app:layout_constraintTop_toBottomOf="@id/md_sort">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_rating"
+                    style="@style/ToggleButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:text="@string/rating" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
 
-        <ImageView
-            android:id="@+id/iv_dont_watch"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="@dimen/margin_start"
-            android:backgroundTint="@color/black"
-            android:contentDescription="@null"
-            android:src="@drawable/dont_show_black" />
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/md_sort"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_1dp"
+                android:layout_marginTop="@dimen/margin_top_16dp"
+                app:dividerColor="@android:color/darker_gray"
+                app:layout_constraintTop_toBottomOf="@id/tg_sort" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_start"
-            android:layout_marginTop="@dimen/margin_top_2dp"
-            android:text="@string/dont_watched"
-            android:textSize="@dimen/text_size_18sp" />
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_dont_watch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingVertical="@dimen/padding_vertical_16dp"
+                app:layout_constraintTop_toBottomOf="@id/md_sort">
+
+                <ImageView
+                    android:id="@+id/iv_dont_watch"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="@dimen/margin_start"
+                    android:backgroundTint="@color/black"
+                    android:contentDescription="@null"
+                    android:src="@drawable/dont_show_black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_start"
+                    android:layout_marginTop="@dimen/margin_top_2dp"
+                    android:text="@string/dont_watched"
+                    android:textSize="@dimen/text_size_18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_top_16dp"
+                app:layout_constraintTop_toBottomOf="@id/ll_dont_watch">
+
+                <Button
+                    android:id="@+id/button_submit"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="@dimen/margin_horizontal"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/bg_button"
+                    android:text="@string/submit" />
+
+                <Button
+                    android:id="@+id/button_reset"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="@dimen/margin_horizontal"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/bg_button"
+                    android:text="@string/reset_filter" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
