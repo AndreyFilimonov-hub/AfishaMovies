@@ -1,6 +1,5 @@
 package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.filimonov.afishamovies.di.ModeQualifier
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,6 +32,5 @@ class SearchChooseViewModel @Inject constructor(@ModeQualifier private val mode:
     fun sendRequest(query: String) {
         val filteredList = list.filter { it.lowercase().contains(query.lowercase()) }
         _state.value = SearchChooseState.Search(filteredList)
-        Log.d("AAA", filteredList.toString())
     }
 }
