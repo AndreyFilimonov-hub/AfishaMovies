@@ -29,6 +29,7 @@ class SearchChooseDataFragment : Fragment() {
             selectedYear = selectedYearFrom
         ) {
             selectedYearFrom = it
+            checkButtonEnable()
             adapterTo.setMinActiveYear(it)
             adapterFrom.updateSelectedYear(it)
         }
@@ -40,6 +41,7 @@ class SearchChooseDataFragment : Fragment() {
             selectedYear = selectedYearTo
         ) {
             selectedYearTo = it
+            checkButtonEnable()
             adapterFrom.setMaxActiveYear(it)
             adapterTo.updateSelectedYear(it)
         }
@@ -76,6 +78,7 @@ class SearchChooseDataFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        checkButtonEnable()
         offBottomNav()
         setupRecyclerView()
         setupClickListeners()
@@ -114,6 +117,16 @@ class SearchChooseDataFragment : Fragment() {
                 }
             )
             parentFragmentManager.popBackStack()
+        }
+    }
+
+    private fun checkButtonEnable() {
+        with(binding.buttonPick) {
+            if (!(selectedYearFrom == null && selectedYearTo != null || selectedYearFrom != null && selectedYearTo == null)) {
+                isEnabled = true
+            } else {
+                isEnabled = false
+            }
         }
     }
 
