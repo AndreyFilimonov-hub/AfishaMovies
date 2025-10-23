@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosedatafragment
+package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosedatafragment
 
 import androidx.recyclerview.widget.DiffUtil
 

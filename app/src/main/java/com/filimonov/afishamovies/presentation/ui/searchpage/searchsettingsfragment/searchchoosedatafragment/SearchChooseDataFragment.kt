@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosedatafragment
+package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosedatafragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.databinding.FragmentSearchChooseDataBinding
 import com.filimonov.afishamovies.presentation.ui.MainActivity
-import com.filimonov.afishamovies.presentation.ui.searchpage.SearchSettingsFragment
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SearchSettingsFragment
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import javax.inject.Inject
 

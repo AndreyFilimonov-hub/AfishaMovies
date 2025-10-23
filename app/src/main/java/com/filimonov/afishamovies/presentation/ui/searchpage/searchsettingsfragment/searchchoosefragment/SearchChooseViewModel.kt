@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosefragment
+package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

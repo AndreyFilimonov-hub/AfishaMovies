@@ -1,5 +1,6 @@
-package com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosefragment
+package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -53,7 +54,7 @@ class SearchChooseAdapter(
                     )
                 )
             } else {
-                binding.root.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+                binding.root.setBackgroundColor(Color.TRANSPARENT)
             }
 
             binding.tvFilterItem.text = item

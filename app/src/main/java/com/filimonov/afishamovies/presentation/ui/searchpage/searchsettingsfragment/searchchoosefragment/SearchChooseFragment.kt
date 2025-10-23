@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosefragment
+package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +15,7 @@ import androidx.transition.Fade
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchChooseBinding
-import com.filimonov.afishamovies.presentation.ui.searchpage.SearchSettingsFragment
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SearchSettingsFragment
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -214,7 +214,7 @@ class SearchChooseFragment : Fragment() {
         private const val FILTER_MODE = "filter_mode_key"
 
         @JvmStatic
-        fun newInstance(filterItem: String, filterMode: String) =
+        fun newInstance(filterItem: String?, filterMode: String) =
             SearchChooseFragment().apply {
                 arguments = Bundle().apply {
                     putString(FILTER_ITEM, filterItem)

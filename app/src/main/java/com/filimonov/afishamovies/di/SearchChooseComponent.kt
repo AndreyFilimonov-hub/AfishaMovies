@@ -1,7 +1,7 @@
 package com.filimonov.afishamovies.di
 
-import com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosefragment.FilterMode
-import com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosefragment.SearchChooseFragment
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment.FilterMode
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment.SearchChooseFragment
 import dagger.BindsInstance
 import dagger.Subcomponent
 

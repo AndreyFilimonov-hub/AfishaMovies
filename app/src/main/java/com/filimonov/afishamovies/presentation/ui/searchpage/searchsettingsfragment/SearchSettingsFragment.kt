@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.presentation.ui.searchpage
+package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment
 
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
@@ -12,8 +12,9 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchSettingsBinding
-import com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosefragment.FilterMode
-import com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosefragment.SearchChooseFragment
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosedatafragment.SearchChooseDataFragment
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment.FilterMode
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment.SearchChooseFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +36,16 @@ class SearchSettingsFragment : Fragment() {
     private val binding: FragmentSearchSettingsBinding
         get() = _binding ?: throw kotlin.RuntimeException("FragmentSearchSettingsBinding == null")
 
+    private var showType: ShowType? = null
+    private var sortType: SortType? = null
+    private var country: String? = null
+    private var genre: String? = null
+    private var yearFrom: Int? = null
+    private var yearTo: Int? = null
+    private var ratingFrom: Int? = null
+    private var ratingTo: Int? = null
+    private var isDontWatched: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -54,6 +65,7 @@ class SearchSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupBackButton()
+        setupMaterialButtonClickListeners()
         setupRangeSlider()
         setupLinearLayoutsClickListeners()
         setupFragmentResultListeners()
@@ -63,12 +75,14 @@ class SearchSettingsFragment : Fragment() {
         binding.llDontWatch.setOnClickListener {
             it.isSelected = !it.isSelected
             if (it.isSelected) {
+                isDontWatched = true
                 animateBackgroundColor(
                     it,
                     Color.WHITE,
                     ContextCompat.getColor(requireContext(), R.color.selected_item)
                 )
             } else {
+                isDontWatched = false
                 animateBackgroundColor(
                     it,
                     ContextCompat.getColor(requireContext(), R.color.selected_item),
@@ -81,7 +95,7 @@ class SearchSettingsFragment : Fragment() {
                 .addToBackStack(null)
                 .add(
                     R.id.fragment_container, SearchChooseFragment.newInstance(
-                        binding.tvCountry.text.toString(),
+                        country,
                         FilterMode.COUNTRY.name
                     )
                 )
@@ -92,11 +106,40 @@ class SearchSettingsFragment : Fragment() {
                 .addToBackStack(null)
                 .add(
                     R.id.fragment_container, SearchChooseFragment.newInstance(
-                        binding.tvGenre.text.toString(),
+                        genre,
                         FilterMode.GENRE.name
                     )
                 )
                 .commit()
+        }
+        binding.llPeriod.setOnClickListener {
+            parentFragmentManager.beginTransaction()
+                .addToBackStack(null)
+                .add(
+                    R.id.fragment_container, SearchChooseDataFragment.newInstance(yearFrom, yearTo)
+                )
+                .commit()
+        }
+    }
+
+    private fun setupMaterialButtonClickListeners() {
+        binding.btnAll.setOnClickListener {
+            showType = ShowType.ALL
+        }
+        binding.btnFilm.setOnClickListener {
+            showType = ShowType.FILM
+        }
+        binding.btnAll.setOnClickListener {
+            showType = ShowType.SERIES
+        }
+        binding.btnDate.setOnClickListener {
+            sortType = SortType.DATE
+        }
+        binding.btnPopular.setOnClickListener {
+            sortType = SortType.POPULAR
+        }
+        binding.btnRating.setOnClickListener {
+            sortType = SortType.RATING
         }
     }
 
@@ -105,15 +148,37 @@ class SearchSettingsFragment : Fragment() {
             COUNTRY_MODE_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
-            val selectedCountry = bundle.getString(COUNTRY_NAME_KEY)
-            binding.tvCountry.text = selectedCountry
+            country = bundle.getString(COUNTRY_NAME_KEY)
+            binding.tvCountry.text = country
+            if (country == getString(R.string.any_v2)) {
+                country = null
+            }
         }
         parentFragmentManager.setFragmentResultListener(
             GENRE_MODE_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
-            val selectedCountry = bundle.getString(GENRE_NAME_KEY)
-            binding.tvGenre.text = selectedCountry
+            genre = bundle.getString(GENRE_NAME_KEY)
+            binding.tvGenre.text = genre
+            if (genre == getString(R.string.any)) {
+                genre = null
+            }
+        }
+        parentFragmentManager.setFragmentResultListener(
+            YEAR_MODE_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            yearFrom = bundle.getInt(YEAR_FROM_NAME_KEY)
+            yearTo = bundle.getInt(YEAR_TO_NAME_KEY)
+            if (yearFrom != Int.MIN_VALUE && yearTo != Int.MAX_VALUE && yearFrom != yearTo) {
+                binding.tvPeriod.text = String.format("с %s до %s", yearFrom, yearTo)
+            } else if (yearFrom == yearTo) {
+                binding.tvPeriod.text = yearFrom.toString()
+            } else {
+                yearFrom = null
+                yearTo = null
+                binding.tvPeriod.text = getString(R.string.any)
+            }
         }
     }
 
@@ -132,14 +197,14 @@ class SearchSettingsFragment : Fragment() {
                 )
             )
             addOnChangeListener { slider, _, _ ->
-                val min = slider.values[0].toInt()
-                val max = slider.values[1].toInt()
-                val rating = if (min == 1 && max == 10) {
-                    "Любой"
-                } else if (min == max) {
-                    "$min"
+                ratingFrom = slider.values[0].toInt()
+                ratingTo = slider.values[1].toInt()
+                val rating = if (ratingFrom == 1 && ratingTo == 10) {
+                    getString(R.string.any)
+                } else if (ratingFrom == ratingTo) {
+                    "$ratingFrom"
                 } else {
-                    "$min - $max"
+                    "$ratingFrom - $ratingTo"
                 }
                 binding.tvRating.text = rating
             }
@@ -170,8 +235,13 @@ class SearchSettingsFragment : Fragment() {
 
         const val COUNTRY_MODE_KEY = "country_mode_key"
         const val COUNTRY_NAME_KEY = "country_name_key"
+
         const val GENRE_MODE_KEY = "genre_mode_key"
         const val GENRE_NAME_KEY = "genre_name_key"
+
+        const val YEAR_MODE_KEY = "year_mode_key"
+        const val YEAR_FROM_NAME_KEY = "year_from_name_key"
+        const val YEAR_TO_NAME_KEY = "year_to_name_key"
 
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

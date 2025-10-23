@@ -1,8 +1,7 @@
 package com.filimonov.afishamovies.di
 
 import androidx.lifecycle.ViewModel
-import com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosedatafragment.SearchChooseDataViewModel
-import com.filimonov.afishamovies.presentation.ui.searchpage.searchchoosefragment.SearchChooseViewModel
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosedatafragment.SearchChooseDataViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
