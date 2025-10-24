@@ -20,28 +20,25 @@ import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragm
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment.FilterMode
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment.SearchChooseFragment
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val SHOW_TYPE_KEY = "show_type_key"
+private const val COUNTRY_KEY = "country_key"
+private const val GENRE_KEY = "genre_key"
+private const val YEAR_FROM_KEY = "year_from_key"
+private const val YEAR_TO_KEY = "year_to_key"
+private const val RATING_FROM_KEY = "rating_from_key"
+private const val RATING_TO_KEY = "rating_to_key"
+private const val SORT_TYPE_KEY = "sort_type_key"
+private const val IS_DONT_WATCH_KEY = "is_dont_watch_key"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchSettingsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SearchSettingsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     private var _binding: FragmentSearchSettingsBinding? = null
 
     private val binding: FragmentSearchSettingsBinding
         get() = _binding ?: throw RuntimeException("FragmentSearchSettingsBinding == null")
 
-    private var showType: ShowType? = ShowType.ALL
-    private var sortType: SortType? = SortType.DATE
+    private lateinit var showType: ShowType
+    private lateinit var sortType: SortType
     private var country: String? = null
     private var genre: String? = null
     private var yearFrom: Int? = null
@@ -52,10 +49,7 @@ class SearchSettingsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        parseArgs()
         enterTransition = Slide(Gravity.END).apply {
             duration = 500L
             interpolator = AccelerateInterpolator()
@@ -190,7 +184,7 @@ class SearchSettingsFragment : Fragment() {
         parentFragmentManager.setFragmentResult(
             SHOW_MODE_KEY,
             Bundle().apply {
-                putString(SHOW_NAME_KEY, showType?.name)
+                putString(SHOW_NAME_KEY, showType.name)
             }
         )
         parentFragmentManager.setFragmentResult(
@@ -222,7 +216,7 @@ class SearchSettingsFragment : Fragment() {
         parentFragmentManager.setFragmentResult(
             SORT_MODE_KEY,
             Bundle().apply {
-                putString(SORT_NAME_KEY, sortType?.name)
+                putString(SORT_NAME_KEY, sortType.name)
             }
         )
         parentFragmentManager.setFragmentResult(
@@ -332,6 +326,20 @@ class SearchSettingsFragment : Fragment() {
         colorAnimation.start()
     }
 
+    private fun parseArgs() {
+        arguments?.let {
+            showType = ShowType.valueOf(it.getString(SHOW_TYPE_KEY, ShowType.ALL.name))
+            country = it.getString(COUNTRY_KEY)
+            genre = it.getString(GENRE_KEY)
+            yearFrom = it.getInt(YEAR_FROM_KEY)
+            yearTo = it.getInt(YEAR_TO_KEY)
+            ratingFrom = it.getInt(RATING_FROM_KEY)
+            ratingTo = it.getInt(RATING_TO_KEY)
+            sortType = SortType.valueOf(it.getString(SORT_TYPE_KEY, SortType.DATE.name))
+            isDontWatched = it.getBoolean(IS_DONT_WATCH_KEY)
+        }
+    }
+
     companion object {
         const val SHOW_MODE_KEY = "show_mode_key"
         const val SHOW_NAME_KEY = "show_name_key"
@@ -361,11 +369,28 @@ class SearchSettingsFragment : Fragment() {
         private const val RATING_TO_DEFAULT = 10
 
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(
+            showType: String?,
+            country: String?,
+            genre: String?,
+            yearFrom: Int?,
+            yearTo: Int?,
+            ratingFrom: Int?,
+            ratingTo: Int?,
+            sortType: String?,
+            isDontWatched: Boolean
+        ) =
             SearchSettingsFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(SHOW_TYPE_KEY, showType)
+                    putString(COUNTRY_KEY, country)
+                    putString(GENRE_KEY, genre)
+                    putInt(YEAR_FROM_KEY, yearFrom ?: ZERO_YEAR_VALUE)
+                    putInt(YEAR_TO_KEY, yearTo ?: ZERO_YEAR_VALUE)
+                    putInt(RATING_FROM_KEY, ratingFrom ?: RATING_FROM_DEFAULT)
+                    putInt(RATING_TO_KEY, ratingTo ?: RATING_TO_DEFAULT)
+                    putString(SORT_TYPE_KEY, sortType)
+                    putBoolean(IS_DONT_WATCH_KEY, isDontWatched)
                 }
             }
     }
