@@ -172,7 +172,7 @@ class SearchPageFragment : Fragment() {
 
     private fun setupFragmentResultListeners() {
         parentFragmentManager.setFragmentResultListener(
-            SearchSettingsFragment.SHOW_MODE_KEY,
+            SearchSettingsFragment.FILTERS_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
             showType = ShowType.valueOf(
@@ -181,23 +181,10 @@ class SearchPageFragment : Fragment() {
                     ShowType.ALL.name
                 )
             )
-        }
-        parentFragmentManager.setFragmentResultListener(
-            SearchSettingsFragment.COUNTRY_MODE_KEY,
-            viewLifecycleOwner
-        ) { _, bundle ->
+
             country = bundle.getString(SearchSettingsFragment.COUNTRY_NAME_KEY)
-        }
-        parentFragmentManager.setFragmentResultListener(
-            SearchSettingsFragment.GENRE_MODE_KEY,
-            viewLifecycleOwner
-        ) { _, bundle ->
             genre = bundle.getString(SearchSettingsFragment.GENRE_NAME_KEY)
-        }
-        parentFragmentManager.setFragmentResultListener(
-            SearchSettingsFragment.YEAR_MODE_KEY,
-            viewLifecycleOwner
-        ) { _, bundle ->
+
             val yearFromBundle = bundle.getInt(SearchSettingsFragment.YEAR_FROM_NAME_KEY)
             yearFrom = if (yearFromBundle == Int.MIN_VALUE) {
                 null
@@ -210,29 +197,17 @@ class SearchPageFragment : Fragment() {
             } else {
                 yearToBundle
             }
-        }
-        parentFragmentManager.setFragmentResultListener(
-            SearchSettingsFragment.RATING_MODE_KEY,
-            viewLifecycleOwner
-        ) { _, bundle ->
+
             ratingFrom = bundle.getFloat(SearchSettingsFragment.RATING_FROM_NAME_KEY)
             ratingTo = bundle.getFloat(SearchSettingsFragment.RATING_TO_NAME_KEY)
-        }
-        parentFragmentManager.setFragmentResultListener(
-            SearchSettingsFragment.SORT_MODE_KEY,
-            viewLifecycleOwner
-        ) { _, bundle ->
+
             sortType = SortType.valueOf(
                 bundle.getString(
                     SearchSettingsFragment.SORT_NAME_KEY,
                     SortType.DATE.name
                 )
             )
-        }
-        parentFragmentManager.setFragmentResultListener(
-            SearchSettingsFragment.IS_DONT_WATCHED_MODE_KEY,
-            viewLifecycleOwner
-        ) { _, bundle ->
+
             isDontWatched = bundle.getBoolean(SearchSettingsFragment.IS_DONT_WATCHED_NAME_KEY)
         }
     }

@@ -242,46 +242,16 @@ class SearchSettingsFragment : Fragment() {
 
     private fun sendSettingsToPreviousFragment() {
         parentFragmentManager.setFragmentResult(
-            SHOW_MODE_KEY,
+            FILTERS_KEY,
             Bundle().apply {
                 putString(SHOW_NAME_KEY, showType.name)
-            }
-        )
-        parentFragmentManager.setFragmentResult(
-            COUNTRY_MODE_KEY,
-            Bundle().apply {
                 putString(COUNTRY_NAME_KEY, country)
-            }
-        )
-        parentFragmentManager.setFragmentResult(
-            GENRE_MODE_KEY,
-            Bundle().apply {
                 putString(GENRE_NAME_KEY, genre)
-            }
-        )
-        parentFragmentManager.setFragmentResult(
-            YEAR_MODE_KEY,
-            Bundle().apply {
                 putInt(YEAR_FROM_NAME_KEY, yearFrom ?: YEAR_FROM_DEFAULT)
                 putInt(YEAR_TO_NAME_KEY, yearTo ?: YEAR_TO_DEFAULT)
-            }
-        )
-        parentFragmentManager.setFragmentResult(
-            RATING_MODE_KEY,
-            Bundle().apply {
                 putFloat(RATING_FROM_NAME_KEY, ratingFrom ?: RATING_FROM_DEFAULT)
                 putFloat(RATING_TO_NAME_KEY, ratingTo ?: RATING_TO_DEFAULT)
-            }
-        )
-        parentFragmentManager.setFragmentResult(
-            SORT_MODE_KEY,
-            Bundle().apply {
                 putString(SORT_NAME_KEY, sortType.name)
-            }
-        )
-        parentFragmentManager.setFragmentResult(
-            IS_DONT_WATCHED_MODE_KEY,
-            Bundle().apply {
                 putBoolean(IS_DONT_WATCHED_NAME_KEY, isDontWatched)
             }
         )
@@ -402,27 +372,22 @@ class SearchSettingsFragment : Fragment() {
     }
 
     companion object {
-        const val SHOW_MODE_KEY = "show_mode_key"
+        const val FILTERS_KEY = "filters_key"
+
         const val SHOW_NAME_KEY = "show_name_key"
 
-        const val COUNTRY_MODE_KEY = "country_mode_key"
         const val COUNTRY_NAME_KEY = "country_name_key"
 
-        const val GENRE_MODE_KEY = "genre_mode_key"
         const val GENRE_NAME_KEY = "genre_name_key"
 
-        const val YEAR_MODE_KEY = "year_mode_key"
         const val YEAR_FROM_NAME_KEY = "year_from_name_key"
         const val YEAR_TO_NAME_KEY = "year_to_name_key"
 
-        const val RATING_MODE_KEY = "rating_mode_key"
         const val RATING_FROM_NAME_KEY = "rating_from_name_key"
         const val RATING_TO_NAME_KEY = "rating_to_name_key"
 
-        const val SORT_MODE_KEY = "sort_mode_key"
         const val SORT_NAME_KEY = "sort_name_key"
 
-        const val IS_DONT_WATCHED_MODE_KEY = "is_dont_watched_mode_key"
         const val IS_DONT_WATCHED_NAME_KEY = "is_dont_watched_name_key"
 
         private const val YEAR_FROM_DEFAULT = Int.MIN_VALUE
