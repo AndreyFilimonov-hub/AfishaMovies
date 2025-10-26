@@ -97,12 +97,14 @@ fun SearchMediaBannerDto.toSearchMediaBannerEntity(): SearchMediaBannerEntity {
     return SearchMediaBannerEntity(
         id = this.id,
         name = this.name,
-        year = year,
+        year = this.year,
+        isSeries = this.isSeries,
         rating = this.rating?.kp?.roundRating(),
         votes = this.votes?.kp,
         posterUrl = this.poster?.url,
         genres = this.genres?.map { it.name },
-        countries = this.countries?.map { it.name }
+        countries = this.countries?.map { it.name },
+        isWatched = false // TODO: from db
     )
 }
 
