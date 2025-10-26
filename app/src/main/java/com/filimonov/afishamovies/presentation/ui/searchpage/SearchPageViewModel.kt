@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filimonov.afishamovies.domain.usecases.GetMoviesByQueryUseCase
 import com.filimonov.afishamovies.domain.usecases.GetPersonsByQueryUseCase
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.ShowType
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SortType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
@@ -33,6 +35,16 @@ class SearchPageViewModel @Inject constructor(
 
     private var page = 1
 
+    private var showType: ShowType = ShowType.ALL
+    private var country: String? = null
+    private var genre: String? = null
+    private var yearFrom: Int = Int.MIN_VALUE
+    private var yearTo: Int = Int.MAX_VALUE
+    private var ratingFrom: Int = 1
+    private var ratingTo: Int = 10
+    private var sortType: SortType = SortType.DATE
+    private var isDontWatched: Boolean? = null
+
     init {
         viewModelScope.launch {
             _query
@@ -52,11 +64,47 @@ class SearchPageViewModel @Inject constructor(
 
                                 val searchMediaBanners =
                                     medias.await()
+                                        .filter { it.name.isNotEmpty() }
                                         .filter {
-                                            it.name.isNotEmpty()
-
+                                            when (showType) {
+                                                ShowType.ALL -> return@filter true
+                                                ShowType.FILM -> !it.isSeries
+                                                ShowType.SERIES -> it.isSeries
+                                            }
                                         }
-                                        .sortedByDescending { it.votes }
+                                        .filter {
+                                            if (country != null) {
+                                                it.countries?.contains(country) == true
+                                            } else {
+                                                return@filter true
+                                            }
+                                        }
+                                        .filter {
+                                            if (genre != null) {
+                                                it.genres?.contains(genre) == true
+                                            } else {
+                                                return@filter true
+                                            }
+                                        }
+                                        .filter { it.year in yearFrom..yearTo }
+                                        .filter {
+                                            it.rating?.toFloatOrNull()?.toInt()
+                                                ?.let { rating -> rating in ratingFrom..ratingTo } == true
+                                        }
+                                        .filter {
+                                            if (isDontWatched != null && isDontWatched == true) {
+                                                !it.isWatched
+                                            } else {
+                                                return@filter true
+                                            }
+                                        }
+                                        .sortedByDescending {
+                                            when (sortType) {
+                                                SortType.DATE -> it.year
+                                                SortType.POPULAR -> it.votes
+                                                SortType.RATING -> it.rating?.toInt()
+                                            }
+                                        }
                                         .map { SearchItem.MediaBanner(it) }
                                 val searchPersonBanners =
                                     persons.await()
@@ -85,7 +133,27 @@ class SearchPageViewModel @Inject constructor(
         }
     }
 
-    fun sendRequest(query: String) {
+    fun sendRequest(
+        query: String,
+        showType: ShowType,
+        country: String?,
+        genre: String?,
+        yearFrom: Int?,
+        yearTo: Int?,
+        ratingFrom: Int?,
+        ratingTo: Int?,
+        sortType: SortType,
+        isDontWatched: Boolean?
+    ) {
         _query.value = query
+        this.showType = showType
+        this.country = country
+        this.genre = genre
+        this.yearFrom = yearFrom ?: Int.MIN_VALUE
+        this.yearTo = yearTo ?: Int.MAX_VALUE
+        this.ratingFrom = ratingFrom ?: 1
+        this.ratingTo = ratingTo ?: 10
+        this.sortType = sortType
+        this.isDontWatched = isDontWatched
     }
 }

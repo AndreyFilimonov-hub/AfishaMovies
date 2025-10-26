@@ -119,7 +119,7 @@ class SearchPageFragment : Fragment() {
                         }
 
                         is SearchPageState.Success -> {
-                            Log.d("AAA", state.result.toString())
+//                            Log.d("AAA", state.result.toString())
                             searchItemAdapter.submitList(state.result)
                         }
                     }
@@ -155,7 +155,18 @@ class SearchPageFragment : Fragment() {
                 .commit()
         }
         binding.sbMain.doOnTextChanged { query, _, _, _ ->
-            viewModel.sendRequest(query.toString())
+            viewModel.sendRequest(
+                query.toString(),
+                showType,
+                country,
+                genre,
+                yearFrom,
+                yearTo,
+                ratingFrom,
+                ratingTo,
+                sortType,
+                isDontWatched
+            )
         }
     }
 
