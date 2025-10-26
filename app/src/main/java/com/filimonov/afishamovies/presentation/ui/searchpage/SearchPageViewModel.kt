@@ -40,8 +40,8 @@ class SearchPageViewModel @Inject constructor(
     private var genre: String? = null
     private var yearFrom: Int = Int.MIN_VALUE
     private var yearTo: Int = Int.MAX_VALUE
-    private var ratingFrom: Int = 1
-    private var ratingTo: Int = 10
+    private var ratingFrom: Float = 1f
+    private var ratingTo: Float = 10f
     private var sortType: SortType = SortType.DATE
     private var isDontWatched: Boolean? = null
 
@@ -88,7 +88,7 @@ class SearchPageViewModel @Inject constructor(
                                         }
                                         .filter { it.year in yearFrom..yearTo }
                                         .filter {
-                                            it.rating?.toFloatOrNull()?.toInt()
+                                            it.rating?.toFloatOrNull()
                                                 ?.let { rating -> rating in ratingFrom..ratingTo } == true
                                         }
                                         .filter {
@@ -140,8 +140,8 @@ class SearchPageViewModel @Inject constructor(
         genre: String?,
         yearFrom: Int?,
         yearTo: Int?,
-        ratingFrom: Int?,
-        ratingTo: Int?,
+        ratingFrom: Float?,
+        ratingTo: Float?,
         sortType: SortType,
         isDontWatched: Boolean?
     ) {
@@ -151,8 +151,8 @@ class SearchPageViewModel @Inject constructor(
         this.genre = genre
         this.yearFrom = yearFrom ?: Int.MIN_VALUE
         this.yearTo = yearTo ?: Int.MAX_VALUE
-        this.ratingFrom = ratingFrom ?: 1
-        this.ratingTo = ratingTo ?: 10
+        this.ratingFrom = ratingFrom ?: 1f
+        this.ratingTo = ratingTo ?: 10f
         this.sortType = sortType
         this.isDontWatched = isDontWatched
     }

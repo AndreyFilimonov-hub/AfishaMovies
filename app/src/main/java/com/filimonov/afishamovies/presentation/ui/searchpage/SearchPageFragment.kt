@@ -39,8 +39,8 @@ class SearchPageFragment : Fragment() {
     private var genre: String? = null
     private var yearFrom: Int? = null
     private var yearTo: Int? = null
-    private var ratingFrom: Int? = null
-    private var ratingTo: Int? = null
+    private var ratingFrom: Float? = null
+    private var ratingTo: Float? = null
     private var isDontWatched: Boolean = false
 
     private val component by lazy {
@@ -215,8 +215,8 @@ class SearchPageFragment : Fragment() {
             SearchSettingsFragment.RATING_MODE_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
-            ratingFrom = bundle.getInt(SearchSettingsFragment.RATING_FROM_NAME_KEY)
-            ratingTo = bundle.getInt(SearchSettingsFragment.RATING_TO_NAME_KEY)
+            ratingFrom = bundle.getFloat(SearchSettingsFragment.RATING_FROM_NAME_KEY)
+            ratingTo = bundle.getFloat(SearchSettingsFragment.RATING_TO_NAME_KEY)
         }
         parentFragmentManager.setFragmentResultListener(
             SearchSettingsFragment.SORT_MODE_KEY,

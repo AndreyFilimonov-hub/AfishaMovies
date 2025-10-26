@@ -43,8 +43,8 @@ class SearchSettingsFragment : Fragment() {
     private var genre: String? = null
     private var yearFrom: Int? = null
     private var yearTo: Int? = null
-    private var ratingFrom: Int? = null
-    private var ratingTo: Int? = null
+    private var ratingFrom: Float? = null
+    private var ratingTo: Float? = null
     private var isDontWatched: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,7 +105,7 @@ class SearchSettingsFragment : Fragment() {
         } else {
             String.format("с %s до %s", yearFrom, yearTo)
         }
-        binding.rangeSlider.values = listOf(ratingFrom?.toFloat(), ratingTo?.toFloat())
+        binding.rangeSlider.values = listOf(ratingFrom, ratingTo)
         binding.tvRating.text =
             if (ratingFrom == RATING_FROM_DEFAULT && ratingTo == RATING_TO_DEFAULT) {
                 getString(R.string.any)
@@ -269,8 +269,8 @@ class SearchSettingsFragment : Fragment() {
         parentFragmentManager.setFragmentResult(
             RATING_MODE_KEY,
             Bundle().apply {
-                putInt(RATING_FROM_NAME_KEY, ratingFrom ?: RATING_FROM_DEFAULT)
-                putInt(RATING_TO_NAME_KEY, ratingTo ?: RATING_TO_DEFAULT)
+                putFloat(RATING_FROM_NAME_KEY, ratingFrom ?: RATING_FROM_DEFAULT)
+                putFloat(RATING_TO_NAME_KEY, ratingTo ?: RATING_TO_DEFAULT)
             }
         )
         parentFragmentManager.setFragmentResult(
@@ -341,15 +341,16 @@ class SearchSettingsFragment : Fragment() {
                 )
             )
             addOnChangeListener { slider, _, _ ->
-                ratingFrom = slider.values[0].toInt()
-                ratingTo = slider.values[1].toInt()
-                val rating = if (ratingFrom == 1 && ratingTo == 10) {
-                    getString(R.string.any)
-                } else if (ratingFrom == ratingTo) {
-                    "$ratingFrom"
-                } else {
-                    "$ratingFrom - $ratingTo"
-                }
+                ratingFrom = slider.values[0].toFloat()
+                ratingTo = slider.values[1].toFloat()
+                val rating =
+                    if (ratingFrom == RATING_FROM_DEFAULT && ratingTo == RATING_TO_DEFAULT) {
+                        getString(R.string.any)
+                    } else if (ratingFrom == ratingTo) {
+                        "${ratingFrom?.toInt()}"
+                    } else {
+                        "${ratingFrom?.toInt()} - ${ratingTo?.toInt()}"
+                    }
                 binding.tvRating.text = rating
             }
         }
@@ -393,8 +394,8 @@ class SearchSettingsFragment : Fragment() {
             genre = it.getString(GENRE_KEY)
             yearFrom = it.getInt(YEAR_FROM_KEY)
             yearTo = it.getInt(YEAR_TO_KEY)
-            ratingFrom = it.getInt(RATING_FROM_KEY)
-            ratingTo = it.getInt(RATING_TO_KEY)
+            ratingFrom = it.getFloat(RATING_FROM_KEY)
+            ratingTo = it.getFloat(RATING_TO_KEY)
             sortType = SortType.valueOf(it.getString(SORT_TYPE_KEY, SortType.DATE.name))
             isDontWatched = it.getBoolean(IS_DONT_WATCH_KEY)
         }
@@ -426,8 +427,8 @@ class SearchSettingsFragment : Fragment() {
 
         private const val YEAR_FROM_DEFAULT = Int.MIN_VALUE
         private const val YEAR_TO_DEFAULT = Int.MAX_VALUE
-        private const val RATING_FROM_DEFAULT = 1
-        private const val RATING_TO_DEFAULT = 10
+        private const val RATING_FROM_DEFAULT = 1f
+        private const val RATING_TO_DEFAULT = 10f
 
         @JvmStatic
         fun newInstance(
@@ -436,8 +437,8 @@ class SearchSettingsFragment : Fragment() {
             genre: String?,
             yearFrom: Int?,
             yearTo: Int?,
-            ratingFrom: Int?,
-            ratingTo: Int?,
+            ratingFrom: Float?,
+            ratingTo: Float?,
             sortType: String?,
             isDontWatched: Boolean
         ) =
@@ -448,8 +449,8 @@ class SearchSettingsFragment : Fragment() {
                     putString(GENRE_KEY, genre)
                     putInt(YEAR_FROM_KEY, yearFrom ?: YEAR_FROM_DEFAULT)
                     putInt(YEAR_TO_KEY, yearTo ?: YEAR_TO_DEFAULT)
-                    putInt(RATING_FROM_KEY, ratingFrom ?: RATING_FROM_DEFAULT)
-                    putInt(RATING_TO_KEY, ratingTo ?: RATING_TO_DEFAULT)
+                    putFloat(RATING_FROM_KEY, ratingFrom ?: RATING_FROM_DEFAULT)
+                    putFloat(RATING_TO_KEY, ratingTo ?: RATING_TO_DEFAULT)
                     putString(SORT_TYPE_KEY, sortType)
                     putBoolean(IS_DONT_WATCH_KEY, isDontWatched)
                 }
