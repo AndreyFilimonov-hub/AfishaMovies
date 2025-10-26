@@ -73,12 +73,67 @@ class SearchSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         offBottomNav()
+        setupTextViews()
         setupBackButton()
         setupMaterialButtonClickListeners()
         setupButtonClickListeners()
         setupLinearLayoutsClickListeners()
         setupRangeSlider()
         setupFragmentResultListeners()
+    }
+
+    private fun setupTextViews() {
+        when (showType) {
+            ShowType.ALL -> binding.tgShow.check(R.id.btn_all)
+            ShowType.FILM -> binding.tgShow.check(R.id.btn_film)
+            ShowType.SERIES -> binding.tgShow.check(R.id.btn_series)
+        }
+        binding.tvCountry.text = if (country == null) {
+            getString(R.string.any_v2)
+        } else {
+            country
+        }
+        binding.tvGenre.text = if (genre == null) {
+            getString(R.string.any)
+        } else {
+            genre
+        }
+        binding.tvPeriod.text = if (yearFrom == YEAR_FROM_DEFAULT && yearTo == YEAR_TO_DEFAULT) {
+            getString(R.string.any)
+        } else if (yearFrom == yearTo) {
+            yearFrom.toString()
+        } else {
+            String.format("с %s до %s", yearFrom, yearTo)
+        }
+        binding.rangeSlider.values = listOf(ratingFrom?.toFloat(), ratingTo?.toFloat())
+        binding.tvRating.text =
+            if (ratingFrom == RATING_FROM_DEFAULT && ratingTo == RATING_TO_DEFAULT) {
+                getString(R.string.any)
+            } else if (ratingFrom == ratingTo) {
+                ratingFrom.toString()
+            } else {
+                String.format("%s - %s", ratingFrom, ratingTo)
+            }
+        when (sortType) {
+            SortType.DATE -> binding.tgSort.check(R.id.btn_date)
+            SortType.POPULAR -> binding.tgSort.check(R.id.btn_popular)
+            SortType.RATING -> binding.tgSort.check(R.id.btn_rating)
+        }
+        if (isDontWatched) {
+            binding.llDontWatch.isSelected = isDontWatched
+            animateBackgroundColor(
+                binding.llDontWatch,
+                Color.WHITE,
+                ContextCompat.getColor(requireContext(), R.color.selected_item)
+            )
+        } else {
+            binding.llDontWatch.isSelected = isDontWatched
+            animateBackgroundColor(
+                binding.llDontWatch,
+                ContextCompat.getColor(requireContext(), R.color.selected_item),
+                Color.WHITE
+            )
+        }
     }
 
     private fun setupLinearLayoutsClickListeners() {
@@ -171,7 +226,12 @@ class SearchSettingsFragment : Fragment() {
             binding.tgSort.check(R.id.btn_date)
             sortType = SortType.DATE
             isDontWatched = false
-            binding.llDontWatch.isSelected = false
+            binding.llDontWatch.isSelected = isDontWatched
+            animateBackgroundColor(
+                binding.llDontWatch,
+                ContextCompat.getColor(requireContext(), R.color.selected_item),
+                Color.WHITE
+            )
         }
 
         binding.buttonSubmit.setOnClickListener {
@@ -202,8 +262,8 @@ class SearchSettingsFragment : Fragment() {
         parentFragmentManager.setFragmentResult(
             YEAR_MODE_KEY,
             Bundle().apply {
-                putInt(YEAR_FROM_NAME_KEY, yearFrom ?: ZERO_YEAR_VALUE)
-                putInt(YEAR_TO_NAME_KEY, yearTo ?: ZERO_YEAR_VALUE)
+                putInt(YEAR_FROM_NAME_KEY, yearFrom ?: YEAR_FROM_DEFAULT)
+                putInt(YEAR_TO_NAME_KEY, yearTo ?: YEAR_TO_DEFAULT)
             }
         )
         parentFragmentManager.setFragmentResult(
@@ -364,7 +424,8 @@ class SearchSettingsFragment : Fragment() {
         const val IS_DONT_WATCHED_MODE_KEY = "is_dont_watched_mode_key"
         const val IS_DONT_WATCHED_NAME_KEY = "is_dont_watched_name_key"
 
-        private const val ZERO_YEAR_VALUE = 0
+        private const val YEAR_FROM_DEFAULT = Int.MIN_VALUE
+        private const val YEAR_TO_DEFAULT = Int.MAX_VALUE
         private const val RATING_FROM_DEFAULT = 1
         private const val RATING_TO_DEFAULT = 10
 
@@ -385,8 +446,8 @@ class SearchSettingsFragment : Fragment() {
                     putString(SHOW_TYPE_KEY, showType)
                     putString(COUNTRY_KEY, country)
                     putString(GENRE_KEY, genre)
-                    putInt(YEAR_FROM_KEY, yearFrom ?: ZERO_YEAR_VALUE)
-                    putInt(YEAR_TO_KEY, yearTo ?: ZERO_YEAR_VALUE)
+                    putInt(YEAR_FROM_KEY, yearFrom ?: YEAR_FROM_DEFAULT)
+                    putInt(YEAR_TO_KEY, yearTo ?: YEAR_TO_DEFAULT)
                     putInt(RATING_FROM_KEY, ratingFrom ?: RATING_FROM_DEFAULT)
                     putInt(RATING_TO_KEY, ratingTo ?: RATING_TO_DEFAULT)
                     putString(SORT_TYPE_KEY, sortType)
