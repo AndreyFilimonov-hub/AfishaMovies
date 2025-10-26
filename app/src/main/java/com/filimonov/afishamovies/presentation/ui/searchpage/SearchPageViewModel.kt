@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filimonov.afishamovies.domain.usecases.GetMoviesByQueryUseCase
 import com.filimonov.afishamovies.domain.usecases.GetPersonsByQueryUseCase
-import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.ShowType
-import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SortType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async

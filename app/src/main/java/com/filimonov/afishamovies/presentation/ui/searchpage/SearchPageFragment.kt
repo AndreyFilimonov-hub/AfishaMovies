@@ -19,8 +19,6 @@ import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchpageadapter.SearchItemAdapter
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SearchSettingsFragment
-import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.ShowType
-import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SortType
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
