@@ -18,6 +18,9 @@ import com.filimonov.afishamovies.databinding.FragmentSearchPageBinding
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchpageadapter.SearchItemAdapter
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SearchSettingsFragment
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.ShowType
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SortType
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -29,6 +32,16 @@ class SearchPageFragment : Fragment() {
 
     private val binding: FragmentSearchPageBinding
         get() = _binding ?: throw RuntimeException("FragmentSearchPageBinding == null")
+
+    private var showType: ShowType = ShowType.ALL
+    private var sortType: SortType = SortType.DATE
+    private var country: String? = null
+    private var genre: String? = null
+    private var yearFrom: Int? = null
+    private var yearTo: Int? = null
+    private var ratingFrom: Int? = null
+    private var ratingTo: Int? = null
+    private var isDontWatched: Boolean = false
 
     private val component by lazy {
         (requireActivity().application as AfishaMoviesApp).component
@@ -77,6 +90,7 @@ class SearchPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupFragmentResultListeners()
         setPaddingRootView()
         setupSearchBar()
         setupRecyclerView()
@@ -91,15 +105,19 @@ class SearchPageFragment : Fragment() {
                         SearchPageState.Empty -> {
 
                         }
+
                         SearchPageState.Error -> {
 
                         }
+
                         SearchPageState.Initial -> {
 
                         }
+
                         SearchPageState.Loading -> {
 
                         }
+
                         is SearchPageState.Success -> {
                             Log.d("AAA", state.result.toString())
                             searchItemAdapter.submitList(state.result)
@@ -119,12 +137,92 @@ class SearchPageFragment : Fragment() {
     private fun setupSearchBar() {
         binding.ivFilter.setOnClickListener {
             parentFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, SearchSettingsFragment.newInstance("", ""))
+                .add(
+                    R.id.fragment_container,
+                    SearchSettingsFragment.newInstance(
+                        showType.name,
+                        country,
+                        genre,
+                        yearFrom,
+                        yearTo,
+                        ratingFrom,
+                        ratingTo,
+                        sortType.name,
+                        isDontWatched
+                    )
+                )
                 .addToBackStack(null)
                 .commit()
         }
         binding.sbMain.doOnTextChanged { query, _, _, _ ->
             viewModel.sendRequest(query.toString())
+        }
+    }
+
+    private fun setupFragmentResultListeners() {
+        parentFragmentManager.setFragmentResultListener(
+            SearchSettingsFragment.SHOW_MODE_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            showType = ShowType.valueOf(
+                bundle.getString(
+                    SearchSettingsFragment.SHOW_NAME_KEY,
+                    ShowType.ALL.name
+                )
+            )
+        }
+        parentFragmentManager.setFragmentResultListener(
+            SearchSettingsFragment.COUNTRY_MODE_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            country = bundle.getString(SearchSettingsFragment.COUNTRY_NAME_KEY)
+        }
+        parentFragmentManager.setFragmentResultListener(
+            SearchSettingsFragment.GENRE_MODE_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            genre = bundle.getString(SearchSettingsFragment.GENRE_NAME_KEY)
+        }
+        parentFragmentManager.setFragmentResultListener(
+            SearchSettingsFragment.YEAR_MODE_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            val yearFromBundle = bundle.getInt(SearchSettingsFragment.YEAR_FROM_NAME_KEY)
+            yearFrom = if (yearFromBundle == Int.MIN_VALUE) {
+                null
+            } else {
+                yearFromBundle
+            }
+            val yearToBundle = bundle.getInt(SearchSettingsFragment.YEAR_TO_NAME_KEY)
+            yearTo = if (yearToBundle == Int.MAX_VALUE) {
+                null
+            } else {
+                yearToBundle
+            }
+        }
+        parentFragmentManager.setFragmentResultListener(
+            SearchSettingsFragment.RATING_MODE_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            ratingFrom = bundle.getInt(SearchSettingsFragment.RATING_FROM_NAME_KEY)
+            ratingTo = bundle.getInt(SearchSettingsFragment.RATING_TO_NAME_KEY)
+        }
+        parentFragmentManager.setFragmentResultListener(
+            SearchSettingsFragment.SORT_MODE_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            sortType = SortType.valueOf(
+                bundle.getString(
+                    SearchSettingsFragment.SORT_NAME_KEY,
+                    SortType.DATE.name
+                )
+            )
+        }
+        parentFragmentManager.setFragmentResultListener(
+            SearchSettingsFragment.IS_DONT_WATCHED_MODE_KEY,
+            viewLifecycleOwner
+        ) { _, bundle ->
+            isDontWatched = bundle.getBoolean(SearchSettingsFragment.IS_DONT_WATCHED_NAME_KEY)
         }
     }
 
