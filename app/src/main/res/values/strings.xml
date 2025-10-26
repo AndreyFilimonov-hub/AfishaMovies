@@ -24,7 +24,7 @@
     <string name="error_load_data">Произошла ошибка\n при загрузке данных</string>
     <string name="deeplink_film">Смотри! %1$s\nhttps://afisha.app/film?movieId=%2$d\n</string>
     <string name="share_via">Поделиться через</string>
-    <string name="sb_main_hint">Фильмы, актеры, режиссеры</string>
+    <string name="sb_main_hint">Название фильма или сериала</string>
     <string name="films">Фильмы</string>
     <string name="search_settings">Настройки поиска</string>
     <string name="show">Показывать</string>

@@ -65,9 +65,6 @@ class SearchPageFragment : Fragment() {
                 )
                 .commit()
         },
-        onPersonBannerClick = {
-            Log.d("AAA", it.toString())
-        },
         onRetryButtonClick = {
 
         }
@@ -207,6 +204,8 @@ class SearchPageFragment : Fragment() {
             )
 
             isDontWatched = bundle.getBoolean(SearchSettingsFragment.IS_DONT_WATCHED_NAME_KEY)
+
+            viewModel.updateList(showType, country, genre, yearFrom, yearTo, ratingFrom, ratingTo, sortType, isDontWatched)
         }
     }
 
