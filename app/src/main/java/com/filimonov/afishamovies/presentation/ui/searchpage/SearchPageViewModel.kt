@@ -72,56 +72,29 @@ class SearchPageViewModel @Inject constructor(
         }
     }
 
-    fun updateList(
-        showType: ShowType,
-        country: String?,
-        genre: String?,
-        yearFrom: Int?,
-        yearTo: Int?,
-        ratingFrom: Float?,
-        ratingTo: Float?,
-        sortType: SortType,
-        isDontWatched: Boolean?
-    ) {
-        setupFilters(
-            showType,
-            country,
-            genre,
-            yearFrom,
-            yearTo,
-            ratingFrom,
-            ratingTo,
-            sortType,
-            isDontWatched
-        )
+    fun updateList() {
+        viewModelScope.launch {
+            try {
+                _state.value = SearchPageState.Loading
 
+                val medias = getMoviesByQueryUseCase(page, _query.value)
 
+                val filteredMediaBannerList = filterList(medias)
+
+                if (filteredMediaBannerList.isEmpty()) {
+                    _state.value = SearchPageState.Empty
+                } else {
+                    _state.value = SearchPageState.Success(filteredMediaBannerList)
+                    currentList = filteredMediaBannerList.toMutableList()
+                }
+            } catch (_: Exception) {
+                _state.value = SearchPageState.Error
+            }
+        }
     }
 
-    fun sendRequest(
-        query: String,
-        showType: ShowType,
-        country: String?,
-        genre: String?,
-        yearFrom: Int?,
-        yearTo: Int?,
-        ratingFrom: Float?,
-        ratingTo: Float?,
-        sortType: SortType,
-        isDontWatched: Boolean?
-    ) {
+    fun sendRequest(query: String) {
         _query.value = query
-        setupFilters(
-            showType,
-            country,
-            genre,
-            yearFrom,
-            yearTo,
-            ratingFrom,
-            ratingTo,
-            sortType,
-            isDontWatched
-        )
     }
 
     private fun filterList(list: List<SearchMediaBannerEntity>): List<SearchItem.MediaBanner> {
@@ -162,15 +135,15 @@ class SearchPageViewModel @Inject constructor(
             }
             .sortedByDescending {
                 when (sortType) {
-                    SortType.DATE -> it.year
-                    SortType.POPULAR -> it.votes
-                    SortType.RATING -> it.rating?.toInt()
+                    SortType.DATE -> it.year.toFloat()
+                    SortType.POPULAR -> it.votes?.toFloat()
+                    SortType.RATING -> it.rating?.toFloat()
                 }
             }
             .map { SearchItem.MediaBanner(it) }
     }
 
-    private fun setupFilters(
+    fun setupFilters(
         showType: ShowType,
         country: String?,
         genre: String?,

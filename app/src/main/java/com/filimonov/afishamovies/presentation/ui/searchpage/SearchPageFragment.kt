@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnNextLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -106,7 +107,17 @@ class SearchPageFragment : Fragment() {
                         }
 
                         SearchPageState.Initial -> {
-
+                            viewModel.setupFilters(
+                                showType,
+                                country,
+                                genre,
+                                yearFrom,
+                                yearTo,
+                                ratingFrom,
+                                ratingTo,
+                                sortType,
+                                isDontWatched
+                            )
                         }
 
                         SearchPageState.Loading -> {
@@ -150,18 +161,7 @@ class SearchPageFragment : Fragment() {
                 .commit()
         }
         binding.sbMain.doOnTextChanged { query, _, _, _ ->
-            viewModel.sendRequest(
-                query.toString(),
-                showType,
-                country,
-                genre,
-                yearFrom,
-                yearTo,
-                ratingFrom,
-                ratingTo,
-                sortType,
-                isDontWatched
-            )
+            viewModel.sendRequest(query.toString())
         }
     }
 
@@ -205,7 +205,27 @@ class SearchPageFragment : Fragment() {
 
             isDontWatched = bundle.getBoolean(SearchSettingsFragment.IS_DONT_WATCHED_NAME_KEY)
 
-            viewModel.updateList(showType, country, genre, yearFrom, yearTo, ratingFrom, ratingTo, sortType, isDontWatched)
+            setupFilters()
+        }
+    }
+
+    private fun setupFilters() {
+        viewModel.setupFilters(
+            showType,
+            country,
+            genre,
+            yearFrom,
+            yearTo,
+            ratingFrom,
+            ratingTo,
+            sortType,
+            isDontWatched
+        )
+
+        viewModel.updateList()
+
+        binding.rvReplySearch.doOnNextLayout {
+            binding.rvReplySearch.scrollToPosition(0)
         }
     }
 
