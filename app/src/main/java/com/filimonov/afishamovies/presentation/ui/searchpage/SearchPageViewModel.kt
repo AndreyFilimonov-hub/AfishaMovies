@@ -99,6 +99,7 @@ class SearchPageViewModel @Inject constructor(
 
     private fun filterList(list: List<SearchMediaBannerEntity>): List<SearchItem.MediaBanner> {
         return list
+            .asSequence()
             .filter { it.name.isNotEmpty() }
             .filter {
                 when (showType) {
@@ -141,6 +142,7 @@ class SearchPageViewModel @Inject constructor(
                 }
             }
             .map { SearchItem.MediaBanner(it) }
+            .toList()
     }
 
     fun setupFilters(
