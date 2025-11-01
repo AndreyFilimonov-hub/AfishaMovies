@@ -48,4 +48,5 @@
     <string name="find_period_to">Искать в период до</string>
     <string name="pick">Выбрать</string>
     <string name="submit">Применить</string>
+    <string name="empty">К сожалению, по вашему запросу ничего не найдено</string>
 </resources>

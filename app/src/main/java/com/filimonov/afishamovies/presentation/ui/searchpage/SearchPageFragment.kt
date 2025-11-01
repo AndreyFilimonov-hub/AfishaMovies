@@ -57,7 +57,7 @@ class SearchPageFragment : Fragment() {
 
     private val searchItemAdapter = SearchItemAdapter(
         onMediaBannerClick = {
-            Log.d("AAA", it.toString())
+            Log.d("AAA", it.toString()) // TODO: remove
             requireActivity().supportFragmentManager.beginTransaction()
                 .addToBackStack(null)
                 .add(
@@ -67,7 +67,7 @@ class SearchPageFragment : Fragment() {
                 .commit()
         },
         onRetryButtonClick = {
-
+            viewModel.sendRequest(binding.sbMain.text.toString().trim())
         }
     )
 
@@ -99,11 +99,16 @@ class SearchPageFragment : Fragment() {
                 viewModel.state.collect { state ->
                     when (state) {
                         SearchPageState.Empty -> {
-
+                            binding.pbLoading.visibility = View.GONE
+                            binding.rvReplySearch.visibility = View.GONE
+                            binding.tvEmpty.visibility = View.VISIBLE
                         }
 
                         SearchPageState.Error -> {
-
+                            binding.rvReplySearch.visibility = View.GONE
+                            binding.tvEmpty.visibility = View.GONE
+                            binding.llNoInternet.visibility = View.VISIBLE
+                            setupNoInternetRetryButton()
                         }
 
                         SearchPageState.Initial -> {
@@ -121,16 +126,28 @@ class SearchPageFragment : Fragment() {
                         }
 
                         SearchPageState.Loading -> {
-
+                            binding.rvReplySearch.visibility = View.GONE
+                            binding.llNoInternet.visibility = View.GONE
+                            binding.pbLoading.visibility = View.VISIBLE
+                            binding.tvEmpty.visibility = View.GONE
                         }
 
                         is SearchPageState.Success -> {
-//                            Log.d("AAA", state.result.toString())
+                            binding.rvReplySearch.visibility = View.VISIBLE
+                            binding.llNoInternet.visibility = View.GONE
+                            binding.pbLoading.visibility = View.GONE
+                            binding.tvEmpty.visibility = View.GONE
                             searchItemAdapter.submitList(state.result)
                         }
                     }
                 }
             }
+        }
+    }
+
+    private fun setupNoInternetRetryButton() {
+        binding.buttonReload.setOnClickListener {
+            viewModel.updateList()
         }
     }
 
