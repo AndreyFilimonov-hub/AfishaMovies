@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 class SearchChooseFragment : Fragment() {
 
-    private lateinit var filterItem: String
+    private var chooseItemResId: Int = NOT_SELECTED_RES_ID
     private lateinit var filterMode: FilterMode
 
     private var _binding: FragmentSearchChooseBinding? = null
@@ -46,9 +46,9 @@ class SearchChooseFragment : Fragment() {
 
     private val searchChooseAdapter by lazy {
         SearchChooseAdapter(
-            filterItem,
+            chooseItemResId,
             onItemClick = { chooseFilterItem ->
-                filterItem = chooseFilterItem
+                chooseItemResId = chooseFilterItem
                 sendDataToPreviousFragment()
             }
         )
@@ -57,8 +57,8 @@ class SearchChooseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            val filterItemBundle = it.getString(FILTER_ITEM) ?: ""
-            filterItem = filterItemBundle
+            val chooseItemResIdBundle = it.getInt(CHOOSE_ITEM, NOT_SELECTED_RES_ID)
+            chooseItemResId = chooseItemResIdBundle
             val filterModeBundle =
                 it.getString(FILTER_MODE) ?: throw RuntimeException("param mode is absent")
             filterMode = FilterMode.valueOf(filterModeBundle)
@@ -149,7 +149,7 @@ class SearchChooseFragment : Fragment() {
                 parentFragmentManager.setFragmentResult(
                     CHOOSE_COUNTRY_MODE_KEY,
                     Bundle().apply {
-                        putString(CHOOSE_COUNTRY_NAME_KEY, filterItem)
+                        putInt(CHOOSE_COUNTRY_NAME_KEY, chooseItemResId)
                     }
                 )
                 parentFragmentManager.popBackStack()
@@ -159,7 +159,7 @@ class SearchChooseFragment : Fragment() {
                 parentFragmentManager.setFragmentResult(
                     CHOOSE_GENRE_MODE_KEY,
                     Bundle().apply {
-                        putString(CHOOSE_GENRE_NAME_KEY, filterItem)
+                        putInt(CHOOSE_GENRE_NAME_KEY, chooseItemResId)
                     }
                 )
                 parentFragmentManager.popBackStack()
@@ -168,7 +168,7 @@ class SearchChooseFragment : Fragment() {
     }
 
     private fun setupButtonReset() {
-        if (filterItem.isEmpty() || filterItem.isEmpty()) {
+        if (chooseItemResId == NOT_SELECTED_RES_ID) {
             binding.buttonReset.visibility = View.GONE
         } else {
             binding.buttonReset.setOnClickListener {
@@ -183,9 +183,9 @@ class SearchChooseFragment : Fragment() {
                 parentFragmentManager.setFragmentResult(
                     CHOOSE_COUNTRY_MODE_KEY,
                     Bundle().apply {
-                        putString(
+                        putInt(
                             CHOOSE_COUNTRY_NAME_KEY,
-                            getString(R.string.any_v2)
+                            R.string.any_v2
                         )
                     }
                 )
@@ -196,9 +196,9 @@ class SearchChooseFragment : Fragment() {
                 parentFragmentManager.setFragmentResult(
                     CHOOSE_GENRE_MODE_KEY,
                     Bundle().apply {
-                        putString(
+                        putInt(
                             CHOOSE_GENRE_NAME_KEY,
-                            getString(R.string.any)
+                            R.string.any
                         )
                     }
                 )
@@ -209,7 +209,9 @@ class SearchChooseFragment : Fragment() {
 
     companion object {
 
-        private const val FILTER_ITEM = "filter_item_key"
+        private const val NOT_SELECTED_RES_ID = -1
+
+        private const val CHOOSE_ITEM = "choose_item_key"
         private const val FILTER_MODE = "filter_mode_key"
 
         const val CHOOSE_COUNTRY_MODE_KEY = "choose_country_mode_key"
@@ -219,10 +221,10 @@ class SearchChooseFragment : Fragment() {
         const val CHOOSE_GENRE_NAME_KEY = "choose_genre_name_key"
 
         @JvmStatic
-        fun newInstance(filterItem: String?, filterMode: String) =
+        fun newInstance(chooseItem: Int, filterMode: String) =
             SearchChooseFragment().apply {
                 arguments = Bundle().apply {
-                    putString(FILTER_ITEM, filterItem)
+                    putInt(CHOOSE_ITEM, chooseItem)
                     putString(FILTER_MODE, filterMode)
                 }
             }
