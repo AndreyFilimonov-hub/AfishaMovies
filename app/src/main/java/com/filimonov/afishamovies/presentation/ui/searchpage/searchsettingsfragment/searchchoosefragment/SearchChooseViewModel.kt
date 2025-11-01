@@ -1,36 +1,28 @@
 package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.filimonov.afishamovies.di.ModeQualifier
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
-class SearchChooseViewModel @Inject constructor(@ModeQualifier private val mode: FilterMode) : ViewModel() {
+class SearchChooseViewModel @Inject constructor(
+    @ModeQualifier private val mode: FilterMode,
+    private val applicationContext: Context
+) : ViewModel() {
 
-    private val list = if (mode == FilterMode.GENRE) {
-        mutableListOf(
-            "Комедия",
-            "Мелодрама",
-            "Боевик",
-            "Вестерн",
-            "Драма"
-        )
+    private val list: List<ChooseItem> = if (mode == FilterMode.GENRE) {
+        Genres.entries
     } else {
-        mutableListOf(
-            "Россия",
-            "Великобритания",
-            "Германия",
-            "США",
-            "Франция"
-        )
+        Countries.entries
     }
 
     private val _state = MutableStateFlow<SearchChooseState>(SearchChooseState.Initial(list))
     val state = _state.asStateFlow()
 
     fun sendRequest(query: String) {
-        val filteredList = list.filter { it.lowercase().contains(query.lowercase()) }
+        val filteredList = list.filter { applicationContext.getString(it.itemResId).contains(query.lowercase()) }
         _state.value = SearchChooseState.Search(filteredList)
     }
 }
