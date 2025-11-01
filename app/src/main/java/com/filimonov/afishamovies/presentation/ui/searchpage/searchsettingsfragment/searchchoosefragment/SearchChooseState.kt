@@ -2,7 +2,7 @@ package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfrag
 
 sealed class SearchChooseState {
 
-    data class Initial(val list: List<String>) : SearchChooseState()
+    data class Initial(val list: List<ChooseItem>) : SearchChooseState()
 
-    data class Search(val list: List<String>) : SearchChooseState()
+    data class Search(val list: List<ChooseItem>) : SearchChooseState()
 }
