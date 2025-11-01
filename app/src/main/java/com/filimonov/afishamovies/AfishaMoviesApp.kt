@@ -6,6 +6,8 @@ import com.filimonov.afishamovies.di.DaggerAppComponent
 
 class AfishaMoviesApp : Application() {
     val component: AppComponent by lazy {
-        DaggerAppComponent.create()
+        DaggerAppComponent.builder()
+            .context(applicationContext)
+            .build()
     }
 }
