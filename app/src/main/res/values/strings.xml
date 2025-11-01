@@ -49,4 +49,14 @@
     <string name="pick">Выбрать</string>
     <string name="submit">Применить</string>
     <string name="empty">К сожалению, по вашему запросу ничего не найдено</string>
+    <string name="russia">Россия</string>
+    <string name="great_britain">Великобритания</string>
+    <string name="germany">Германия</string>
+    <string name="usa">США</string>
+    <string name="france">Франция</string>
+    <string name="comedy">Комедия</string>
+    <string name="melodrama">Мелодрама</string>
+    <string name="action">Боевик</string>
+    <string name="western">Вестерн</string>
+    <string name="drama">Драма</string>
 </resources>
