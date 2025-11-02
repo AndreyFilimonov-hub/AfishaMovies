@@ -18,12 +18,10 @@ interface AppComponent {
 
     fun searchPageComponent(): SearchPageComponent.Factory
 
-    @Component.Builder
-    interface AppComponentBuilder {
+    @Component.Factory
+    interface AppComponentFactory {
 
-        @BindsInstance
-        fun context(context: Context): AppComponentBuilder
+        fun create(@BindsInstance context: Context): AppComponent
 
-        fun build(): AppComponent
     }
 }
