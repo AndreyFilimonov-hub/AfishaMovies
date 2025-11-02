@@ -12,6 +12,8 @@ class SearchChooseViewModel @Inject constructor(
     private val applicationContext: Context
 ) : ViewModel() {
 
+    var chooseItemResId: Int = NOT_SELECTED_RES_ID
+
     private val list: List<ChooseItem> = if (mode == FilterMode.GENRE) {
         Genres.entries
     } else {
@@ -24,5 +26,10 @@ class SearchChooseViewModel @Inject constructor(
     fun sendRequest(query: String) {
         val filteredList = list.filter { applicationContext.getString(it.itemResId).contains(query.lowercase()) }
         _state.value = SearchChooseState.Search(filteredList)
+    }
+
+    companion object {
+
+        private const val NOT_SELECTED_RES_ID = -1
     }
 }
