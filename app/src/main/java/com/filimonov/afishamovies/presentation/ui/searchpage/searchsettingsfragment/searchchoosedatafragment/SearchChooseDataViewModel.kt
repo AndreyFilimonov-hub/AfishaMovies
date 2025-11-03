@@ -1,45 +1,47 @@
 package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosedatafragment
 
 import android.icu.util.Calendar
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.filimonov.afishamovies.di.SelectedYearFromQualifier
 import com.filimonov.afishamovies.di.SelectedYearToQualifier
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class SearchChooseDataViewModel @Inject constructor(
-    @SelectedYearFromQualifier private val selectedYearFrom: Int?,
-    @SelectedYearToQualifier private val selectedYearTo: Int?
+    @SelectedYearFromQualifier var selectedYearFrom: Int?,
+    @SelectedYearToQualifier var selectedYearTo: Int?
 ) : ViewModel() {
 
     private val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-    private val startYear = currentYear - 11
+    private val startYear = currentYear - ELEVEN_ELEMENTS
 
-    private val yearsFrom = findRightDateRange(selectedYearFrom)
+    private var yearsFrom = findRightDateRange(selectedYearFrom)
 
-    private val yearsTo = findRightDateRange(selectedYearTo)
+    private var yearsTo = findRightDateRange(selectedYearTo)
 
-    private val _yearsFromLd = MutableLiveData<List<Int>>(yearsFrom)
-
-    val yearsFromLd: LiveData<List<Int>>
-        get() = _yearsFromLd
-
-    private val _yearsToLd = MutableLiveData<List<Int>>(yearsTo)
-    val yearsToLd: LiveData<List<Int>>
-        get() = _yearsToLd
+    private val _state = MutableStateFlow<SearchChooseDataState>(
+        SearchChooseDataState.Success(
+            yearsFrom,
+            "${yearsFrom.first()} - ${yearsFrom.last()}",
+            yearsTo,
+            "${yearsTo.first()} - ${yearsTo.last()}"
+        )
+    )
+    val state = _state.asStateFlow()
 
     private fun findRightDateRange(findYear: Int?): MutableList<Int> {
         if (findYear != null) {
             var currentList = (startYear..currentYear).toMutableList()
             if (findYear < startYear) {
                 while (findYear !in currentList) {
-                    currentList = currentList.map { it - 11 }.toMutableList()
+                    currentList = currentList.map { it - ELEVEN_ELEMENTS }.toMutableList()
                 }
                 return currentList
             } else {
                 while (findYear !in currentList) {
-                    currentList = currentList.map { it + 11 }.toMutableList()
+                    currentList = currentList.map { it + ELEVEN_ELEMENTS }.toMutableList()
                 }
                 return currentList
             }
@@ -51,11 +53,27 @@ class SearchChooseDataViewModel @Inject constructor(
     fun nextStep(dataRangeType: DateRangeType) {
         when (dataRangeType) {
             DateRangeType.FROM -> {
-                _yearsFromLd.value = _yearsFromLd.value?.map { it + 11 }
+                _state.update { state ->
+                    when (state) {
+                        is SearchChooseDataState.Success -> {
+                            yearsFrom = yearsFrom.map { it + ELEVEN_ELEMENTS }.toMutableList()
+                            val rangeFrom = "${yearsFrom.first()} - ${yearsFrom.last()}"
+                            state.copy(yearsFrom = yearsFrom, rangeFrom = rangeFrom)
+                        }
+                    }
+                }
             }
 
             DateRangeType.TO -> {
-                _yearsToLd.value = _yearsToLd.value?.map { it + 11 }
+                _state.update { state ->
+                    when (state) {
+                        is SearchChooseDataState.Success -> {
+                            yearsTo = yearsTo.map { it + ELEVEN_ELEMENTS }.toMutableList()
+                            val rangeTo = "${yearsTo.first()} - ${yearsTo.last()}"
+                            state.copy(yearsTo = yearsTo, rangeTo = rangeTo)
+                        }
+                    }
+                }
             }
         }
     }
@@ -63,12 +81,33 @@ class SearchChooseDataViewModel @Inject constructor(
     fun previousStep(dataRangeType: DateRangeType) {
         when (dataRangeType) {
             DateRangeType.FROM -> {
-                _yearsFromLd.value = _yearsFromLd.value?.map { it - 11 }
+                _state.update { state ->
+                    when (state) {
+                        is SearchChooseDataState.Success -> {
+                            yearsFrom = yearsFrom.map { it - ELEVEN_ELEMENTS }.toMutableList()
+                            val rangeFrom = "${yearsFrom.first()} - ${yearsFrom.last()}"
+                            state.copy(yearsFrom = yearsFrom, rangeFrom = rangeFrom)
+                        }
+                    }
+                }
             }
 
             DateRangeType.TO -> {
-                _yearsToLd.value = _yearsToLd.value?.map { it - 11 }
+                _state.update { state ->
+                    when (state) {
+                        is SearchChooseDataState.Success -> {
+                            yearsTo = yearsTo.map { it - ELEVEN_ELEMENTS }.toMutableList()
+                            val rangeTo = "${yearsTo.first()} - ${yearsTo.last()}"
+                            state.copy(yearsTo = yearsTo, rangeTo = rangeTo)
+                        }
+                    }
+                }
             }
         }
+    }
+
+    companion object {
+
+        private const val ELEVEN_ELEMENTS = 11
     }
 }

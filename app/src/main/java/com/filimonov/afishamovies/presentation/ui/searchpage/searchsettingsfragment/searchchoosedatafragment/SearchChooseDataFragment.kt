@@ -5,13 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.Fade
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.databinding.FragmentSearchChooseDataBinding
 import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchChooseDataFragment : Fragment() {
@@ -25,10 +29,10 @@ class SearchChooseDataFragment : Fragment() {
 
     private val adapterFrom: YearsAdapter by lazy {
         YearsAdapter(
-            maxActiveYear = selectedYearTo ?: UNDEFINED_YEAR_TO,
-            selectedYear = selectedYearFrom
+            maxActiveYear = viewModel.selectedYearTo ?: UNDEFINED_YEAR_TO,
+            selectedYear = viewModel.selectedYearFrom
         ) {
-            selectedYearFrom = it
+            viewModel.selectedYearFrom = it
             checkButtonEnable()
             adapterTo.setMinActiveYear(it)
             adapterFrom.updateSelectedYear(it)
@@ -37,10 +41,10 @@ class SearchChooseDataFragment : Fragment() {
 
     private val adapterTo: YearsAdapter by lazy {
         YearsAdapter(
-            minActiveYear = selectedYearFrom ?: UNDEFINED_YEAR_FROM,
-            selectedYear = selectedYearTo
+            minActiveYear = viewModel.selectedYearFrom ?: UNDEFINED_YEAR_FROM,
+            selectedYear = viewModel.selectedYearTo
         ) {
-            selectedYearTo = it
+            viewModel.selectedYearTo = it
             checkButtonEnable()
             adapterFrom.setMaxActiveYear(it)
             adapterTo.updateSelectedYear(it)
@@ -112,8 +116,8 @@ class SearchChooseDataFragment : Fragment() {
             parentFragmentManager.setFragmentResult(
                 CHOOSE_YEAR_MODE_KEY,
                 Bundle().apply {
-                    putInt(CHOOSE_YEAR_FROM_NAME_KEY, selectedYearFrom ?: Int.MIN_VALUE)
-                    putInt(CHOOSE_YEAR_TO_NAME_KEY, selectedYearTo ?: Int.MAX_VALUE)
+                    putInt(CHOOSE_YEAR_FROM_NAME_KEY, viewModel.selectedYearFrom ?: Int.MIN_VALUE)
+                    putInt(CHOOSE_YEAR_TO_NAME_KEY, viewModel.selectedYearTo ?: Int.MAX_VALUE)
                 }
             )
             parentFragmentManager.popBackStack()
@@ -122,17 +126,24 @@ class SearchChooseDataFragment : Fragment() {
 
     private fun checkButtonEnable() {
         binding.buttonPick.isEnabled =
-            !(selectedYearFrom == null && selectedYearTo != null || selectedYearFrom != null && selectedYearTo == null)
+            !(viewModel.selectedYearFrom == null && viewModel.selectedYearTo != null ||
+                    viewModel.selectedYearFrom != null && viewModel.selectedYearTo == null)
     }
 
     private fun observeViewModel() {
-        viewModel.yearsFromLd.observe(viewLifecycleOwner) {
-            adapterFrom.submitList(it)
-            binding.tvPeriodFrom.text = String.format("%s - %s", it.first(), it.last())
-        }
-        viewModel.yearsToLd.observe(viewLifecycleOwner) {
-            adapterTo.submitList(it)
-            binding.tvPeriodTo.text = String.format("%s - %s", it.first(), it.last())
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.state.collect { state ->
+                    when (state) {
+                        is SearchChooseDataState.Success -> {
+                            adapterFrom.submitList(state.yearsFrom)
+                            adapterTo.submitList(state.yearsTo)
+                            binding.tvPeriodFrom.text = state.rangeFrom
+                            binding.tvPeriodTo.text = state.rangeTo
+                        }
+                    }
+                }
+            }
         }
     }
 
