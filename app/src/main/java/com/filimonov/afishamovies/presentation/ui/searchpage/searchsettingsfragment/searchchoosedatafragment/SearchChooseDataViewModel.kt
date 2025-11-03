@@ -23,10 +23,8 @@ class SearchChooseDataViewModel @Inject constructor(
 
     private val _state = MutableStateFlow<SearchChooseDataState>(
         SearchChooseDataState.Success(
-            selectedYearFrom,
             yearsFrom,
             "${yearsFrom.first()} - ${yearsFrom.last()}",
-            selectedYearTo,
             yearsTo,
             "${yearsTo.first()} - ${yearsTo.last()}"
         )
