@@ -15,7 +15,7 @@ class SearchChooseDataViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-    private val startYear = currentYear - 11
+    private val startYear = currentYear - ELEVEN_ELEMENTS
 
     private val yearsFrom = findRightDateRange(selectedYearFrom)
 
@@ -38,12 +38,12 @@ class SearchChooseDataViewModel @Inject constructor(
             var currentList = (startYear..currentYear).toMutableList()
             if (findYear < startYear) {
                 while (findYear !in currentList) {
-                    currentList = currentList.map { it - 11 }.toMutableList()
+                    currentList = currentList.map { it - ELEVEN_ELEMENTS }.toMutableList()
                 }
                 return currentList
             } else {
                 while (findYear !in currentList) {
-                    currentList = currentList.map { it + 11 }.toMutableList()
+                    currentList = currentList.map { it + ELEVEN_ELEMENTS }.toMutableList()
                 }
                 return currentList
             }
@@ -57,7 +57,7 @@ class SearchChooseDataViewModel @Inject constructor(
             DateRangeType.FROM -> {
                 _state.update { state ->
                     when (state) {
-                        is SearchChooseDataState.Success -> state.copy(yearsFrom = yearsFrom.map { it + 11 })
+                        is SearchChooseDataState.Success -> state.copy(yearsFrom = yearsFrom.map { it + ELEVEN_ELEMENTS })
                     }
                 }
             }
@@ -65,7 +65,7 @@ class SearchChooseDataViewModel @Inject constructor(
             DateRangeType.TO -> {
                 _state.update { state ->
                     when (state) {
-                        is SearchChooseDataState.Success -> state.copy(yearsTo = yearsTo.map { it + 11 })
+                        is SearchChooseDataState.Success -> state.copy(yearsTo = yearsTo.map { it + ELEVEN_ELEMENTS })
                     }
                 }
             }
@@ -77,7 +77,7 @@ class SearchChooseDataViewModel @Inject constructor(
             DateRangeType.FROM -> {
                 _state.update { state ->
                     when (state) {
-                        is SearchChooseDataState.Success -> state.copy(yearsFrom = yearsFrom.map { it - 11 })
+                        is SearchChooseDataState.Success -> state.copy(yearsFrom = yearsFrom.map { it - ELEVEN_ELEMENTS })
                     }
                 }
             }
@@ -85,10 +85,15 @@ class SearchChooseDataViewModel @Inject constructor(
             DateRangeType.TO -> {
                 _state.update { state ->
                     when (state) {
-                        is SearchChooseDataState.Success -> state.copy(yearsTo = yearsTo.map { it - 11 })
+                        is SearchChooseDataState.Success -> state.copy(yearsTo = yearsTo.map { it - ELEVEN_ELEMENTS })
                     }
                 }
             }
         }
+    }
+
+    companion object {
+
+        private const val ELEVEN_ELEMENTS = 11
     }
 }
