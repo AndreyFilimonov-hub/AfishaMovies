@@ -5,13 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.transition.Fade
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.databinding.FragmentSearchChooseDataBinding
 import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchChooseDataFragment : Fragment() {
@@ -126,13 +130,19 @@ class SearchChooseDataFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.yearsFromLd.observe(viewLifecycleOwner) {
-            adapterFrom.submitList(it)
-            binding.tvPeriodFrom.text = String.format("%s - %s", it.first(), it.last())
-        }
-        viewModel.yearsToLd.observe(viewLifecycleOwner) {
-            adapterTo.submitList(it)
-            binding.tvPeriodTo.text = String.format("%s - %s", it.first(), it.last())
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.state.collect { state ->
+                    when (state) {
+                        is SearchChooseDataState.Success -> {
+                            adapterFrom.submitList(state.yearsFrom)
+                            adapterTo.submitList(state.yearsTo)
+                            binding.tvPeriodFrom.text = state.rangeFrom
+                            binding.tvPeriodTo.text = state.rangeTo
+                        }
+                    }
+                }
+            }
         }
     }
 
