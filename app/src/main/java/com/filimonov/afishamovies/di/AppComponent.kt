@@ -1,5 +1,7 @@
 package com.filimonov.afishamovies.di
 
+import android.content.Context
+import dagger.BindsInstance
 import dagger.Component
 
 @ApplicationScope
@@ -15,4 +17,11 @@ interface AppComponent {
     fun galleryComponent(): GalleryComponent.Factory
 
     fun searchPageComponent(): SearchPageComponent.Factory
+
+    @Component.Factory
+    interface AppComponentFactory {
+
+        fun create(@BindsInstance context: Context): AppComponent
+
+    }
 }
