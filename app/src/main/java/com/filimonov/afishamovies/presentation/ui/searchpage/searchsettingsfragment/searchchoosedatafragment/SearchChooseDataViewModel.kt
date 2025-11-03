@@ -10,16 +10,16 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 class SearchChooseDataViewModel @Inject constructor(
-    @SelectedYearFromQualifier private val selectedYearFrom: Int?,
-    @SelectedYearToQualifier private val selectedYearTo: Int?
+    @SelectedYearFromQualifier var selectedYearFrom: Int?,
+    @SelectedYearToQualifier var selectedYearTo: Int?
 ) : ViewModel() {
 
     private val currentYear = Calendar.getInstance().get(Calendar.YEAR)
     private val startYear = currentYear - ELEVEN_ELEMENTS
 
-    private val yearsFrom = findRightDateRange(selectedYearFrom)
+    private var yearsFrom = findRightDateRange(selectedYearFrom)
 
-    private val yearsTo = findRightDateRange(selectedYearTo)
+    private var yearsTo = findRightDateRange(selectedYearTo)
 
     private val _state = MutableStateFlow<SearchChooseDataState>(
         SearchChooseDataState.Success(
@@ -55,7 +55,11 @@ class SearchChooseDataViewModel @Inject constructor(
             DateRangeType.FROM -> {
                 _state.update { state ->
                     when (state) {
-                        is SearchChooseDataState.Success -> state.copy(yearsFrom = yearsFrom.map { it + ELEVEN_ELEMENTS })
+                        is SearchChooseDataState.Success -> {
+                            yearsFrom = yearsFrom.map { it + ELEVEN_ELEMENTS }.toMutableList()
+                            val rangeFrom = "${yearsFrom.first()} - ${yearsFrom.last()}"
+                            state.copy(yearsFrom = yearsFrom, rangeFrom = rangeFrom)
+                        }
                     }
                 }
             }
@@ -63,7 +67,11 @@ class SearchChooseDataViewModel @Inject constructor(
             DateRangeType.TO -> {
                 _state.update { state ->
                     when (state) {
-                        is SearchChooseDataState.Success -> state.copy(yearsTo = yearsTo.map { it + ELEVEN_ELEMENTS })
+                        is SearchChooseDataState.Success -> {
+                            yearsTo = yearsTo.map { it + ELEVEN_ELEMENTS }.toMutableList()
+                            val rangeTo = "${yearsTo.first()} - ${yearsTo.last()}"
+                            state.copy(yearsTo = yearsTo, rangeTo = rangeTo)
+                        }
                     }
                 }
             }
@@ -75,7 +83,11 @@ class SearchChooseDataViewModel @Inject constructor(
             DateRangeType.FROM -> {
                 _state.update { state ->
                     when (state) {
-                        is SearchChooseDataState.Success -> state.copy(yearsFrom = yearsFrom.map { it - ELEVEN_ELEMENTS })
+                        is SearchChooseDataState.Success -> {
+                            yearsFrom = yearsFrom.map { it - ELEVEN_ELEMENTS }.toMutableList()
+                            val rangeFrom = "${yearsFrom.first()} - ${yearsFrom.last()}"
+                            state.copy(yearsFrom = yearsFrom, rangeFrom = rangeFrom)
+                        }
                     }
                 }
             }
@@ -83,7 +95,11 @@ class SearchChooseDataViewModel @Inject constructor(
             DateRangeType.TO -> {
                 _state.update { state ->
                     when (state) {
-                        is SearchChooseDataState.Success -> state.copy(yearsTo = yearsTo.map { it - ELEVEN_ELEMENTS })
+                        is SearchChooseDataState.Success -> {
+                            yearsTo = yearsTo.map { it - ELEVEN_ELEMENTS }.toMutableList()
+                            val rangeTo = "${yearsTo.first()} - ${yearsTo.last()}"
+                            state.copy(yearsTo = yearsTo, rangeTo = rangeTo)
+                        }
                     }
                 }
             }

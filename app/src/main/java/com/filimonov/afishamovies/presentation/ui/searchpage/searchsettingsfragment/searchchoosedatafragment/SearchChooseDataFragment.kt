@@ -29,10 +29,10 @@ class SearchChooseDataFragment : Fragment() {
 
     private val adapterFrom: YearsAdapter by lazy {
         YearsAdapter(
-            maxActiveYear = selectedYearTo ?: UNDEFINED_YEAR_TO,
-            selectedYear = selectedYearFrom
+            maxActiveYear = viewModel.selectedYearTo ?: UNDEFINED_YEAR_TO,
+            selectedYear = viewModel.selectedYearFrom
         ) {
-            selectedYearFrom = it
+            viewModel.selectedYearFrom = it
             checkButtonEnable()
             adapterTo.setMinActiveYear(it)
             adapterFrom.updateSelectedYear(it)
@@ -41,10 +41,10 @@ class SearchChooseDataFragment : Fragment() {
 
     private val adapterTo: YearsAdapter by lazy {
         YearsAdapter(
-            minActiveYear = selectedYearFrom ?: UNDEFINED_YEAR_FROM,
-            selectedYear = selectedYearTo
+            minActiveYear = viewModel.selectedYearFrom ?: UNDEFINED_YEAR_FROM,
+            selectedYear = viewModel.selectedYearTo
         ) {
-            selectedYearTo = it
+            viewModel.selectedYearTo = it
             checkButtonEnable()
             adapterFrom.setMaxActiveYear(it)
             adapterTo.updateSelectedYear(it)
@@ -116,8 +116,8 @@ class SearchChooseDataFragment : Fragment() {
             parentFragmentManager.setFragmentResult(
                 CHOOSE_YEAR_MODE_KEY,
                 Bundle().apply {
-                    putInt(CHOOSE_YEAR_FROM_NAME_KEY, selectedYearFrom ?: Int.MIN_VALUE)
-                    putInt(CHOOSE_YEAR_TO_NAME_KEY, selectedYearTo ?: Int.MAX_VALUE)
+                    putInt(CHOOSE_YEAR_FROM_NAME_KEY, viewModel.selectedYearFrom ?: Int.MIN_VALUE)
+                    putInt(CHOOSE_YEAR_TO_NAME_KEY, viewModel.selectedYearTo ?: Int.MAX_VALUE)
                 }
             )
             parentFragmentManager.popBackStack()
@@ -126,7 +126,8 @@ class SearchChooseDataFragment : Fragment() {
 
     private fun checkButtonEnable() {
         binding.buttonPick.isEnabled =
-            !(selectedYearFrom == null && selectedYearTo != null || selectedYearFrom != null && selectedYearTo == null)
+            !(viewModel.selectedYearFrom == null && viewModel.selectedYearTo != null ||
+                    viewModel.selectedYearFrom != null && viewModel.selectedYearTo == null)
     }
 
     private fun observeViewModel() {
