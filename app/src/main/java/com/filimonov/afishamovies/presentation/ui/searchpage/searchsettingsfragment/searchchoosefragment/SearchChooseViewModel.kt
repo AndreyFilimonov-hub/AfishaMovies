@@ -2,7 +2,7 @@ package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfrag
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.filimonov.afishamovies.di.ChooseResIdQualifier
+import com.filimonov.afishamovies.di.searchpagecomponent.searchsettingscomponent.searchchoosecomponent.ChooseResIdQualifier
 import com.filimonov.afishamovies.di.ModeQualifier
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

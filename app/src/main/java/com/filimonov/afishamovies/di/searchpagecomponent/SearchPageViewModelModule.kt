@@ -1,6 +1,7 @@
-package com.filimonov.afishamovies.di
+package com.filimonov.afishamovies.di.searchpagecomponent
 
 import androidx.lifecycle.ViewModel
+import com.filimonov.afishamovies.di.ViewModelKey
 import com.filimonov.afishamovies.presentation.ui.searchpage.SearchPageViewModel
 import dagger.Binds
 import dagger.Module
@@ -12,5 +13,5 @@ interface SearchPageViewModelModule {
     @IntoMap
     @ViewModelKey(SearchPageViewModel::class)
     @Binds
-    fun bindListPageViewModel(viewModel: SearchPageViewModel): ViewModel
+    fun bindSearchPageViewModel(viewModel: SearchPageViewModel): ViewModel
 }

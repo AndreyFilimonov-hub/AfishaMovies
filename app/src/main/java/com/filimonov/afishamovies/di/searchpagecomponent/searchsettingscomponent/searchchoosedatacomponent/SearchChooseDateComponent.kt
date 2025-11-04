@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.di
+package com.filimonov.afishamovies.di.searchpagecomponent.searchsettingscomponent.searchchoosedatacomponent
 
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosedatafragment.SearchChooseDataFragment
 import dagger.BindsInstance
