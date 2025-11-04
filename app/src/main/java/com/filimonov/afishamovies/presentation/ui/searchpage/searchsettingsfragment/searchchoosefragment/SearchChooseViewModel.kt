@@ -2,6 +2,7 @@ package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfrag
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
+import com.filimonov.afishamovies.di.ChooseResIdQualifier
 import com.filimonov.afishamovies.di.ModeQualifier
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,10 +10,9 @@ import javax.inject.Inject
 
 class SearchChooseViewModel @Inject constructor(
     @ModeQualifier private val mode: FilterMode,
+    @ChooseResIdQualifier var chooseResId: Int,
     private val applicationContext: Context
 ) : ViewModel() {
-
-    var chooseItemResId: Int = NOT_SELECTED_RES_ID
 
     private val list: List<ChooseItem> = if (mode == FilterMode.GENRE) {
         Genres.entries
@@ -26,10 +26,5 @@ class SearchChooseViewModel @Inject constructor(
     fun sendRequest(query: String) {
         val filteredList = list.filter { applicationContext.getString(it.itemResId).contains(query.lowercase()) }
         _state.value = SearchChooseState.Search(filteredList)
-    }
-
-    companion object {
-
-        private const val NOT_SELECTED_RES_ID = -1
     }
 }

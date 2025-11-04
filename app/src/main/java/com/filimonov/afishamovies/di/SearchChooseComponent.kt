@@ -13,6 +13,8 @@ interface SearchChooseComponent {
     @Subcomponent.Factory
     interface Factory {
 
-        fun create(@BindsInstance @ModeQualifier filterMode: FilterMode) : SearchChooseComponent
+        fun create(
+            @BindsInstance @ModeQualifier filterMode: FilterMode,
+            @BindsInstance @ChooseResIdQualifier chooseResId: Int) : SearchChooseComponent
     }
 }

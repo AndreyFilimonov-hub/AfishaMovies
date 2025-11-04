@@ -34,7 +34,7 @@ class SearchChooseFragment : Fragment() {
             .searchPageComponent()
             .create()
             .createSearchChooseComponent()
-            .create(filterMode)
+            .create(filterMode, chooseItemResId)
     }
 
     @Inject
@@ -46,9 +46,9 @@ class SearchChooseFragment : Fragment() {
 
     private val searchChooseAdapter by lazy {
         SearchChooseAdapter(
-            viewModel.chooseItemResId,
-            onItemClick = { chooseFilterItem ->
-                viewModel.chooseItemResId = chooseFilterItem
+            viewModel.chooseResId,
+            onItemClick = { chooseFilterResId ->
+                viewModel.chooseResId = chooseFilterResId
                 sendDataToPreviousFragment()
             }
         )
@@ -59,7 +59,6 @@ class SearchChooseFragment : Fragment() {
         parseArgs()
 
         component.inject(this)
-        viewModel.chooseItemResId = chooseItemResId
 
         enterTransition = Fade()
         exitTransition = Fade()
@@ -145,7 +144,7 @@ class SearchChooseFragment : Fragment() {
                 parentFragmentManager.setFragmentResult(
                     CHOOSE_COUNTRY_MODE_KEY,
                     Bundle().apply {
-                        putInt(CHOOSE_COUNTRY_NAME_KEY, viewModel.chooseItemResId)
+                        putInt(CHOOSE_COUNTRY_NAME_KEY, viewModel.chooseResId)
                     }
                 )
                 parentFragmentManager.popBackStack()
@@ -155,7 +154,7 @@ class SearchChooseFragment : Fragment() {
                 parentFragmentManager.setFragmentResult(
                     CHOOSE_GENRE_MODE_KEY,
                     Bundle().apply {
-                        putInt(CHOOSE_GENRE_NAME_KEY, viewModel.chooseItemResId)
+                        putInt(CHOOSE_GENRE_NAME_KEY, viewModel.chooseResId)
                     }
                 )
                 parentFragmentManager.popBackStack()
@@ -164,7 +163,7 @@ class SearchChooseFragment : Fragment() {
     }
 
     private fun setupButtonReset() {
-        if (viewModel.chooseItemResId == NOT_SELECTED_RES_ID) {
+        if (viewModel.chooseResId == NOT_SELECTED_RES_ID) {
             binding.buttonReset.visibility = View.GONE
         } else {
             binding.buttonReset.setOnClickListener {
