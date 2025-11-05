@@ -227,12 +227,10 @@ class SearchSettingsFragment : Fragment() {
                     ContextCompat.getColor(requireContext(), R.color.selected_item)
                 )
             } else {
-                binding.llDontWatch.isSelected = false
-                animateBackgroundColor(
-                    binding.llDontWatch,
-                    ContextCompat.getColor(requireContext(), R.color.selected_item),
-                    Color.WHITE
-                )
+                with(binding.llDontWatch) {
+                    isSelected = false
+                    setBackgroundColor(Color.WHITE)
+                }
             }
         }
     }

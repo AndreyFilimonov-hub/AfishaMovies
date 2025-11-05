@@ -41,7 +41,7 @@ class SearchSettingsViewModel @Inject constructor(
             getYearRange(yearFrom, yearTo),
             getRatingRange(ratingFrom, ratingTo),
             listOf(ratingFrom, ratingTo),
-            false
+            isDontWatched
         )
     )
     val state = _state.asStateFlow()
