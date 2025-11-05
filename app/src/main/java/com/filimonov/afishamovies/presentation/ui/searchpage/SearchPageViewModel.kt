@@ -30,15 +30,15 @@ class SearchPageViewModel @Inject constructor(
 
     private var page = 1
 
-    private var showType: ShowType = ShowType.ALL
-    private var country: String? = null
-    private var genre: String? = null
-    private var yearFrom: Int = Int.MIN_VALUE
-    private var yearTo: Int = Int.MAX_VALUE
-    private var ratingFrom: Float = 1f
-    private var ratingTo: Float = 10f
-    private var sortType: SortType = SortType.DATE
-    private var isDontWatched: Boolean? = null
+    var showType: ShowType = ShowType.ALL
+    var country: String? = null
+    var genre: String? = null
+    var yearFrom: Int = Int.MIN_VALUE
+    var yearTo: Int = Int.MAX_VALUE
+    var ratingFrom: Float = 1f
+    var ratingTo: Float = 10f
+    var sortType: SortType = SortType.DATE
+    var isDontWatched: Boolean = false
 
     private var currentList = mutableListOf<SearchItem.MediaBanner>()
 
@@ -128,7 +128,7 @@ class SearchPageViewModel @Inject constructor(
                     ?.let { rating -> rating in this.ratingFrom..this.ratingTo } == true
             }
             .filter {
-                if (this.isDontWatched != null && this.isDontWatched == true) {
+                if (isDontWatched) {
                     !it.isWatched
                 } else {
                     return@filter true
@@ -154,7 +154,7 @@ class SearchPageViewModel @Inject constructor(
         ratingFrom: Float?,
         ratingTo: Float?,
         sortType: SortType,
-        isDontWatched: Boolean?
+        isDontWatched: Boolean
     ) {
         this.showType = showType
         this.country = country
