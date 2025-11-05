@@ -12,15 +12,25 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.transition.Slide
+import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchSettingsBinding
 import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.ui.searchpage.ShowType
 import com.filimonov.afishamovies.presentation.ui.searchpage.SortType
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosedatafragment.SearchChooseDataFragment
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment.Countries
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment.FilterMode
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment.Genres
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment.SearchChooseFragment
+import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private const val SHOW_TYPE_KEY = "show_type_key"
 private const val COUNTRY_KEY = "country_key"
@@ -41,17 +51,45 @@ class SearchSettingsFragment : Fragment() {
 
     private lateinit var showType: ShowType
     private lateinit var sortType: SortType
-    private var country: String? = null
-    private var genre: String? = null
-    private var yearFrom: Int? = null
-    private var yearTo: Int? = null
-    private var ratingFrom: Float? = null
-    private var ratingTo: Float? = null
+    private var countryResId: Int = R.string.any_v2
+    private var genreResId: Int = R.string.any
+    private var yearFrom: Int = YEAR_FROM_DEFAULT
+    private var yearTo: Int = YEAR_TO_DEFAULT
+    private var ratingFrom: Float = RATING_FROM_DEFAULT
+    private var ratingTo: Float = RATING_TO_DEFAULT
     private var isDontWatched: Boolean = false
+
+    private var previousState: SearchSettingsState.Success? = null
+
+    private val component by lazy {
+        (requireActivity().application as AfishaMoviesApp).component
+            .searchPageComponent()
+            .create()
+            .createSearchSettingsComponent()
+            .create(
+                showType,
+                sortType,
+                requireContext().getString(countryResId),
+                requireContext().getString(genreResId),
+                yearFrom,
+                yearTo,
+                ratingFrom,
+                ratingTo,
+                isDontWatched
+            )
+    }
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[SearchSettingsViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         parseArgs()
+        component.inject(this)
         enterTransition = Slide(Gravity.END).apply {
             duration = 500L
             interpolator = AccelerateInterpolator()
@@ -75,94 +113,140 @@ class SearchSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         offBottomNav()
-        setupTextViews()
+        setupRangeSlider()
+        setupFragmentResultListeners()
+        observeViewModel()
         setupBackButton()
         setupMaterialButtonClickListeners()
         setupButtonClickListeners()
         setupLinearLayoutsClickListeners()
-        setupRangeSlider()
-        setupFragmentResultListeners()
     }
 
-    private fun setupTextViews() {
-        when (showType) {
-            ShowType.ALL -> binding.tgShow.check(R.id.btn_all)
-            ShowType.FILM -> binding.tgShow.check(R.id.btn_film)
-            ShowType.SERIES -> binding.tgShow.check(R.id.btn_series)
-        }
-        binding.tvCountry.text = if (country == null) {
-            getString(R.string.any_v2)
-        } else {
-            country
-        }
-        binding.tvGenre.text = if (genre == null) {
-            getString(R.string.any)
-        } else {
-            genre
-        }
-        binding.tvPeriod.text = if (yearFrom == YEAR_FROM_DEFAULT && yearTo == YEAR_TO_DEFAULT) {
-            getString(R.string.any)
-        } else if (yearFrom == yearTo) {
-            yearFrom.toString()
-        } else {
-            String.format("с %s до %s", yearFrom, yearTo)
-        }
-        binding.rangeSlider.values = listOf(ratingFrom, ratingTo)
-        binding.tvRating.text =
-            if (ratingFrom == RATING_FROM_DEFAULT && ratingTo == RATING_TO_DEFAULT) {
-                getString(R.string.any)
-            } else if (ratingFrom == ratingTo) {
-                ratingFrom.toString()
-            } else {
-                String.format("%s - %s", ratingFrom, ratingTo)
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.state.collect { state ->
+                    when (state) {
+                        is SearchSettingsState.Success -> {
+                            setupTextViews(previousState, state)
+                            previousState = state
+                        }
+                    }
+                }
             }
-        when (sortType) {
-            SortType.DATE -> binding.tgSort.check(R.id.btn_date)
-            SortType.POPULAR -> binding.tgSort.check(R.id.btn_popular)
-            SortType.RATING -> binding.tgSort.check(R.id.btn_rating)
         }
-        if (isDontWatched) {
-            binding.llDontWatch.isSelected = isDontWatched
-            animateBackgroundColor(
-                binding.llDontWatch,
-                Color.WHITE,
-                ContextCompat.getColor(requireContext(), R.color.selected_item)
-            )
-        } else {
-            binding.llDontWatch.isSelected = isDontWatched
-            animateBackgroundColor(
-                binding.llDontWatch,
-                ContextCompat.getColor(requireContext(), R.color.selected_item),
-                Color.WHITE
-            )
+    }
+
+    private fun setupTextViews(
+        old: SearchSettingsState.Success?,
+        new: SearchSettingsState.Success
+    ) {
+
+        if (old == null) {
+            initSetupTextViews(new)
+            return
+        }
+
+        if (old.showType != new.showType) {
+            when (new.showType) {
+                ShowType.ALL -> binding.tgShow.check(R.id.btn_all)
+                ShowType.FILM -> binding.tgShow.check(R.id.btn_film)
+                ShowType.SERIES -> binding.tgShow.check(R.id.btn_series)
+            }
+        }
+
+        if (old.country != new.country) {
+            binding.tvCountry.text = new.country ?: requireContext().getString(R.string.any_v2)
+        }
+
+        if (old.genre != new.genre) {
+            binding.tvGenre.text = new.genre ?: requireContext().getString(R.string.any)
+        }
+
+        if (old.yearRange != new.yearRange) {
+            binding.tvYearRange.text = new.yearRange
+        }
+
+        if (old.ratingValues != new.ratingValues) {
+            binding.rangeSlider.values = new.ratingValues
+        }
+
+        if (old.ratingRange != new.ratingRange) {
+            binding.tvRatingRange.text = new.ratingRange
+        }
+
+        if (old.sortType != new.sortType) {
+            when (new.sortType) {
+                SortType.DATE -> binding.tgSort.check(R.id.btn_date)
+                SortType.POPULAR -> binding.tgSort.check(R.id.btn_popular)
+                SortType.RATING -> binding.tgSort.check(R.id.btn_rating)
+            }
+        }
+
+        if (old.isDontWatched != new.isDontWatched) {
+            if (new.isDontWatched) {
+                binding.llDontWatch.isSelected = true
+                animateBackgroundColor(
+                    binding.llDontWatch,
+                    Color.WHITE,
+                    ContextCompat.getColor(requireContext(), R.color.selected_item)
+                )
+            } else {
+                binding.llDontWatch.isSelected = false
+                animateBackgroundColor(
+                    binding.llDontWatch,
+                    ContextCompat.getColor(requireContext(), R.color.selected_item),
+                    Color.WHITE
+                )
+            }
+        }
+    }
+
+    private fun initSetupTextViews(state: SearchSettingsState.Success) {
+        with(state) {
+            when (showType) {
+                ShowType.ALL -> binding.tgShow.check(R.id.btn_all)
+                ShowType.FILM -> binding.tgShow.check(R.id.btn_film)
+                ShowType.SERIES -> binding.tgShow.check(R.id.btn_series)
+            }
+            binding.tvCountry.text = country ?: requireContext().getString(R.string.any_v2)
+            binding.tvGenre.text = genre ?: requireContext().getString(R.string.any)
+            binding.tvYearRange.text = yearRange
+            binding.rangeSlider.values = ratingValues
+            binding.tvRatingRange.text = ratingRange
+            when (sortType) {
+                SortType.DATE -> binding.tgSort.check(R.id.btn_date)
+                SortType.POPULAR -> binding.tgSort.check(R.id.btn_popular)
+                SortType.RATING -> binding.tgSort.check(R.id.btn_rating)
+            }
+            if (isDontWatched) {
+                binding.llDontWatch.isSelected = true
+                animateBackgroundColor(
+                    binding.llDontWatch,
+                    Color.WHITE,
+                    ContextCompat.getColor(requireContext(), R.color.selected_item)
+                )
+            } else {
+                binding.llDontWatch.isSelected = false
+                animateBackgroundColor(
+                    binding.llDontWatch,
+                    ContextCompat.getColor(requireContext(), R.color.selected_item),
+                    Color.WHITE
+                )
+            }
         }
     }
 
     private fun setupLinearLayoutsClickListeners() {
         binding.llDontWatch.setOnClickListener {
-            it.isSelected = !it.isSelected
-            if (it.isSelected) {
-                isDontWatched = true
-                animateBackgroundColor(
-                    it,
-                    Color.WHITE,
-                    ContextCompat.getColor(requireContext(), R.color.selected_item)
-                )
-            } else {
-                isDontWatched = false
-                animateBackgroundColor(
-                    it,
-                    ContextCompat.getColor(requireContext(), R.color.selected_item),
-                    Color.WHITE
-                )
-            }
+            viewModel.updateIsDontWatched(!viewModel.isDontWatched)
         }
         binding.llCountry.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .addToBackStack(null)
                 .add(
                     R.id.fragment_container, SearchChooseFragment.newInstance(
-                        country,
+                        viewModel.country,
                         FilterMode.COUNTRY.name
                     )
                 )
@@ -173,7 +257,7 @@ class SearchSettingsFragment : Fragment() {
                 .addToBackStack(null)
                 .add(
                     R.id.fragment_container, SearchChooseFragment.newInstance(
-                        genre,
+                        viewModel.genre,
                         FilterMode.GENRE.name
                     )
                 )
@@ -191,49 +275,28 @@ class SearchSettingsFragment : Fragment() {
 
     private fun setupMaterialButtonClickListeners() {
         binding.btnAll.setOnClickListener {
-            showType = ShowType.ALL
+            viewModel.updateShowType(ShowType.ALL)
         }
         binding.btnFilm.setOnClickListener {
-            showType = ShowType.FILM
+            viewModel.updateShowType(ShowType.FILM)
         }
         binding.btnSeries.setOnClickListener {
-            showType = ShowType.SERIES
+            viewModel.updateShowType(ShowType.SERIES)
         }
         binding.btnDate.setOnClickListener {
-            sortType = SortType.DATE
+            viewModel.updateSortType(SortType.DATE)
         }
         binding.btnPopular.setOnClickListener {
-            sortType = SortType.POPULAR
+            viewModel.updateSortType(SortType.POPULAR)
         }
         binding.btnRating.setOnClickListener {
-            sortType = SortType.RATING
+            viewModel.updateSortType(SortType.RATING)
         }
     }
 
     private fun setupButtonClickListeners() {
         binding.buttonReset.setOnClickListener {
-            binding.tgShow.check(R.id.btn_all)
-            showType = ShowType.ALL
-            country = null
-            binding.tvCountry.text = getString(R.string.any_v2)
-            genre = null
-            binding.tvGenre.text = getString(R.string.any)
-            yearFrom = null
-            yearTo = null
-            binding.tvPeriod.text = getString(R.string.any)
-            binding.rangeSlider.values = listOf(1f, 10f)
-            ratingFrom = null
-            ratingTo = null
-            binding.tvRating.text = getString(R.string.any)
-            binding.tgSort.check(R.id.btn_date)
-            sortType = SortType.DATE
-            isDontWatched = false
-            binding.llDontWatch.isSelected = isDontWatched
-            animateBackgroundColor(
-                binding.llDontWatch,
-                ContextCompat.getColor(requireContext(), R.color.selected_item),
-                Color.WHITE
-            )
+            viewModel.reset()
         }
 
         binding.buttonSubmit.setOnClickListener {
@@ -246,15 +309,15 @@ class SearchSettingsFragment : Fragment() {
         parentFragmentManager.setFragmentResult(
             FILTERS_KEY,
             Bundle().apply {
-                putString(SHOW_NAME_KEY, showType.name)
-                putString(COUNTRY_NAME_KEY, country)
-                putString(GENRE_NAME_KEY, genre)
-                putInt(YEAR_FROM_NAME_KEY, yearFrom ?: YEAR_FROM_DEFAULT)
-                putInt(YEAR_TO_NAME_KEY, yearTo ?: YEAR_TO_DEFAULT)
-                putFloat(RATING_FROM_NAME_KEY, ratingFrom ?: RATING_FROM_DEFAULT)
-                putFloat(RATING_TO_NAME_KEY, ratingTo ?: RATING_TO_DEFAULT)
-                putString(SORT_NAME_KEY, sortType.name)
-                putBoolean(IS_DONT_WATCHED_NAME_KEY, isDontWatched)
+                putString(SHOW_NAME_KEY, viewModel.showType.name)
+                putString(COUNTRY_NAME_KEY, viewModel.country)
+                putString(GENRE_NAME_KEY, viewModel.genre)
+                putInt(YEAR_FROM_NAME_KEY, viewModel.yearFrom)
+                putInt(YEAR_TO_NAME_KEY, viewModel.yearTo)
+                putFloat(RATING_FROM_NAME_KEY, viewModel.ratingFrom)
+                putFloat(RATING_TO_NAME_KEY, viewModel.ratingTo)
+                putString(SORT_NAME_KEY, viewModel.sortType.name)
+                putBoolean(IS_DONT_WATCHED_NAME_KEY, viewModel.isDontWatched)
             }
         )
     }
@@ -264,21 +327,17 @@ class SearchSettingsFragment : Fragment() {
             SearchChooseFragment.CHOOSE_COUNTRY_MODE_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
-            country = bundle.getString(SearchChooseFragment.CHOOSE_COUNTRY_NAME_KEY)
-            binding.tvCountry.text = country
-            if (country == getString(R.string.any_v2)) {
-                country = null
-            }
+            val country = bundle.getString(SearchChooseFragment.CHOOSE_COUNTRY_NAME_KEY)
+                ?: requireContext().getString(R.string.any_v2)
+            viewModel.updateCountry(country)
         }
         parentFragmentManager.setFragmentResultListener(
             SearchChooseFragment.CHOOSE_GENRE_MODE_KEY,
             viewLifecycleOwner
         ) { _, bundle ->
-            genre = bundle.getString(SearchChooseFragment.CHOOSE_GENRE_NAME_KEY)
-            binding.tvGenre.text = genre
-            if (genre == getString(R.string.any)) {
-                genre = null
-            }
+            val genre = bundle.getString(SearchChooseFragment.CHOOSE_GENRE_NAME_KEY)
+                ?: requireContext().getString(R.string.any)
+            viewModel.updateGenre(genre)
         }
         parentFragmentManager.setFragmentResultListener(
             SearchChooseDataFragment.CHOOSE_YEAR_MODE_KEY,
@@ -286,15 +345,7 @@ class SearchSettingsFragment : Fragment() {
         ) { _, bundle ->
             yearFrom = bundle.getInt(SearchChooseDataFragment.CHOOSE_YEAR_FROM_NAME_KEY)
             yearTo = bundle.getInt(SearchChooseDataFragment.CHOOSE_YEAR_TO_NAME_KEY)
-            if (yearFrom != Int.MIN_VALUE && yearTo != Int.MAX_VALUE && yearFrom != yearTo) {
-                binding.tvPeriod.text = String.format("с %s до %s", yearFrom, yearTo)
-            } else if (yearFrom == yearTo) {
-                binding.tvPeriod.text = yearFrom.toString()
-            } else {
-                yearFrom = null
-                yearTo = null
-                binding.tvPeriod.text = getString(R.string.any)
-            }
+            viewModel.updateYearRange(yearFrom, yearTo)
         }
     }
 
@@ -313,17 +364,9 @@ class SearchSettingsFragment : Fragment() {
                 )
             )
             addOnChangeListener { slider, _, _ ->
-                ratingFrom = slider.values[0].toFloat()
-                ratingTo = slider.values[1].toFloat()
-                val rating =
-                    if (ratingFrom == RATING_FROM_DEFAULT && ratingTo == RATING_TO_DEFAULT) {
-                        getString(R.string.any)
-                    } else if (ratingFrom == ratingTo) {
-                        "${ratingFrom?.toInt()}"
-                    } else {
-                        "${ratingFrom?.toInt()} - ${ratingTo?.toInt()}"
-                    }
-                binding.tvRating.text = rating
+                val ratingFrom = slider.values[0].toFloat()
+                val ratingTo = slider.values[1].toFloat()
+                viewModel.updateRangeSlider(ratingFrom, ratingTo)
             }
         }
     }
@@ -362,8 +405,14 @@ class SearchSettingsFragment : Fragment() {
     private fun parseArgs() {
         arguments?.let {
             showType = ShowType.valueOf(it.getString(SHOW_TYPE_KEY, ShowType.ALL.name))
-            country = it.getString(COUNTRY_KEY)
-            genre = it.getString(GENRE_KEY)
+            val country = Countries.entries.firstOrNull { value ->
+                requireContext().getString(value.itemResId) == it.getString(COUNTRY_KEY)
+            }
+            val genre = Genres.entries.firstOrNull { value ->
+                requireContext().getString(value.itemResId) == it.getString(GENRE_KEY)
+            }
+            countryResId = country?.itemResId ?: R.string.any_v2
+            genreResId = genre?.itemResId ?: R.string.any
             yearFrom = it.getInt(YEAR_FROM_KEY)
             yearTo = it.getInt(YEAR_TO_KEY)
             ratingFrom = it.getFloat(RATING_FROM_KEY)
