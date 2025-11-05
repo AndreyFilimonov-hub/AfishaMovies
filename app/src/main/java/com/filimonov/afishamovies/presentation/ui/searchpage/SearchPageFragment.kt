@@ -163,15 +163,15 @@ class SearchPageFragment : Fragment() {
                 .add(
                     R.id.fragment_container,
                     SearchSettingsFragment.newInstance(
-                        showType.name,
-                        country,
-                        genre,
-                        yearFrom,
-                        yearTo,
-                        ratingFrom,
-                        ratingTo,
-                        sortType.name,
-                        isDontWatched
+                        viewModel.showType.name,
+                        viewModel.country,
+                        viewModel.genre,
+                        viewModel.yearFrom,
+                        viewModel.yearTo,
+                        viewModel.ratingFrom,
+                        viewModel.ratingTo,
+                        viewModel.sortType.name,
+                        viewModel.isDontWatched
                     )
                 )
                 .addToBackStack(null)
@@ -194,8 +194,19 @@ class SearchPageFragment : Fragment() {
                 )
             )
 
-            country = bundle.getString(SearchSettingsFragment.COUNTRY_NAME_KEY)
-            genre = bundle.getString(SearchSettingsFragment.GENRE_NAME_KEY)
+            val countryBundle = bundle.getString(SearchSettingsFragment.COUNTRY_NAME_KEY)
+            country = if (countryBundle == requireContext().getString(R.string.any_v2)) {
+                null
+            } else {
+                countryBundle
+            }
+
+            val genreBundle = bundle.getString(SearchSettingsFragment.GENRE_NAME_KEY)
+            genre = if (genreBundle == requireContext().getString(R.string.any)) {
+                null
+            } else {
+                genreBundle
+            }
 
             val yearFromBundle = bundle.getInt(SearchSettingsFragment.YEAR_FROM_NAME_KEY)
             yearFrom = if (yearFromBundle == Int.MIN_VALUE) {
