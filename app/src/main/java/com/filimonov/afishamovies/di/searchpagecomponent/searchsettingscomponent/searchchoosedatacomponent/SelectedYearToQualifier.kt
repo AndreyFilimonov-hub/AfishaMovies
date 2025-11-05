@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.di
+package com.filimonov.afishamovies.di.searchpagecomponent.searchsettingscomponent.searchchoosedatacomponent
 
 import javax.inject.Qualifier
 

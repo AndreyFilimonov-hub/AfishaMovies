@@ -1,5 +1,6 @@
-package com.filimonov.afishamovies.di
+package com.filimonov.afishamovies.di.searchpagecomponent.searchsettingscomponent.searchchoosecomponent
 
+import com.filimonov.afishamovies.di.ModeQualifier
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment.FilterMode
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment.SearchChooseFragment
 import dagger.BindsInstance
@@ -15,6 +16,6 @@ interface SearchChooseComponent {
 
         fun create(
             @BindsInstance @ModeQualifier filterMode: FilterMode,
-            @BindsInstance @ChooseResIdQualifier chooseResId: Int) : SearchChooseComponent
+            @BindsInstance @ChooseItemQualifier chooseItem: String?) : SearchChooseComponent
     }
 }

@@ -10,8 +10,8 @@ import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ChooseFilterItemBinding
 
 class SearchChooseAdapter(
-    private val launchItem: Int,
-    private val onItemClick: (Int) -> Unit
+    private val launchItem: String,
+    private val onItemClick: (String) -> Unit
 ) : ListAdapter<ChooseItem, SearchChooseAdapter.SearchChooseViewHolder>(
     SearchChooseDiffCallback()
 ) {
@@ -40,13 +40,14 @@ class SearchChooseAdapter(
 
     class SearchChooseViewHolder(
         private val binding: ChooseFilterItemBinding,
-        private val launchItem: Int?,
-        private val onItemClick: (Int) -> Unit
+        private val launchItem: String,
+        private val onItemClick: (String) -> Unit
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(itemResId: Int) {
-            if (itemResId == launchItem) {
+            val item = itemView.context.getString(itemResId)
+            if (item == launchItem) {
                 binding.root.setBackgroundColor(
                     ContextCompat.getColor(
                         itemView.context,
@@ -57,9 +58,9 @@ class SearchChooseAdapter(
                 binding.root.setBackgroundColor(Color.TRANSPARENT)
             }
 
-            binding.tvFilterItem.text = itemView.context.getString(itemResId)
+            binding.tvFilterItem.text = item
             binding.root.setOnClickListener {
-                onItemClick(itemResId)
+                onItemClick(item)
             }
         }
     }

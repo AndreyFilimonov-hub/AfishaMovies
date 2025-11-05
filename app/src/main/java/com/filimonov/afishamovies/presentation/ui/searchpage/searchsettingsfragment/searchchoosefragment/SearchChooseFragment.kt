@@ -1,6 +1,7 @@
 package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +22,7 @@ import javax.inject.Inject
 
 class SearchChooseFragment : Fragment() {
 
-    private var chooseItemResId: Int = NOT_SELECTED_RES_ID
+    private var chooseItem: String? = null
     private lateinit var filterMode: FilterMode
 
     private var _binding: FragmentSearchChooseBinding? = null
@@ -34,7 +35,7 @@ class SearchChooseFragment : Fragment() {
             .searchPageComponent()
             .create()
             .createSearchChooseComponent()
-            .create(filterMode, chooseItemResId)
+            .create(filterMode, chooseItem)
     }
 
     @Inject
@@ -46,9 +47,9 @@ class SearchChooseFragment : Fragment() {
 
     private val searchChooseAdapter by lazy {
         SearchChooseAdapter(
-            viewModel.chooseResId,
-            onItemClick = { chooseFilterResId ->
-                viewModel.chooseResId = chooseFilterResId
+            viewModel.chooseItem ?: requireContext().getString(R.string.any_v2),
+            onItemClick = { chooseFilter ->
+                viewModel.chooseItem = chooseFilter
                 sendDataToPreviousFragment()
             }
         )
@@ -144,7 +145,7 @@ class SearchChooseFragment : Fragment() {
                 parentFragmentManager.setFragmentResult(
                     CHOOSE_COUNTRY_MODE_KEY,
                     Bundle().apply {
-                        putInt(CHOOSE_COUNTRY_NAME_KEY, viewModel.chooseResId)
+                        putString(CHOOSE_COUNTRY_NAME_KEY, viewModel.chooseItem)
                     }
                 )
                 parentFragmentManager.popBackStack()
@@ -154,7 +155,7 @@ class SearchChooseFragment : Fragment() {
                 parentFragmentManager.setFragmentResult(
                     CHOOSE_GENRE_MODE_KEY,
                     Bundle().apply {
-                        putInt(CHOOSE_GENRE_NAME_KEY, viewModel.chooseResId)
+                        putString(CHOOSE_GENRE_NAME_KEY, viewModel.chooseItem)
                     }
                 )
                 parentFragmentManager.popBackStack()
@@ -163,7 +164,11 @@ class SearchChooseFragment : Fragment() {
     }
 
     private fun setupButtonReset() {
-        if (viewModel.chooseResId == NOT_SELECTED_RES_ID) {
+        Log.d("AAA", "${viewModel.chooseItem}")
+        if (viewModel.chooseItem == requireContext().getString(R.string.any) ||
+            viewModel.chooseItem == requireContext().getString(R.string.any_v2) ||
+            viewModel.chooseItem == null
+        ) {
             binding.buttonReset.visibility = View.GONE
         } else {
             binding.buttonReset.setOnClickListener {
@@ -178,9 +183,9 @@ class SearchChooseFragment : Fragment() {
                 parentFragmentManager.setFragmentResult(
                     CHOOSE_COUNTRY_MODE_KEY,
                     Bundle().apply {
-                        putInt(
+                        putString(
                             CHOOSE_COUNTRY_NAME_KEY,
-                            R.string.any_v2
+                            requireContext().getString(R.string.any_v2)
                         )
                     }
                 )
@@ -191,9 +196,9 @@ class SearchChooseFragment : Fragment() {
                 parentFragmentManager.setFragmentResult(
                     CHOOSE_GENRE_MODE_KEY,
                     Bundle().apply {
-                        putInt(
+                        putString(
                             CHOOSE_GENRE_NAME_KEY,
-                            R.string.any
+                            requireContext().getString(R.string.any)
                         )
                     }
                 )
@@ -204,8 +209,8 @@ class SearchChooseFragment : Fragment() {
 
     private fun parseArgs() {
         arguments?.let {
-            val chooseItemResIdBundle = it.getInt(CHOOSE_ITEM, NOT_SELECTED_RES_ID)
-            chooseItemResId = chooseItemResIdBundle
+            val chooseItemBundle = it.getString(CHOOSE_ITEM)
+            chooseItem = chooseItemBundle
             val filterModeBundle =
                 it.getString(FILTER_MODE) ?: throw RuntimeException("param mode is absent")
             filterMode = FilterMode.valueOf(filterModeBundle)
@@ -213,8 +218,6 @@ class SearchChooseFragment : Fragment() {
     }
 
     companion object {
-
-        private const val NOT_SELECTED_RES_ID = -1
 
         private const val CHOOSE_ITEM = "choose_item_key"
         private const val FILTER_MODE = "filter_mode_key"
@@ -226,10 +229,10 @@ class SearchChooseFragment : Fragment() {
         const val CHOOSE_GENRE_NAME_KEY = "choose_genre_name_key"
 
         @JvmStatic
-        fun newInstance(chooseItem: Int, filterMode: String) =
+        fun newInstance(chooseItem: String?, filterMode: String) =
             SearchChooseFragment().apply {
                 arguments = Bundle().apply {
-                    putInt(CHOOSE_ITEM, chooseItem)
+                    putString(CHOOSE_ITEM, chooseItem)
                     putString(FILTER_MODE, filterMode)
                 }
             }

@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.di
+package com.filimonov.afishamovies.di.listpagecomponent
 
 import javax.inject.Qualifier
 

@@ -2,7 +2,7 @@ package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfrag
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
-import com.filimonov.afishamovies.di.ChooseResIdQualifier
+import com.filimonov.afishamovies.di.searchpagecomponent.searchsettingscomponent.searchchoosecomponent.ChooseItemQualifier
 import com.filimonov.afishamovies.di.ModeQualifier
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,14 +10,14 @@ import javax.inject.Inject
 
 class SearchChooseViewModel @Inject constructor(
     @ModeQualifier private val mode: FilterMode,
-    @ChooseResIdQualifier var chooseResId: Int,
+    @ChooseItemQualifier var chooseItem: String?,
     private val applicationContext: Context
 ) : ViewModel() {
 
     private val list: List<ChooseItem> = if (mode == FilterMode.GENRE) {
-        Genres.entries
+        Genres.entries.filter { it != Genres.ANY }
     } else {
-        Countries.entries
+        Countries.entries.filter { it != Countries.ANY }
     }
 
     private val _state = MutableStateFlow<SearchChooseState>(SearchChooseState.Initial(list))

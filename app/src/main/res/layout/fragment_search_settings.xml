@@ -182,7 +182,7 @@
                     android:textSize="@dimen/text_size_16sp" />
 
                 <TextView
-                    android:id="@+id/tv_period"
+                    android:id="@+id/tv_year_range"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_end"
@@ -208,7 +208,7 @@
                 app:layout_constraintTop_toBottomOf="@id/ll_period" />
 
             <TextView
-                android:id="@+id/tv_rating"
+                android:id="@+id/tv_rating_range"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_top_16dp"
@@ -228,7 +228,7 @@
                 android:stepSize="1"
                 android:valueFrom="1"
                 android:valueTo="10"
-                app:layout_constraintTop_toBottomOf="@id/tv_rating"
+                app:layout_constraintTop_toBottomOf="@id/tv_rating_range"
                 app:tickVisible="false"
                 app:trackHeight="@dimen/height_4dp"
                 app:values="@array/range" />

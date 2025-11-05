@@ -2,8 +2,8 @@ package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfrag
 
 import android.icu.util.Calendar
 import androidx.lifecycle.ViewModel
-import com.filimonov.afishamovies.di.SelectedYearFromQualifier
-import com.filimonov.afishamovies.di.SelectedYearToQualifier
+import com.filimonov.afishamovies.di.searchpagecomponent.searchsettingscomponent.searchchoosedatacomponent.SelectedYearFromQualifier
+import com.filimonov.afishamovies.di.searchpagecomponent.searchsettingscomponent.searchchoosedatacomponent.SelectedYearToQualifier
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
