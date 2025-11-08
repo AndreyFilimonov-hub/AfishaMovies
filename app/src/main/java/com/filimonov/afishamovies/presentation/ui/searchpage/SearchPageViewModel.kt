@@ -4,15 +4,13 @@ package com.filimonov.afishamovies.presentation.ui.searchpage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.filimonov.afishamovies.domain.entities.SearchMediaBannerEntity
 import com.filimonov.afishamovies.domain.usecases.GetMoviesByQueryUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -26,7 +24,7 @@ class SearchPageViewModel @Inject constructor(
     private val _state = MutableStateFlow<SearchPageState>(SearchPageState.Initial)
     val state = _state.asStateFlow()
 
-    private val _query = MutableStateFlow("")
+    private val _query = MutableSharedFlow<String>(1)
 
     private var page = 1
 
@@ -44,16 +42,19 @@ class SearchPageViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            _query.emit("")
+
             _query
                 .debounce(500)
                 .map { it.trim() }
-                .filter { it.isNotEmpty() }
-                .distinctUntilChanged()
                 .flatMapLatest { query ->
                     flow {
                         emit(SearchPageState.Loading)
                         try {
-                            val medias = getMoviesByQueryUseCase(page = page, query = query)
+                            val medias = getMoviesByQueryUseCase(
+                                page = page,
+                                query = query
+                            ).map { SearchItem.MediaBanner(it) }
 
                             val filteredMediaBannerList = filterList(medias)
 
@@ -73,75 +74,65 @@ class SearchPageViewModel @Inject constructor(
     }
 
     fun updateList() {
-        viewModelScope.launch {
-            try {
-                _state.value = SearchPageState.Loading
+        val filteredMediaBannerList = filterList(currentList)
 
-                val medias = getMoviesByQueryUseCase(page, _query.value)
-
-                val filteredMediaBannerList = filterList(medias)
-
-                if (filteredMediaBannerList.isEmpty()) {
-                    _state.value = SearchPageState.Empty
-                } else {
-                    _state.value = SearchPageState.Success(filteredMediaBannerList)
-                    currentList = filteredMediaBannerList.toMutableList()
-                }
-            } catch (_: Exception) {
-                _state.value = SearchPageState.Error
-            }
+        if (filteredMediaBannerList.isEmpty()) {
+            _state.value = SearchPageState.Empty
+        } else {
+            _state.value = SearchPageState.Success(filteredMediaBannerList)
         }
     }
 
     fun sendRequest(query: String) {
-        _query.value = query
+        viewModelScope.launch {
+            _query.emit(query)
+        }
     }
 
-    private fun filterList(list: List<SearchMediaBannerEntity>): List<SearchItem.MediaBanner> {
+    private fun filterList(list: List<SearchItem.MediaBanner>): List<SearchItem.MediaBanner> {
         return list
             .asSequence()
-            .filter { it.name.isNotEmpty() }
+            .filter { it.mediaBanner.name.isNotEmpty() }
             .filter {
                 when (showType) {
                     ShowType.ALL -> return@filter true
-                    ShowType.FILM -> !it.isSeries
-                    ShowType.SERIES -> it.isSeries
+                    ShowType.FILM -> !it.mediaBanner.isSeries
+                    ShowType.SERIES -> it.mediaBanner.isSeries
                 }
             }
             .filter {
                 if (country != null) {
-                    it.countries?.contains(country) == true
+                    it.mediaBanner.countries?.contains(country) == true
                 } else {
                     return@filter true
                 }
             }
             .filter {
                 if (genre != null) {
-                    it.genres?.contains(genre) == true
+                    it.mediaBanner.genres?.contains(genre) == true
                 } else {
                     return@filter true
                 }
             }
-            .filter { it.year in this.yearFrom..this.yearTo }
+            .filter { it.mediaBanner.year in this.yearFrom..this.yearTo }
             .filter {
-                it.rating?.toFloatOrNull()
+                it.mediaBanner.rating?.toFloatOrNull()
                     ?.let { rating -> rating in this.ratingFrom..this.ratingTo } == true
             }
             .filter {
                 if (isDontWatched) {
-                    !it.isWatched
+                    !it.mediaBanner.isWatched
                 } else {
                     return@filter true
                 }
             }
             .sortedByDescending {
                 when (sortType) {
-                    SortType.DATE -> it.year.toFloat()
-                    SortType.POPULAR -> it.votes?.toFloat()
-                    SortType.RATING -> it.rating?.toFloat()
+                    SortType.DATE -> it.mediaBanner.year.toFloat()
+                    SortType.POPULAR -> it.mediaBanner.votes?.toFloat()
+                    SortType.RATING -> it.mediaBanner.rating?.toFloat()
                 }
             }
-            .map { SearchItem.MediaBanner(it) }
             .toList()
     }
 
@@ -161,9 +152,15 @@ class SearchPageViewModel @Inject constructor(
         this.genre = genre
         this.yearFrom = yearFrom ?: Int.MIN_VALUE
         this.yearTo = yearTo ?: Int.MAX_VALUE
-        this.ratingFrom = ratingFrom ?: 1f
-        this.ratingTo = ratingTo ?: 10f
+        this.ratingFrom = ratingFrom ?: RATING_FROM_DEFAULT
+        this.ratingTo = ratingTo ?: RATING_TO_DEFAULT
         this.sortType = sortType
         this.isDontWatched = isDontWatched
+    }
+
+    companion object {
+
+        private const val RATING_FROM_DEFAULT = 1f
+        private const val RATING_TO_DEFAULT = 10f
     }
 }
