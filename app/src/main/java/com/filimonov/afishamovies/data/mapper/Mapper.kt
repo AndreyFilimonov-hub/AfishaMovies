@@ -6,7 +6,6 @@ import com.filimonov.afishamovies.data.model.filmpage.PersonBannerDto
 import com.filimonov.afishamovies.data.model.gallery.GalleryImageDto
 import com.filimonov.afishamovies.data.model.mediabanner.MediaBannerDto
 import com.filimonov.afishamovies.data.model.searchpage.SearchMediaBannerDto
-import com.filimonov.afishamovies.data.model.searchpage.SearchPersonBannerDto
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
 import com.filimonov.afishamovies.domain.entities.GalleryImageEntity
 import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
@@ -110,18 +109,4 @@ fun SearchMediaBannerDto.toSearchMediaBannerEntity(): SearchMediaBannerEntity {
 
 fun List<SearchMediaBannerDto>.toSearchMediaBannerListEntity(): List<SearchMediaBannerEntity> {
     return this.map { it.toSearchMediaBannerEntity() }
-}
-
-fun SearchPersonBannerDto.toSearchPersonBannerEntity(): PersonBannerEntity {
-    return PersonBannerEntity(
-        id = this.id,
-        name = this.name,
-        photo = this.photo,
-        character = null,
-        profession = ""
-    )
-}
-
-fun List<SearchPersonBannerDto>.toSearchPersonBannerListEntity(): List<PersonBannerEntity> {
-    return this.map { it.toSearchPersonBannerEntity() }
 }
