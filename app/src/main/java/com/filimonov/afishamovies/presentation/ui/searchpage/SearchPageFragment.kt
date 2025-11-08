@@ -107,6 +107,7 @@ class SearchPageFragment : Fragment() {
                         SearchPageState.Error -> {
                             binding.rvReplySearch.visibility = View.GONE
                             binding.tvEmpty.visibility = View.GONE
+                            binding.pbLoading.visibility = View.GONE
                             binding.llNoInternet.visibility = View.VISIBLE
                             setupNoInternetRetryButton()
                         }
@@ -147,7 +148,7 @@ class SearchPageFragment : Fragment() {
 
     private fun setupNoInternetRetryButton() {
         binding.buttonReload.setOnClickListener {
-            viewModel.updateList()
+            viewModel.sendRequest(binding.sbMain.text.toString())
         }
     }
 
