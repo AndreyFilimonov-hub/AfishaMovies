@@ -1,5 +1,6 @@
-package com.filimonov.afishamovies.di
+package com.filimonov.afishamovies.di.filmpagecomponent
 
+import com.filimonov.afishamovies.di.MovieIdQualifier
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import dagger.BindsInstance
 import dagger.Subcomponent

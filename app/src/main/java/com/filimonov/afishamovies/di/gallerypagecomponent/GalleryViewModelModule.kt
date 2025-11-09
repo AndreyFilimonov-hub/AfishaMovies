@@ -1,6 +1,7 @@
-package com.filimonov.afishamovies.di
+package com.filimonov.afishamovies.di.gallerypagecomponent
 
 import androidx.lifecycle.ViewModel
+import com.filimonov.afishamovies.di.ViewModelKey
 import com.filimonov.afishamovies.presentation.ui.gallery.GalleryViewModel
 import dagger.Binds
 import dagger.Module

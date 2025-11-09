@@ -1,5 +1,12 @@
 package com.filimonov.afishamovies.di
 
+import android.content.Context
+import com.filimonov.afishamovies.di.filmpagecomponent.FilmPageComponent
+import com.filimonov.afishamovies.di.gallerypagecomponent.GalleryComponent
+import com.filimonov.afishamovies.di.homepagecomponent.HomePageComponent
+import com.filimonov.afishamovies.di.listpagecomponent.ListPageComponent
+import com.filimonov.afishamovies.di.searchpagecomponent.SearchPageComponent
+import dagger.BindsInstance
 import dagger.Component
 
 @ApplicationScope
@@ -13,4 +20,13 @@ interface AppComponent {
     fun filmPageComponent(): FilmPageComponent.Factory
 
     fun galleryComponent(): GalleryComponent.Factory
+
+    fun searchPageComponent(): SearchPageComponent.Factory
+
+    @Component.Factory
+    interface AppComponentFactory {
+
+        fun create(@BindsInstance context: Context): AppComponent
+
+    }
 }

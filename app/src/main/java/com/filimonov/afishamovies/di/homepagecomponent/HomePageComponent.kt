@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.di
+package com.filimonov.afishamovies.di.homepagecomponent
 
 import com.filimonov.afishamovies.presentation.ui.homepage.HomePageFragment
 import dagger.Subcomponent

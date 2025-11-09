@@ -5,11 +5,13 @@ import com.filimonov.afishamovies.data.model.filmpage.ImagePreviewDto
 import com.filimonov.afishamovies.data.model.filmpage.PersonBannerDto
 import com.filimonov.afishamovies.data.model.gallery.GalleryImageDto
 import com.filimonov.afishamovies.data.model.mediabanner.MediaBannerDto
+import com.filimonov.afishamovies.data.model.searchpage.SearchMediaBannerDto
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
 import com.filimonov.afishamovies.domain.entities.GalleryImageEntity
 import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
+import com.filimonov.afishamovies.domain.entities.SearchMediaBannerEntity
 import com.filimonov.afishamovies.presentation.ui.listpage.mediabannergridadapter.ListPageMedia
 import com.filimonov.afishamovies.presentation.utils.roundRating
 import com.filimonov.afishamovies.presentation.utils.toMovieLengthFormat
@@ -18,9 +20,9 @@ fun MediaBannerDto.toMediaBannerEntity(): MediaBannerEntity {
     return MediaBannerEntity(
         id = this.id,
         name = this.name,
-        genreMain = this.genres?.first()?.name,
+        genreMain = this.genres?.firstOrNull()?.name,
         rating = this.rating?.kp?.roundRating(),
-        posterUrl = this.poster.url,
+        posterUrl = this.poster?.url,
     )
 }
 
@@ -88,4 +90,23 @@ fun GalleryImageDto.toGalleryImageEntity(): GalleryImageEntity {
 
 fun List<GalleryImageDto>.toGalleryImageListEntity(): List<GalleryImageEntity> {
     return this.map { it.toGalleryImageEntity() }
+}
+
+fun SearchMediaBannerDto.toSearchMediaBannerEntity(): SearchMediaBannerEntity {
+    return SearchMediaBannerEntity(
+        id = this.id,
+        name = this.name,
+        year = this.year,
+        isSeries = this.isSeries,
+        rating = this.rating?.kp?.roundRating(),
+        votes = this.votes?.kp,
+        posterUrl = this.poster?.url,
+        genres = this.genres?.map { it.name },
+        countries = this.countries?.map { it.name },
+        isWatched = false // TODO: from db
+    )
+}
+
+fun List<SearchMediaBannerDto>.toSearchMediaBannerListEntity(): List<SearchMediaBannerEntity> {
+    return this.map { it.toSearchMediaBannerEntity() }
 }

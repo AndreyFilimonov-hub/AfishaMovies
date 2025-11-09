@@ -1,5 +1,6 @@
-package com.filimonov.afishamovies.di
+package com.filimonov.afishamovies.di.listpagecomponent
 
+import com.filimonov.afishamovies.di.ModeQualifier
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageMode
 import dagger.BindsInstance

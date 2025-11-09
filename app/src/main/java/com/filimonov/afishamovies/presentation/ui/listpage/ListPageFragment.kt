@@ -119,8 +119,8 @@ class ListPageFragment : Fragment() {
         binding.rvContent.addItemDecoration(
             SpaceItemDecoration(
                 mediaBannerGridAdapter,
-                resources.getDimensionPixelSize(R.dimen.margin_between16dp),
-                resources.getDimensionPixelSize(R.dimen.margin_bottom16dp)
+                resources.getDimensionPixelSize(R.dimen.margin_between_16dp),
+                resources.getDimensionPixelSize(R.dimen.margin_bottom_16dp)
             )
         )
         binding.rvContent.addOnScrollListener(object : RecyclerView.OnScrollListener() {

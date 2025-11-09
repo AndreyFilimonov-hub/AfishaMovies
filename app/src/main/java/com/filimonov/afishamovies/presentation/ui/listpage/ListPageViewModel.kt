@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.filimonov.afishamovies.data.mapper.toListPageMediaActorBanners
 import com.filimonov.afishamovies.data.mapper.toListPageMediaBannerList
 import com.filimonov.afishamovies.data.mapper.toListPageMediaWorkerBanners
-import com.filimonov.afishamovies.di.CategoryOrMovieIdQualifier
+import com.filimonov.afishamovies.di.listpagecomponent.CategoryOrMovieIdQualifier
 import com.filimonov.afishamovies.di.ModeQualifier
 import com.filimonov.afishamovies.domain.enums.Category
 import com.filimonov.afishamovies.domain.usecases.GetMediaBannersByCategoryFromLocalUseCase
@@ -82,7 +82,7 @@ class ListPageViewModel @Inject constructor( //TODO: check di
                 _state.value = ListPageState.Success(currentList)
             } catch (e: CancellationException) {
                 throw e
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 _state.value = ListPageState.Error(currentList + ListPageMedia.Error)
             }
         }
