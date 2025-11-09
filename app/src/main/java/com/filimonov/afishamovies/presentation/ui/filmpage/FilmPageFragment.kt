@@ -2,6 +2,7 @@ package com.filimonov.afishamovies.presentation.ui.filmpage
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -64,6 +65,7 @@ class FilmPageFragment : Fragment() {
     private val actorsAdapter = PersonAdapter(
         onClick = {
             // TODO: launch ActorPageFragment
+            Log.d("AAA", "id: $it")
         }
     )
 
