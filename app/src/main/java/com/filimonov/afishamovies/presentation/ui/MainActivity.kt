@@ -6,12 +6,14 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.fragment.app.Fragment
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ActivityMainBinding
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.homepage.HomePageFragment
 import com.filimonov.afishamovies.presentation.ui.onboard.OnBoardFragment
+import com.filimonov.afishamovies.presentation.ui.searchpage.SearchPageFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,6 +23,12 @@ class MainActivity : AppCompatActivity() {
         private const val APP_PREFS = "app_prefs"
         private const val HOME_PAGE_TAG = "HomePageFragment"
     }
+
+    private val homeStack = mutableListOf<Fragment>()
+    private val searchStack = mutableListOf<Fragment>()
+    private val profileStack = mutableListOf<Fragment>()
+
+    private var currentStack = homeStack
 
     val binging: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -40,6 +48,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        initFragments()
+
         setOnBottomNavigationBarItemsClickListener()
     }
 
@@ -51,49 +61,66 @@ class MainActivity : AppCompatActivity() {
     private fun setOnBottomNavigationBarItemsClickListener() {
         binging.bNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.item_home -> {
-                    val fragmentManager = supportFragmentManager
-                    val currentFragment = fragmentManager.findFragmentById(R.id.fragment_container)
+                R.id.item_home -> switchTab(homeStack)
 
-                    if (currentFragment !is HomePageFragment) {
-                        val fragments = fragmentManager.fragments
-                        val homePageFragments = fragments.filterIsInstance<HomePageFragment>()
-                        val exists = homePageFragments.isEmpty()
-                        if (exists) {
-                            launchHomePageFragment()
-                            return@setOnItemSelectedListener true
-                        }
-                        if (fragments.isNotEmpty()) {
-                            val topFragment = fragments.last()
-                            val homePageFragment =
-                                fragmentManager.findFragmentByTag(HOME_PAGE_TAG)
-                            val transaction = fragmentManager.beginTransaction()
+                R.id.item_search -> switchTab(searchStack)
 
-                            fragments.forEach { fragment ->
-                                if (fragment != topFragment && fragment != homePageFragment) {
-                                    transaction.remove(fragment)
-                                }
-                            }
+                R.id.item_profile -> switchTab(profileStack)
+            }
+            true
+        }
+    }
 
-                            transaction.remove(topFragment)
-                            transaction.commit()
-                        }
-                    } else {
-                        currentFragment.scrollToTop()
-                    }
+    private fun initFragments() {
+        searchStack.add(SearchPageFragment.newInstance())
+        // TODO: profileFragment
+    }
 
-                    true
+    private fun switchTab(stack: MutableList<Fragment>) {
+        if (stack == currentStack) {
+            onRetryClick(currentStack.last())
+            return
+        }
+
+        val transaction = supportFragmentManager.beginTransaction()
+        currentStack.forEach { transaction.hide(it) }
+
+        val fragmentToShow = stack.last()
+        if (!fragmentToShow.isAdded) {
+            transaction.add(R.id.fragment_container, fragmentToShow)
+        } else {
+            transaction.show(stack.last())
+        }
+
+        transaction.commit()
+        currentStack = stack
+    }
+
+    private fun onRetryClick(lastOpenFragment: Fragment) {
+        when (lastOpenFragment) {
+            in homeStack -> {
+                if (lastOpenFragment is HomePageFragment) {
+                    lastOpenFragment.scrollToTop()
+                } else {
+                    navigateToRootOfCurrentTab()
                 }
+            }
 
-                R.id.item_search -> {
-                    // TODO launch: SearchFragment
-                    true
-                }
+            in searchStack -> navigateToRootOfCurrentTab()
 
-                R.id.item_profile -> {
-                    // TODO launch: ProfileFragment
-                    true
-                }
+            in profileStack -> navigateToRootOfCurrentTab()
+        }
+    }
+
+    private fun navigateToRootOfCurrentTab() {
+        val transaction = supportFragmentManager.beginTransaction()
+
+        val current = currentStack
+        val rootFragment = current.firstOrNull()
+
+        current.drop(1).forEach { fragment -> transaction.remove(fragment) }
+
+        rootFragment?.let { transaction.show(it) }
 
         transaction.commitAllowingStateLoss()
 
@@ -155,8 +182,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun launchHomePageFragment() {
+        val homePageFragment = HomePageFragment.newInstance()
+        homeStack.add(homePageFragment)
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, HomePageFragment.newInstance(), HOME_PAGE_TAG)
+            .replace(R.id.fragment_container, homePageFragment, HOME_PAGE_TAG)
             .commit()
     }
 }
