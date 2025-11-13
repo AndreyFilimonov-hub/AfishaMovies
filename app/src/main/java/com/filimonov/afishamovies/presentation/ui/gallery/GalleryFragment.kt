@@ -68,9 +68,11 @@ class GalleryFragment : Fragment() {
 
     private var isLastPage = false
 
-    private val imageAdapter = ImageAdapter {
-        reloadData()
-    }
+    private val imageAdapter = ImageAdapter { reloadData() }
+
+    private var shortAnimationDuration: Long = 0
+
+    private val viewAnimator = ViewAnimator()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +88,9 @@ class GalleryFragment : Fragment() {
             interpolator = AccelerateInterpolator()
             propagation = null
         }
+
+        shortAnimationDuration =
+            resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     }
 
     override fun onCreateView(
@@ -112,29 +117,35 @@ class GalleryFragment : Fragment() {
                 viewModel.state.collect { state ->
                     when (state) {
                         GalleryState.InitialLoading -> {
-                            binding.pbLoading.visibility = View.VISIBLE
-                            binding.llNoInternet.visibility = View.INVISIBLE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.llNoInternet, shortAnimationDuration)
+                                setupVisibilityVisible(binding.pbLoading, shortAnimationDuration)
+                            }
                         }
 
                         GalleryState.InitialError -> {
-                            binding.pbLoading.visibility = View.INVISIBLE
-                            binding.llNoInternet.visibility = View.VISIBLE
-                            binding.rvGallery.visibility = View.INVISIBLE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.pbLoading, shortAnimationDuration)
+                                setupVisibilityGone(binding.rvGallery, shortAnimationDuration)
+                                setupVisibilityVisible(binding.llNoInternet, shortAnimationDuration)
+                            }
                         }
 
                         is GalleryState.Success -> {
-                            binding.llNoInternet.visibility = View.INVISIBLE
-                            binding.pbLoading.visibility = View.INVISIBLE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.llNoInternet, shortAnimationDuration)
+                                setupVisibilityGone(binding.pbLoading, shortAnimationDuration)
 
-                            isLastPage = state.isLastPage
-                            currentType = state.selectedType
-                            if (state.images.isNotEmpty()) {
-                                binding.tvEmpty.visibility = View.INVISIBLE
-                                binding.rvGallery.visibility = View.VISIBLE
-                                imageAdapter.submitList(state.images)
-                            } else {
-                                binding.rvGallery.visibility = View.INVISIBLE
-                                binding.tvEmpty.visibility = View.VISIBLE
+                                isLastPage = state.isLastPage
+                                currentType = state.selectedType
+                                if (state.images.isNotEmpty()) {
+                                    setupVisibilityGone(binding.tvEmpty, shortAnimationDuration)
+                                    setupVisibilityVisible(binding.rvGallery, shortAnimationDuration)
+                                    imageAdapter.submitList(state.images)
+                                } else {
+                                    setupVisibilityGone(binding.rvGallery, shortAnimationDuration)
+                                    setupVisibilityVisible(binding.tvEmpty, shortAnimationDuration)
+                                }
                             }
                         }
 

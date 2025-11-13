@@ -77,9 +77,24 @@ class SearchPageFragment : Fragment() {
         }
     )
 
+    private val viewAnimator = ViewAnimator()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         component.inject(this)
+        enterTransition = Slide(Gravity.END).apply {
+            duration = 500L
+            interpolator = AccelerateInterpolator()
+            propagation = null
+        }
+        exitTransition = Slide(Gravity.END).apply {
+            duration = 500L
+            interpolator = AccelerateInterpolator()
+            propagation = null
+        }
+
+        shortAnimationDuration =
+            resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     }
 
     override fun onCreateView(
@@ -105,16 +120,21 @@ class SearchPageFragment : Fragment() {
                 viewModel.state.collect { state ->
                     when (state) {
                         SearchPageState.Empty -> {
-                            binding.pbLoading.visibility = View.GONE
-                            binding.rvReplySearch.visibility = View.GONE
-                            binding.tvEmpty.visibility = View.VISIBLE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.llNoInternet, shortAnimationDuration)
+                                setupVisibilityGone(binding.pbLoading, shortAnimationDuration)
+                                setupVisibilityGone(binding.rvReplySearch, shortAnimationDuration)
+                                setupVisibilityVisible(binding.tvEmpty, shortAnimationDuration)
+                            }
                         }
 
                         SearchPageState.Error -> {
-                            binding.rvReplySearch.visibility = View.GONE
-                            binding.tvEmpty.visibility = View.GONE
-                            binding.pbLoading.visibility = View.GONE
-                            binding.llNoInternet.visibility = View.VISIBLE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.tvEmpty, shortAnimationDuration)
+                                setupVisibilityGone(binding.pbLoading, shortAnimationDuration)
+                                setupVisibilityGone(binding.rvReplySearch, shortAnimationDuration)
+                                setupVisibilityVisible(binding.llNoInternet, shortAnimationDuration)
+                            }
                             setupNoInternetRetryButton()
                         }
 
@@ -133,18 +153,27 @@ class SearchPageFragment : Fragment() {
                         }
 
                         SearchPageState.Loading -> {
-                            binding.rvReplySearch.visibility = View.GONE
-                            binding.llNoInternet.visibility = View.GONE
-                            binding.pbLoading.visibility = View.VISIBLE
-                            binding.tvEmpty.visibility = View.GONE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.llNoInternet, shortAnimationDuration)
+                                setupVisibilityGone(binding.tvEmpty, shortAnimationDuration)
+                                setupVisibilityGone(binding.rvReplySearch, shortAnimationDuration)
+                                setupVisibilityVisible(binding.pbLoading, shortAnimationDuration)
+                            }
                         }
 
                         is SearchPageState.Success -> {
-                            binding.rvReplySearch.visibility = View.VISIBLE
-                            binding.llNoInternet.visibility = View.GONE
-                            binding.pbLoading.visibility = View.GONE
-                            binding.tvEmpty.visibility = View.GONE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.llNoInternet, shortAnimationDuration)
+                                setupVisibilityGone(binding.pbLoading, shortAnimationDuration)
+                                setupVisibilityGone(binding.tvEmpty, shortAnimationDuration)
+                                setupVisibilityVisible(binding.rvReplySearch, shortAnimationDuration)
+                            }
+
                             searchItemAdapter.submitList(state.result)
+
+                            binding.rvReplySearch.doOnNextLayout {
+                                binding.rvReplySearch.scrollToPosition(0)
+                            }
                         }
                     }
                 }

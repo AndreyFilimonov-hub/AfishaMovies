@@ -74,6 +74,10 @@ class HomePageFragment : Fragment() {
         }
     )
 
+    private var shortAnimationDuration: Long = 0
+
+    private val viewAnimator = ViewAnimator()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         component.inject(this)
@@ -89,6 +93,9 @@ class HomePageFragment : Fragment() {
         }
 
         (requireActivity() as? MainActivity)?.setFirstLaunchShown()
+
+        shortAnimationDuration =
+            resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     }
 
     override fun onCreateView(
@@ -132,21 +139,27 @@ class HomePageFragment : Fragment() {
                     TransitionManager.beginDelayedTransition(binding.success)
                     when (it) {
                         is HomePageState.Loading -> {
-                            binding.error.visibility = View.INVISIBLE
-                            binding.success.visibility = View.INVISIBLE
-                            binding.loading.visibility = View.VISIBLE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.error, shortAnimationDuration)
+                                setupVisibilityGone(binding.success, shortAnimationDuration)
+                                setupVisibilityVisible(binding.loading, shortAnimationDuration)
+                            }
                         }
 
                         HomePageState.Error -> {
-                            binding.loading.visibility = View.INVISIBLE
-                            binding.error.visibility = View.VISIBLE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.loading, shortAnimationDuration)
+                                setupVisibilityVisible(binding.error, shortAnimationDuration)
+                            }
                         }
 
                         is HomePageState.Success -> {
                             onBottomNav()
 
-                            binding.loading.visibility = View.INVISIBLE
-                            binding.success.visibility = View.VISIBLE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.loading, shortAnimationDuration)
+                                setupVisibilityVisible(binding.success, shortAnimationDuration)
+                            }
 
                             sectionAdapter.submitList(it.categories)
                         }
