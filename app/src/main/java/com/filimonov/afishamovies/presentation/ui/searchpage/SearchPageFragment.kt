@@ -27,6 +27,12 @@ import javax.inject.Inject
 
 class SearchPageFragment : Fragment() {
 
+    companion object {
+
+        @JvmStatic
+        fun newInstance() = SearchPageFragment()
+    }
+
     private var _binding: FragmentSearchPageBinding? = null
 
     private val binding: FragmentSearchPageBinding

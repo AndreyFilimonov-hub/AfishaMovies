@@ -31,6 +31,19 @@ private const val MOVIE_ID = "movie_id"
 
 class GalleryFragment : Fragment() {
 
+    companion object {
+
+        private const val UNDEFINED_ID = -1
+
+        @JvmStatic
+        fun newInstance(movieId: Int) =
+            GalleryFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(MOVIE_ID, movieId)
+                }
+            }
+    }
+
     private var _binding: FragmentGalleryBinding? = null
 
     private val binding: FragmentGalleryBinding

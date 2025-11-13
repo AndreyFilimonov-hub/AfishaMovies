@@ -29,6 +29,13 @@ import javax.inject.Inject
 
 class HomePageFragment : Fragment() {
 
+    companion object {
+
+        @JvmStatic
+        fun newInstance() =
+            HomePageFragment()
+    }
+
     private var _binding: FragmentHomePageBinding? = null
     private val binding: FragmentHomePageBinding
         get() = _binding ?: throw RuntimeException("FragmentHomePageBinding == null")

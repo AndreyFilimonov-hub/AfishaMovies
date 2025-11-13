@@ -40,6 +40,21 @@ private const val MODE = "mode"
 
 class FilmPageFragment : Fragment() {
 
+    companion object {
+
+        private const val UNDEFINED_ID = -1
+        private const val UNDEFINED_MODE = ""
+
+        @JvmStatic
+        fun newInstance(movieId: Int, mode: String) =
+            FilmPageFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(MOVIE_ID, movieId)
+                    putString(MODE, mode)
+                }
+            }
+    }
+
     private var movieId = UNDEFINED_ID
     private var mode = UNDEFINED_MODE
 

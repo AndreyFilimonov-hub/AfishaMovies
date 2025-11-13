@@ -32,6 +32,21 @@ private const val MODE = "mode"
 
 class ListPageFragment : Fragment() {
 
+    companion object {
+        private const val UNDEFINED_ID = -1
+        private const val UNDEFINED_TITLE = -1
+
+        @JvmStatic
+        fun newInstance(id: Int, titleResId: Int, mode: ListPageMode) =
+            ListPageFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(CATEGORY_OR_MOVIE_ID, id)
+                    putInt(TITLE, titleResId)
+                    putString(MODE, mode.name)
+                }
+            }
+    }
+
     private var _binding: FragmentListPageBinding? = null
 
     private val binding: FragmentListPageBinding
