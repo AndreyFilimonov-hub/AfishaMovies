@@ -43,7 +43,7 @@ class FilmPageViewModel @Inject constructor(
                 }
             } catch (e: CancellationException) {
                 throw e
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 _state.value = FilmPageState.Error
             }
         }

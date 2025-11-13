@@ -60,7 +60,6 @@ class FilmPageFragment : Fragment() {
     private var mode = UNDEFINED_MODE
 
     private var _binding: FragmentFilmPageBinding? = null
-
     private val binding: FragmentFilmPageBinding
         get() = _binding ?: throw RuntimeException("FragmentFilmPageBinding == null")
 
@@ -130,6 +129,11 @@ class FilmPageFragment : Fragment() {
         observeViewModel()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
@@ -173,8 +177,8 @@ class FilmPageFragment : Fragment() {
 
             binding.tvFullDescription.text = this.description
 
-            binding.tvAllPersonInFilm.text = viewModel.actorsCount().toString()
-            binding.tvAllWorkersInFilm.text = viewModel.workersCount().toString()
+            binding.tvAllPersonInFilm.text = viewModel.actorsCount()
+            binding.tvAllWorkersInFilm.text = viewModel.workersCount()
 
             if (this.similarMovies != null) {
                 binding.tvAllSimilarMovie.text = this.similarMovies.size.toString()
@@ -280,7 +284,6 @@ class FilmPageFragment : Fragment() {
         }
     }
 
-
     private fun parseArgs() {
         val args = requireArguments()
         if (!args.containsKey(MOVIE_ID)) {
@@ -312,20 +315,5 @@ class FilmPageFragment : Fragment() {
             layoutParams.bottomMargin = bottomHeight
             rootView.layoutParams = layoutParams
         }
-    }
-
-    companion object {
-
-        private const val UNDEFINED_ID = -1
-        private const val UNDEFINED_MODE = ""
-
-        @JvmStatic
-        fun newInstance(movieId: Int, mode: String) =
-            FilmPageFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(MOVIE_ID, movieId)
-                    putString(MODE, mode)
-                }
-            }
     }
 }

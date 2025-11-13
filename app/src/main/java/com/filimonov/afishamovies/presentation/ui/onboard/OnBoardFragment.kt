@@ -47,6 +47,11 @@ class OnBoardFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun setupViewPager() {
         val viewPager = binding.viewPager
         val dotsIndicator = binding.dotsIndicator // TODO: remove library
@@ -71,10 +76,5 @@ class OnBoardFragment : Fragment() {
             .replace(R.id.fragment_container, HomePageFragment.newInstance(), "HomePageFragment")
             .addToBackStack(null)
             .commit()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

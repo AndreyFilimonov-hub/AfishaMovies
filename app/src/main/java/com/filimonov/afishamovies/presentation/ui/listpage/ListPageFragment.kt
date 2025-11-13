@@ -49,7 +49,6 @@ class ListPageFragment : Fragment() {
     }
 
     private var _binding: FragmentListPageBinding? = null
-
     private val binding: FragmentListPageBinding
         get() = _binding ?: throw RuntimeException("FragmentListPageBinding == null")
 
@@ -116,6 +115,11 @@ class ListPageFragment : Fragment() {
         setToolbar()
         setupRecyclerView()
         observeViewModel()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setupRecyclerView() {
@@ -218,20 +222,5 @@ class ListPageFragment : Fragment() {
             throw RuntimeException("Param mode is empty")
         }
         mode = ListPageMode.valueOf(modeBundle)
-    }
-
-    companion object {
-        private const val UNDEFINED_ID = -1
-        private const val UNDEFINED_TITLE = -1
-
-        @JvmStatic
-        fun newInstance(id: Int, titleResId: Int, mode: ListPageMode) =
-            ListPageFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(CATEGORY_OR_MOVIE_ID, id)
-                    putInt(TITLE, titleResId)
-                    putString(MODE, mode.name)
-                }
-            }
     }
 }

@@ -47,7 +47,6 @@ class GalleryFragment : Fragment() {
     }
 
     private var _binding: FragmentGalleryBinding? = null
-
     private val binding: FragmentGalleryBinding
         get() = _binding ?: throw RuntimeException("FragmentGalleryBinding == null")
 
@@ -112,6 +111,11 @@ class GalleryFragment : Fragment() {
         observeViewModel()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
@@ -157,7 +161,6 @@ class GalleryFragment : Fragment() {
 
                         is GalleryState.Error -> {
                             imageAdapter.submitList(state.images)
-                            binding.rvGallery.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -256,18 +259,5 @@ class GalleryFragment : Fragment() {
             throw RuntimeException("Param movieId is wrong")
         }
         movieId = movieIdBundle
-    }
-
-    companion object {
-
-        private const val UNDEFINED_ID = -1
-
-        @JvmStatic
-        fun newInstance(movieId: Int) =
-            GalleryFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(MOVIE_ID, movieId)
-                }
-            }
     }
 }

@@ -44,8 +44,58 @@ private const val IS_DONT_WATCH_KEY = "is_dont_watch_key"
 
 class SearchSettingsFragment : Fragment() {
 
-    private var _binding: FragmentSearchSettingsBinding? = null
+    companion object {
+        const val FILTERS_KEY = "filters_key"
 
+        const val SHOW_NAME_KEY = "show_name_key"
+
+        const val COUNTRY_NAME_KEY = "country_name_key"
+
+        const val GENRE_NAME_KEY = "genre_name_key"
+
+        const val YEAR_FROM_NAME_KEY = "year_from_name_key"
+        const val YEAR_TO_NAME_KEY = "year_to_name_key"
+
+        const val RATING_FROM_NAME_KEY = "rating_from_name_key"
+        const val RATING_TO_NAME_KEY = "rating_to_name_key"
+
+        const val SORT_NAME_KEY = "sort_name_key"
+
+        const val IS_DONT_WATCHED_NAME_KEY = "is_dont_watched_name_key"
+
+        private const val YEAR_FROM_DEFAULT = Int.MIN_VALUE
+        private const val YEAR_TO_DEFAULT = Int.MAX_VALUE
+        private const val RATING_FROM_DEFAULT = 1f
+        private const val RATING_TO_DEFAULT = 10f
+
+        @JvmStatic
+        fun newInstance(
+            showType: String?,
+            country: String?,
+            genre: String?,
+            yearFrom: Int?,
+            yearTo: Int?,
+            ratingFrom: Float?,
+            ratingTo: Float?,
+            sortType: String?,
+            isDontWatched: Boolean
+        ) =
+            SearchSettingsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(SHOW_TYPE_KEY, showType)
+                    putString(COUNTRY_KEY, country)
+                    putString(GENRE_KEY, genre)
+                    putInt(YEAR_FROM_KEY, yearFrom ?: YEAR_FROM_DEFAULT)
+                    putInt(YEAR_TO_KEY, yearTo ?: YEAR_TO_DEFAULT)
+                    putFloat(RATING_FROM_KEY, ratingFrom ?: RATING_FROM_DEFAULT)
+                    putFloat(RATING_TO_KEY, ratingTo ?: RATING_TO_DEFAULT)
+                    putString(SORT_TYPE_KEY, sortType)
+                    putBoolean(IS_DONT_WATCH_KEY, isDontWatched)
+                }
+            }
+    }
+
+    private var _binding: FragmentSearchSettingsBinding? = null
     private val binding: FragmentSearchSettingsBinding
         get() = _binding ?: throw RuntimeException("FragmentSearchSettingsBinding == null")
 
@@ -120,6 +170,11 @@ class SearchSettingsFragment : Fragment() {
         setupMaterialButtonClickListeners()
         setupButtonClickListeners()
         setupLinearLayoutsClickListeners()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun observeViewModel() {
@@ -406,56 +461,5 @@ class SearchSettingsFragment : Fragment() {
             sortType = SortType.valueOf(it.getString(SORT_TYPE_KEY, SortType.DATE.name))
             isDontWatched = it.getBoolean(IS_DONT_WATCH_KEY)
         }
-    }
-
-    companion object {
-        const val FILTERS_KEY = "filters_key"
-
-        const val SHOW_NAME_KEY = "show_name_key"
-
-        const val COUNTRY_NAME_KEY = "country_name_key"
-
-        const val GENRE_NAME_KEY = "genre_name_key"
-
-        const val YEAR_FROM_NAME_KEY = "year_from_name_key"
-        const val YEAR_TO_NAME_KEY = "year_to_name_key"
-
-        const val RATING_FROM_NAME_KEY = "rating_from_name_key"
-        const val RATING_TO_NAME_KEY = "rating_to_name_key"
-
-        const val SORT_NAME_KEY = "sort_name_key"
-
-        const val IS_DONT_WATCHED_NAME_KEY = "is_dont_watched_name_key"
-
-        private const val YEAR_FROM_DEFAULT = Int.MIN_VALUE
-        private const val YEAR_TO_DEFAULT = Int.MAX_VALUE
-        private const val RATING_FROM_DEFAULT = 1f
-        private const val RATING_TO_DEFAULT = 10f
-
-        @JvmStatic
-        fun newInstance(
-            showType: String?,
-            country: String?,
-            genre: String?,
-            yearFrom: Int?,
-            yearTo: Int?,
-            ratingFrom: Float?,
-            ratingTo: Float?,
-            sortType: String?,
-            isDontWatched: Boolean
-        ) =
-            SearchSettingsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(SHOW_TYPE_KEY, showType)
-                    putString(COUNTRY_KEY, country)
-                    putString(GENRE_KEY, genre)
-                    putInt(YEAR_FROM_KEY, yearFrom ?: YEAR_FROM_DEFAULT)
-                    putInt(YEAR_TO_KEY, yearTo ?: YEAR_TO_DEFAULT)
-                    putFloat(RATING_FROM_KEY, ratingFrom ?: RATING_FROM_DEFAULT)
-                    putFloat(RATING_TO_KEY, ratingTo ?: RATING_TO_DEFAULT)
-                    putString(SORT_TYPE_KEY, sortType)
-                    putBoolean(IS_DONT_WATCH_KEY, isDontWatched)
-                }
-            }
     }
 }

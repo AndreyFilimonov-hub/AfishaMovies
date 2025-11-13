@@ -38,9 +38,10 @@ class SearchPageFragment : Fragment() {
     }
 
     private var _binding: FragmentSearchPageBinding? = null
-
     private val binding: FragmentSearchPageBinding
         get() = _binding ?: throw RuntimeException("FragmentSearchPageBinding == null")
+
+    private var shortAnimationDuration: Long = 0
 
     private var showType: ShowType = ShowType.ALL
     private var sortType: SortType = SortType.DATE
@@ -67,14 +68,8 @@ class SearchPageFragment : Fragment() {
 
     private val searchItemAdapter = SearchItemAdapter(
         onMediaBannerClick = {
-            Log.d("AAA", it.toString()) // TODO: remove
-            requireActivity().supportFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .add(
-                    R.id.fragment_container,
-                    FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
-                )
-                .commit()
+            val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
+            (requireActivity() as MainActivity).openFragment(filmPageFragment)
         },
         onRetryButtonClick = {
             viewModel.sendRequest(binding.sbMain.text.toString().trim())
@@ -116,6 +111,11 @@ class SearchPageFragment : Fragment() {
         setupSearchBar()
         setupRecyclerView()
         observeViewModel()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun observeViewModel() {
@@ -199,24 +199,20 @@ class SearchPageFragment : Fragment() {
 
     private fun setupSearchBar() {
         binding.ivFilter.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .add(
-                    R.id.fragment_container,
-                    SearchSettingsFragment.newInstance(
-                        viewModel.showType.name,
-                        viewModel.country,
-                        viewModel.genre,
-                        viewModel.yearFrom,
-                        viewModel.yearTo,
-                        viewModel.ratingFrom,
-                        viewModel.ratingTo,
-                        viewModel.sortType.name,
-                        viewModel.isDontWatched
-                    )
-                )
-                .addToBackStack(null)
-                .commit()
+            val searchSettingsFragment = SearchSettingsFragment.newInstance(
+                viewModel.showType.name,
+                viewModel.country,
+                viewModel.genre,
+                viewModel.yearFrom,
+                viewModel.yearTo,
+                viewModel.ratingFrom,
+                viewModel.ratingTo,
+                viewModel.sortType.name,
+                viewModel.isDontWatched
+            )
+            (requireActivity() as MainActivity).openFragment(searchSettingsFragment)
         }
+
         binding.sbMain.doOnTextChanged { query, _, _, _ ->
             viewModel.sendRequest(query.toString())
         }
@@ -291,10 +287,6 @@ class SearchPageFragment : Fragment() {
         )
 
         viewModel.updateList()
-
-        binding.rvReplySearch.doOnNextLayout {
-            binding.rvReplySearch.scrollToPosition(0)
-        }
     }
 
     private fun setPaddingRootView() {
@@ -308,11 +300,5 @@ class SearchPageFragment : Fragment() {
             layoutParams.bottomMargin = bottomHeight
             rootView.layoutParams = layoutParams
         }
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() = SearchPageFragment()
     }
 }

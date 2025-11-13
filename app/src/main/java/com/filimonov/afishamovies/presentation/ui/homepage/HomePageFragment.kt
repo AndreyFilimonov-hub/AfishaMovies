@@ -111,6 +111,11 @@ class HomePageFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun setPaddingRootView() {
         val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bNav)
         val rootView = binding.root
@@ -171,18 +176,6 @@ class HomePageFragment : Fragment() {
             .translationY(0f)
             .setDuration(1000)
             .start()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() =
-            HomePageFragment()
     }
 
     fun scrollToTop() {
