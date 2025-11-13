@@ -20,8 +20,10 @@ import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentGalleryBinding
 import com.filimonov.afishamovies.domain.enums.TypeImage
+import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.ui.gallery.imageadapter.ImageAdapter
 import com.filimonov.afishamovies.presentation.ui.gallery.imageadapter.ImageSpaceDecoration
+import com.filimonov.afishamovies.presentation.utils.ViewAnimator
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -227,7 +229,7 @@ class GalleryFragment : Fragment() {
 
     private fun setClickListenerOnBack() {
         binding.ivBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).closeFragment(this)
         }
     }
 

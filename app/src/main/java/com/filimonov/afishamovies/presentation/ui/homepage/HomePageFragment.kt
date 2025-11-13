@@ -22,6 +22,7 @@ import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.homepage.sectionadapter.SectionAdapter
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageMode
+import com.filimonov.afishamovies.presentation.utils.ViewAnimator
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -55,22 +56,13 @@ class HomePageFragment : Fragment() {
 
     private val sectionAdapter = SectionAdapter(
         onShowAllClick = {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .add(
-                    R.id.fragment_container,
-                    ListPageFragment.newInstance(it.categoryId, it.title, ListPageMode.MEDIA)
-                )
-                .commit()
+            val listPageFragment =
+                ListPageFragment.newInstance(it.categoryId, it.title, ListPageMode.MEDIA)
+            (requireActivity() as MainActivity).openFragment(listPageFragment)
         },
         onMediaClick = {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .add(
-                    R.id.fragment_container,
-                    FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
-                )
-                .commit()
+            val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
+            (requireActivity() as MainActivity).openFragment(filmPageFragment)
         }
     )
 
@@ -81,7 +73,7 @@ class HomePageFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         component.inject(this)
-        enterTransition = Slide(Gravity.END).apply {
+        enterTransition = Slide(Gravity.START).apply {
             duration = 500L
             interpolator = AccelerateInterpolator()
             propagation = null

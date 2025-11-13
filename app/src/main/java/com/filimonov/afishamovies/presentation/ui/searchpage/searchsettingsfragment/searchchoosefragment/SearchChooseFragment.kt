@@ -16,6 +16,7 @@ import androidx.transition.Fade
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchChooseBinding
+import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -120,7 +121,7 @@ class SearchChooseFragment : Fragment() {
 
     private fun setupBackButton() {
         binding.ivBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).closeFragment(this)
         }
     }
 

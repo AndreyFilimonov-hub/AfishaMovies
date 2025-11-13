@@ -95,8 +95,24 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
 
-                else -> false
-            }
+        transaction.commitAllowingStateLoss()
+
+        current.retainAll(listOf(rootFragment))
+    }
+
+    fun openFragment(fragment: Fragment) {
+        currentStack.add(fragment)
+        supportFragmentManager.beginTransaction()
+            .hide(currentStack[currentStack.size - 2])
+            .addToBackStack(null)
+            .add(R.id.fragment_container, fragment)
+            .commit()
+    }
+
+    fun closeFragment(fragment: Fragment) {
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.addOnBackStackChangedListener {
+            currentStack.remove(fragment)
         }
     }
 

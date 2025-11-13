@@ -18,6 +18,7 @@ import androidx.transition.TransitionManager
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentListPageBinding
+import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.listpage.mediabannergridadapter.MediaBannerGridAdapter
@@ -72,13 +73,8 @@ class ListPageFragment : Fragment() {
     private val mediaBannerGridAdapter by lazy {
         MediaBannerGridAdapter(
             onMediaBannerClick = {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .addToBackStack(null)
-                    .add(
-                        R.id.fragment_container,
-                        FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
-                    )
-                    .commit()
+                val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
+                (requireActivity() as MainActivity).openFragment(filmPageFragment)
             },
             onPersonBannerClick = {
                 // TODO: launch ActorPageFragment
@@ -178,7 +174,7 @@ class ListPageFragment : Fragment() {
 
     private fun setToolbar() {
         binding.ivBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).closeFragment(this)
         }
         binding.tvTitle.text = requireContext().resources.getText(titleId)
     }

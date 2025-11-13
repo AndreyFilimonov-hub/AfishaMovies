@@ -240,34 +240,22 @@ class SearchSettingsFragment : Fragment() {
             viewModel.updateIsDontWatched(!viewModel.isDontWatched)
         }
         binding.llCountry.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .add(
-                    R.id.fragment_container, SearchChooseFragment.newInstance(
-                        viewModel.country,
-                        FilterMode.COUNTRY.name
-                    )
-                )
-                .commit()
+            val searchChooseCountryFragment = SearchChooseFragment.newInstance(
+                viewModel.country,
+                FilterMode.COUNTRY.name
+            )
+            (requireActivity() as MainActivity).openFragment(searchChooseCountryFragment)
         }
         binding.llGenre.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .add(
-                    R.id.fragment_container, SearchChooseFragment.newInstance(
-                        viewModel.genre,
-                        FilterMode.GENRE.name
-                    )
-                )
-                .commit()
+            val searchChooseGenreFragment = SearchChooseFragment.newInstance(
+                viewModel.genre,
+                FilterMode.GENRE.name
+            )
+            (requireActivity() as MainActivity).openFragment(searchChooseGenreFragment)
         }
         binding.llPeriod.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .add(
-                    R.id.fragment_container, SearchChooseDataFragment.newInstance(yearFrom, yearTo)
-                )
-                .commit()
+            val searchChooseDataFragment = SearchChooseDataFragment.newInstance(yearFrom, yearTo)
+            (requireActivity() as MainActivity).openFragment(searchChooseDataFragment)
         }
     }
 
@@ -371,7 +359,7 @@ class SearchSettingsFragment : Fragment() {
 
     private fun setupBackButton() {
         binding.ivBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).closeFragment(this)
         }
     }
 

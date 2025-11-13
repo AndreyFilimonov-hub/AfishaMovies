@@ -149,7 +149,7 @@ class SearchChooseDataFragment : Fragment() {
 
     private fun setupBackButton() {
         binding.ivBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).closeFragment(this)
         }
     }
 

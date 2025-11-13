@@ -20,6 +20,7 @@ import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentFilmPageBinding
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
 import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
+import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.ui.filmpage.imagepreviewadapter.ImagePreviewAdapter
 import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.ActorsItemDecoration
 import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.PersonAdapter
@@ -90,10 +91,8 @@ class FilmPageFragment : Fragment() {
 
     private val similarMovieAdapter = SimilarMovieAdapter(
         onClick = {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container, newInstance(it.id, FilmPageMode.DEFAULT.name))
-                .addToBackStack(null)
-                .commit()
+            val filmPageFragment = newInstance(it.id, FilmPageMode.DEFAULT.name)
+            (requireActivity() as MainActivity).openFragment(filmPageFragment)
         }
     )
 
@@ -188,17 +187,12 @@ class FilmPageFragment : Fragment() {
                 )
                 similarMovieAdapter.submitList(viewModel.getFirst10SimilarMovies())
                 binding.tvAllSimilarMovie.setOnClickListener {
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .add(
-                            R.id.fragment_container,
-                            ListPageFragment.newInstance(
-                                this.id,
-                                R.string.similar_movie,
-                                ListPageMode.SIMILAR_MOVIES
-                            )
-                        )
-                        .addToBackStack(null)
-                        .commit()
+                    val listPageFragment = ListPageFragment.newInstance(
+                        this.id,
+                        R.string.similar_movie,
+                        ListPageMode.SIMILAR_MOVIES
+                    )
+                    (requireActivity() as MainActivity).openFragment(listPageFragment)
                 }
             } else {
                 binding.tvSimilarMovie.visibility = View.GONE
@@ -229,38 +223,26 @@ class FilmPageFragment : Fragment() {
             workersAdapter.submitList(viewModel.getFirst10Workers())
 
             binding.tvAllPersonInFilm.setOnClickListener {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .add(
-                        R.id.fragment_container,
-                        ListPageFragment.newInstance(
-                            this.id,
-                            R.string.person_in_film,
-                            ListPageMode.ACTOR
-                        )
-                    )
-                    .addToBackStack(null)
-                    .commit()
+                val listPageFragment = ListPageFragment.newInstance(
+                    this.id,
+                    R.string.person_in_film,
+                    ListPageMode.ACTOR
+                )
+                (requireActivity() as MainActivity).openFragment(listPageFragment)
             }
 
             binding.tvAllWorkersInFilm.setOnClickListener {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .add(
-                        R.id.fragment_container,
-                        ListPageFragment.newInstance(
-                            this.id,
-                            R.string.worker_in_film,
-                            ListPageMode.WORKER
-                        )
-                    )
-                    .addToBackStack(null)
-                    .commit()
+                val listPageFragment = ListPageFragment.newInstance(
+                    this.id,
+                    R.string.worker_in_film,
+                    ListPageMode.WORKER
+                )
+                (requireActivity() as MainActivity).openFragment(listPageFragment)
             }
 
             binding.tvAllGallery.setOnClickListener {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .add(R.id.fragment_container, GalleryFragment.newInstance(this.id))
-                    .addToBackStack(null)
-                    .commit()
+                val galleryFragment = GalleryFragment.newInstance(this.id)
+                (requireActivity() as MainActivity).openFragment(galleryFragment)
             }
 
             binding.ivRepost.setOnClickListener {
@@ -280,7 +262,7 @@ class FilmPageFragment : Fragment() {
     private fun setClickListenerOnBack() {
         if (FilmPageMode.valueOf(mode) == FilmPageMode.DEFAULT) {
             binding.ivBack.setOnClickListener {
-                requireActivity().supportFragmentManager.popBackStack()
+                (requireActivity() as MainActivity).closeFragment(this)
             }
         } else {
             binding.ivBack.visibility = View.INVISIBLE
@@ -289,7 +271,7 @@ class FilmPageFragment : Fragment() {
                 object : OnBackPressedCallback(true) {
                     override fun handleOnBackPressed() {
                         if (parentFragmentManager.backStackEntryCount > 1) {
-                            requireActivity().supportFragmentManager.popBackStack()
+                            (requireActivity() as MainActivity).closeFragment(this@FilmPageFragment)
                         } else {
                             requireActivity().finish()
                         }
