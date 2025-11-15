@@ -113,14 +113,29 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToRootOfCurrentTab() {
+        if (currentStack.size < 2) return
+
         val transaction = supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.no_anim,
+                R.anim.slide_out_to_right,
+                R.anim.no_anim,
+                R.anim.slide_out_to_right
+            )
 
         val current = currentStack
-        val rootFragment = current.firstOrNull()
 
-        current.drop(1).forEach { fragment -> transaction.remove(fragment) }
+        val rootFragment = current.first()
+        val lastFragment = current.last()
 
-        rootFragment?.let { transaction.show(it) }
+        current.forEach { fragment ->
+            if (fragment != current.first() && fragment != current.last()) {
+                transaction.remove(fragment)
+            }
+        }
+
+        transaction.show(rootFragment)
+        transaction.hide(lastFragment)
 
         transaction.commitAllowingStateLoss()
 
