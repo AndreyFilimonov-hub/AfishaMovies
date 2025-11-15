@@ -16,6 +16,12 @@ import com.filimonov.afishamovies.presentation.ui.homepage.HomePageFragment
 
 class OnBoardFragment : Fragment() {
 
+    companion object {
+
+        @JvmStatic
+        fun newInstance() = OnBoardFragment()
+    }
+
     private var _binding: FragmentOnBoardBinding? = null
     private val binding: FragmentOnBoardBinding
         get() = _binding ?: throw RuntimeException("FragmentOnBoardBinding == null")
