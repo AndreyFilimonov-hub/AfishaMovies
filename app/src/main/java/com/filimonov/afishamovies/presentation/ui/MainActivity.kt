@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ActivityMainBinding
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
@@ -21,7 +22,6 @@ class MainActivity : AppCompatActivity() {
 
         private const val IS_FIRST_LAUNCH = "is_first_launch"
         private const val APP_PREFS = "app_prefs"
-        private const val HOME_PAGE_TAG = "HomePageFragment"
     }
 
     private val homeStack = mutableListOf<Fragment>()
@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        val transaction = supportFragmentManager.beginTransaction()
+        val transaction = getFragmentTransactionWithSwitchTabAnimation(stack)
         currentStack.forEach { transaction.hide(it) }
 
         val fragmentToShow = stack.last()
@@ -109,6 +109,54 @@ class MainActivity : AppCompatActivity() {
             in searchStack -> navigateToRootOfCurrentTab()
 
             in profileStack -> navigateToRootOfCurrentTab()
+        }
+    }
+
+    private fun getFragmentTransactionWithSwitchTabAnimation(stack: MutableList<Fragment>): FragmentTransaction {
+        return supportFragmentManager.beginTransaction().apply {
+            when {
+                currentStack == homeStack && stack == searchStack -> this.setCustomAnimations(
+                    R.anim.slide_in_from_right,
+                    R.anim.slide_out_to_left,
+                    0,
+                    0
+                )
+
+                currentStack == homeStack && stack == profileStack -> this.setCustomAnimations(
+                    R.anim.slide_in_from_right,
+                    R.anim.slide_out_to_left,
+                    0,
+                    0
+                )
+
+                currentStack == searchStack && stack == homeStack -> this.setCustomAnimations(
+                    R.anim.slide_in_from_left,
+                    R.anim.slide_out_to_right,
+                    0,
+                    0
+                )
+
+                currentStack == searchStack && stack == profileStack -> this.setCustomAnimations(
+                    R.anim.slide_in_from_right,
+                    R.anim.slide_out_to_left,
+                    0,
+                    0
+                )
+
+                currentStack == profileStack && stack == searchStack -> this.setCustomAnimations(
+                    R.anim.slide_in_from_left,
+                    R.anim.slide_out_to_right,
+                    0,
+                    0
+                )
+
+                currentStack == profileStack && stack == homeStack -> this.setCustomAnimations(
+                    R.anim.slide_in_from_left,
+                    R.anim.slide_out_to_right,
+                    0,
+                    0
+                )
+            }
         }
     }
 
@@ -198,7 +246,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun launchOnBoardFragment() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, OnBoardFragment())
+            .replace(R.id.fragment_container, OnBoardFragment.newInstance())
             .commit()
     }
 
@@ -206,7 +254,7 @@ class MainActivity : AppCompatActivity() {
         val homePageFragment = HomePageFragment.newInstance()
         homeStack.add(homePageFragment)
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, homePageFragment, HOME_PAGE_TAG)
+            .replace(R.id.fragment_container, homePageFragment)
             .commit()
     }
 }
