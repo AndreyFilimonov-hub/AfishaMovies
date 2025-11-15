@@ -130,9 +130,15 @@ class MainActivity : AppCompatActivity() {
     fun openFragment(fragment: Fragment) {
         currentStack.add(fragment)
         supportFragmentManager.beginTransaction()
-            .hide(currentStack[currentStack.size - 2])
-            .addToBackStack(null)
+            .setCustomAnimations(
+                R.anim.slide_in_from_right,
+                R.anim.no_anim,
+                R.anim.no_anim,
+                R.anim.slide_out_to_right
+            )
             .add(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .hide(currentStack[currentStack.size - 2])
             .commit()
     }
 
