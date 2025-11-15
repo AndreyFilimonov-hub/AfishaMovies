@@ -1,13 +1,10 @@
 package com.filimonov.afishamovies.presentation.ui.onboard
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.Fragment
-import androidx.transition.Slide
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentOnBoardBinding
 import com.filimonov.afishamovies.presentation.ui.MainActivity
@@ -25,16 +22,6 @@ class OnBoardFragment : Fragment() {
     private var _binding: FragmentOnBoardBinding? = null
     private val binding: FragmentOnBoardBinding
         get() = _binding ?: throw RuntimeException("FragmentOnBoardBinding == null")
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        exitTransition = Slide(Gravity.START).apply {
-            duration = 500L
-            interpolator = AccelerateInterpolator()
-            propagation = null
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,6 +66,12 @@ class OnBoardFragment : Fragment() {
 
     private fun launchHomePageFragment() {
         requireActivity().supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_from_right,
+                R.anim.slide_out_to_left,
+                R.anim.slide_in_from_right,
+                R.anim.slide_out_to_left
+            )
             .replace(R.id.fragment_container, HomePageFragment.newInstance(), "HomePageFragment")
             .addToBackStack(null)
             .commit()
