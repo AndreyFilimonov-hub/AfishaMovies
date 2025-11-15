@@ -19,8 +19,29 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchChooseDataFragment : Fragment() {
-    private var _binding: FragmentSearchChooseDataBinding? = null
 
+    companion object {
+
+        const val CHOOSE_YEAR_MODE_KEY = "choose_year_mode_key"
+        const val CHOOSE_YEAR_FROM_NAME_KEY = "choose_year_from_name_key"
+        const val CHOOSE_YEAR_TO_NAME_KEY = "choose_year_to_name_key"
+
+        private const val SELECTED_YEAR_FROM_KEY = "selected_year_from"
+        private const val SELECTED_YEAR_TO_KEY = "selected_year_to"
+        private const val UNDEFINED_YEAR_FROM = Int.MIN_VALUE
+        private const val UNDEFINED_YEAR_TO = Int.MAX_VALUE
+
+        @JvmStatic
+        fun newInstance(selectedYearFrom: Int?, selectedYearTo: Int?) =
+            SearchChooseDataFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(SELECTED_YEAR_FROM_KEY, selectedYearFrom ?: UNDEFINED_YEAR_FROM)
+                    putInt(SELECTED_YEAR_TO_KEY, selectedYearTo ?: UNDEFINED_YEAR_TO)
+                }
+            }
+    }
+
+    private var _binding: FragmentSearchChooseDataBinding? = null
     private val binding: FragmentSearchChooseDataBinding
         get() = _binding ?: throw RuntimeException("FragmentSearchChooseDataBinding == null")
 
@@ -92,6 +113,11 @@ class SearchChooseDataFragment : Fragment() {
         observeViewModel()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun setupRecyclerView() {
         binding.rvFrom.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.rvFrom.adapter = adapterFrom
@@ -149,7 +175,7 @@ class SearchChooseDataFragment : Fragment() {
 
     private fun setupBackButton() {
         binding.ivBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).closeFragment(this)
         }
     }
 
@@ -180,26 +206,5 @@ class SearchChooseDataFragment : Fragment() {
                 selectedYearToBundle
             }
         }
-    }
-
-    companion object {
-
-        const val CHOOSE_YEAR_MODE_KEY = "choose_year_mode_key"
-        const val CHOOSE_YEAR_FROM_NAME_KEY = "choose_year_from_name_key"
-        const val CHOOSE_YEAR_TO_NAME_KEY = "choose_year_to_name_key"
-
-        private const val SELECTED_YEAR_FROM_KEY = "selected_year_from"
-        private const val SELECTED_YEAR_TO_KEY = "selected_year_to"
-        private const val UNDEFINED_YEAR_FROM = Int.MIN_VALUE
-        private const val UNDEFINED_YEAR_TO = Int.MAX_VALUE
-
-        @JvmStatic
-        fun newInstance(selectedYearFrom: Int?, selectedYearTo: Int?) =
-            SearchChooseDataFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(SELECTED_YEAR_FROM_KEY, selectedYearFrom ?: UNDEFINED_YEAR_FROM)
-                    putInt(SELECTED_YEAR_TO_KEY, selectedYearTo ?: UNDEFINED_YEAR_TO)
-                }
-            }
     }
 }

@@ -6,12 +6,15 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.ActivityMainBinding
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.homepage.HomePageFragment
 import com.filimonov.afishamovies.presentation.ui.onboard.OnBoardFragment
+import com.filimonov.afishamovies.presentation.ui.searchpage.SearchPageFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,8 +22,13 @@ class MainActivity : AppCompatActivity() {
 
         private const val IS_FIRST_LAUNCH = "is_first_launch"
         private const val APP_PREFS = "app_prefs"
-        private const val HOME_PAGE_TAG = "HomePageFragment"
     }
+
+    private val homeStack = mutableListOf<Fragment>()
+    private val searchStack = mutableListOf<Fragment>()
+    private val profileStack = mutableListOf<Fragment>()
+
+    private var currentStack = homeStack
 
     val binging: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -40,6 +48,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        initFragments()
+
         setOnBottomNavigationBarItemsClickListener()
     }
 
@@ -51,52 +61,154 @@ class MainActivity : AppCompatActivity() {
     private fun setOnBottomNavigationBarItemsClickListener() {
         binging.bNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.item_home -> {
-                    val fragmentManager = supportFragmentManager
-                    val currentFragment = fragmentManager.findFragmentById(R.id.fragment_container)
+                R.id.item_home -> switchTab(homeStack)
 
-                    if (currentFragment !is HomePageFragment) {
-                        val fragments = fragmentManager.fragments
-                        val homePageFragments = fragments.filterIsInstance<HomePageFragment>()
-                        val exists = homePageFragments.isEmpty()
-                        if (exists) {
-                            launchHomePageFragment()
-                            return@setOnItemSelectedListener true
-                        }
-                        if (fragments.isNotEmpty()) {
-                            val topFragment = fragments.last()
-                            val homePageFragment =
-                                fragmentManager.findFragmentByTag(HOME_PAGE_TAG)
-                            val transaction = fragmentManager.beginTransaction()
+                R.id.item_search -> switchTab(searchStack)
 
-                            fragments.forEach { fragment ->
-                                if (fragment != topFragment && fragment != homePageFragment) {
-                                    transaction.remove(fragment)
-                                }
-                            }
-
-                            transaction.remove(topFragment)
-                            transaction.commit()
-                        }
-                    } else {
-                        currentFragment.scrollToTop()
-                    }
-
-                    true
-                }
-
-                R.id.item_search -> {
-                    // TODO launch: SearchFragment
-                    true
-                }
-
-                R.id.item_profile -> {
-                    // TODO launch: ProfileFragment
-                    true
-                }
-
-                else -> false
+                R.id.item_profile -> switchTab(profileStack)
             }
+            true
+        }
+    }
+
+    private fun initFragments() {
+        searchStack.add(SearchPageFragment.newInstance())
+        // TODO: profileFragment
+    }
+
+    private fun switchTab(stack: MutableList<Fragment>) {
+        if (stack == currentStack) {
+            onRetryClick(currentStack.last())
+            return
+        }
+
+        val transaction = getFragmentTransactionWithSwitchTabAnimation(stack)
+        currentStack.forEach { transaction.hide(it) }
+
+        val fragmentToShow = stack.last()
+        if (!fragmentToShow.isAdded) {
+            transaction.add(R.id.fragment_container, fragmentToShow)
+        } else {
+            transaction.show(stack.last())
+        }
+
+        transaction.commit()
+        currentStack = stack
+    }
+
+    private fun onRetryClick(lastOpenFragment: Fragment) {
+        when (lastOpenFragment) {
+            in homeStack -> {
+                if (lastOpenFragment is HomePageFragment) {
+                    lastOpenFragment.scrollToTop()
+                } else {
+                    navigateToRootOfCurrentTab()
+                }
+            }
+
+            in searchStack -> navigateToRootOfCurrentTab()
+
+            in profileStack -> navigateToRootOfCurrentTab()
+        }
+    }
+
+    private fun getFragmentTransactionWithSwitchTabAnimation(stack: MutableList<Fragment>): FragmentTransaction {
+        return supportFragmentManager.beginTransaction().apply {
+            when {
+                currentStack == homeStack && stack == searchStack -> this.setCustomAnimations(
+                    R.anim.slide_in_from_right,
+                    R.anim.slide_out_to_left,
+                    0,
+                    0
+                )
+
+                currentStack == homeStack && stack == profileStack -> this.setCustomAnimations(
+                    R.anim.slide_in_from_right,
+                    R.anim.slide_out_to_left,
+                    0,
+                    0
+                )
+
+                currentStack == searchStack && stack == homeStack -> this.setCustomAnimations(
+                    R.anim.slide_in_from_left,
+                    R.anim.slide_out_to_right,
+                    0,
+                    0
+                )
+
+                currentStack == searchStack && stack == profileStack -> this.setCustomAnimations(
+                    R.anim.slide_in_from_right,
+                    R.anim.slide_out_to_left,
+                    0,
+                    0
+                )
+
+                currentStack == profileStack && stack == searchStack -> this.setCustomAnimations(
+                    R.anim.slide_in_from_left,
+                    R.anim.slide_out_to_right,
+                    0,
+                    0
+                )
+
+                currentStack == profileStack && stack == homeStack -> this.setCustomAnimations(
+                    R.anim.slide_in_from_left,
+                    R.anim.slide_out_to_right,
+                    0,
+                    0
+                )
+            }
+        }
+    }
+
+    private fun navigateToRootOfCurrentTab() {
+        if (currentStack.size < 2) return
+
+        val transaction = supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.no_anim,
+                R.anim.slide_out_to_right,
+                R.anim.no_anim,
+                R.anim.slide_out_to_right
+            )
+
+        val current = currentStack
+
+        val rootFragment = current.first()
+        val lastFragment = current.last()
+
+        current.forEach { fragment ->
+            if (fragment != current.first() && fragment != current.last()) {
+                transaction.remove(fragment)
+            }
+        }
+
+        transaction.show(rootFragment)
+        transaction.hide(lastFragment)
+
+        transaction.commitAllowingStateLoss()
+
+        current.retainAll(listOf(rootFragment))
+    }
+
+    fun openFragment(fragment: Fragment) {
+        currentStack.add(fragment)
+        supportFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_from_right,
+                R.anim.no_anim,
+                R.anim.no_anim,
+                R.anim.slide_out_to_right
+            )
+            .add(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .hide(currentStack[currentStack.size - 2])
+            .commit()
+    }
+
+    fun closeFragment(fragment: Fragment) {
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.addOnBackStackChangedListener {
+            currentStack.remove(fragment)
         }
     }
 
@@ -134,13 +246,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun launchOnBoardFragment() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, OnBoardFragment())
+            .replace(R.id.fragment_container, OnBoardFragment.newInstance())
             .commit()
     }
 
     private fun launchHomePageFragment() {
+        val homePageFragment = HomePageFragment.newInstance()
+        homeStack.add(homePageFragment)
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, HomePageFragment.newInstance(), HOME_PAGE_TAG)
+            .replace(R.id.fragment_container, homePageFragment)
             .commit()
     }
 }
