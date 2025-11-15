@@ -5,18 +5,15 @@ import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.transition.Slide
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchSettingsBinding
@@ -140,16 +137,6 @@ class SearchSettingsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         parseArgs()
         component.inject(this)
-        enterTransition = Slide(Gravity.END).apply {
-            duration = 500L
-            interpolator = AccelerateInterpolator()
-            propagation = null
-        }
-        exitTransition = Slide(Gravity.START).apply {
-            duration = 500L
-            interpolator = AccelerateInterpolator()
-            propagation = null
-        }
     }
 
     override fun onCreateView(

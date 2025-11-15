@@ -1,11 +1,9 @@
 package com.filimonov.afishamovies.presentation.ui.searchpage
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateInterpolator
 import androidx.core.view.doOnNextLayout
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -14,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.transition.Slide
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchPageBinding
@@ -81,16 +78,6 @@ class SearchPageFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         component.inject(this)
-        enterTransition = Slide(Gravity.END).apply {
-            duration = 500L
-            interpolator = AccelerateInterpolator()
-            propagation = null
-        }
-        exitTransition = Slide(Gravity.END).apply {
-            duration = 500L
-            interpolator = AccelerateInterpolator()
-            propagation = null
-        }
 
         shortAnimationDuration =
             resources.getInteger(android.R.integer.config_shortAnimTime).toLong()

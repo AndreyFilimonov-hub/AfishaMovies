@@ -1,17 +1,14 @@
 package com.filimonov.afishamovies.presentation.ui.homepage
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.transition.Slide
 import androidx.transition.TransitionManager
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
@@ -73,16 +70,6 @@ class HomePageFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         component.inject(this)
-        enterTransition = Slide(Gravity.START).apply {
-            duration = 500L
-            interpolator = AccelerateInterpolator()
-            propagation = null
-        }
-        exitTransition = Slide(Gravity.START).apply {
-            duration = 500L
-            interpolator = AccelerateInterpolator()
-            propagation = null
-        }
 
         (requireActivity() as? MainActivity)?.setFirstLaunchShown()
 
