@@ -138,8 +138,6 @@ class HomePageFragment : Fragment() {
                         }
 
                         is HomePageState.Success -> {
-                            onBottomNav()
-
                             with(viewAnimator) {
                                 setupVisibilityGone(binding.loading, shortAnimationDuration)
                                 setupVisibilityVisible(binding.success, shortAnimationDuration)
@@ -151,18 +149,6 @@ class HomePageFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun onBottomNav() {
-        val bNav = (requireActivity() as MainActivity).binging.bNav
-        bNav.apply {
-            visibility = View.VISIBLE
-            translationY = height.toFloat()
-        }
-            .animate()
-            .translationY(0f)
-            .setDuration(1000)
-            .start()
     }
 
     fun scrollToTop() {

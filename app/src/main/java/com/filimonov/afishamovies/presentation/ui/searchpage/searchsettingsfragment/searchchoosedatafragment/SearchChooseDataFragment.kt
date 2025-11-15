@@ -106,7 +106,6 @@ class SearchChooseDataFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkButtonEnable()
-        offBottomNav()
         setupBackButton()
         setupRecyclerView()
         setupClickListeners()
@@ -146,7 +145,7 @@ class SearchChooseDataFragment : Fragment() {
                     putInt(CHOOSE_YEAR_TO_NAME_KEY, viewModel.selectedYearTo ?: Int.MAX_VALUE)
                 }
             )
-            parentFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).closeFragment(this)
         }
     }
 
@@ -177,17 +176,6 @@ class SearchChooseDataFragment : Fragment() {
         binding.ivBack.setOnClickListener {
             (requireActivity() as MainActivity).closeFragment(this)
         }
-    }
-
-    private fun offBottomNav() {
-        val bNav = (requireActivity() as MainActivity).binging.bNav
-        bNav.animate()
-            .translationY(bNav.height.toFloat())
-            .setDuration(1000)
-            .withEndAction {
-                bNav.visibility = View.GONE
-            }
-            .start()
     }
 
     private fun parseArgs() {

@@ -149,7 +149,6 @@ class SearchSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        offBottomNav()
         setupRangeSlider()
         setupFragmentResultListeners()
         observeViewModel()
@@ -329,7 +328,7 @@ class SearchSettingsFragment : Fragment() {
 
         binding.buttonSubmit.setOnClickListener {
             sendSettingsToPreviousFragment()
-            parentFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).closeFragment(this)
         }
     }
 
@@ -403,17 +402,6 @@ class SearchSettingsFragment : Fragment() {
         binding.ivBack.setOnClickListener {
             (requireActivity() as MainActivity).closeFragment(this)
         }
-    }
-
-    private fun offBottomNav() {
-        val bNav = (requireActivity() as MainActivity).binging.bNav
-        bNav.animate()
-            .translationY(bNav.height.toFloat())
-            .setDuration(1000)
-            .withEndAction {
-                bNav.visibility = View.GONE
-            }
-            .start()
     }
 
     private fun animateBackgroundColor(

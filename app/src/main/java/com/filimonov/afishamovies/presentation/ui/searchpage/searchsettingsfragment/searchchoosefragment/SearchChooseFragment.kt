@@ -173,7 +173,6 @@ class SearchChooseFragment : Fragment() {
                         putString(CHOOSE_COUNTRY_NAME_KEY, viewModel.chooseItem)
                     }
                 )
-                parentFragmentManager.popBackStack()
             }
 
             FilterMode.GENRE -> {
@@ -183,9 +182,9 @@ class SearchChooseFragment : Fragment() {
                         putString(CHOOSE_GENRE_NAME_KEY, viewModel.chooseItem)
                     }
                 )
-                parentFragmentManager.popBackStack()
             }
         }
+        (requireActivity() as MainActivity).closeFragment(this)
     }
 
     private fun setupButtonReset() {

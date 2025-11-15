@@ -3,6 +3,7 @@ package com.filimonov.afishamovies.presentation.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
@@ -15,6 +16,9 @@ import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.homepage.HomePageFragment
 import com.filimonov.afishamovies.presentation.ui.onboard.OnBoardFragment
 import com.filimonov.afishamovies.presentation.ui.searchpage.SearchPageFragment
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SearchSettingsFragment
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosedatafragment.SearchChooseDataFragment
+import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment.SearchChooseFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,6 +33,8 @@ class MainActivity : AppCompatActivity() {
     private val profileStack = mutableListOf<Fragment>()
 
     private var currentStack = homeStack
+
+    private var isBottomBarVisible = true
 
     val binging: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -203,12 +209,15 @@ class MainActivity : AppCompatActivity() {
             .addToBackStack(null)
             .hide(currentStack[currentStack.size - 2])
             .commit()
+
+        setVisibleBottomNavBar(fragment)
     }
 
     fun closeFragment(fragment: Fragment) {
         supportFragmentManager.popBackStack()
         supportFragmentManager.addOnBackStackChangedListener {
             currentStack.remove(fragment)
+            setVisibleBottomNavBar(currentStack.last())
         }
     }
 
@@ -242,6 +251,49 @@ class MainActivity : AppCompatActivity() {
         }
 
         return false
+    }
+
+    private fun setVisibleBottomNavBar(fragment: Fragment) {
+        if (fragment is SearchSettingsFragment) {
+            showBottomNavBar()
+        } else if (fragment is SearchChooseFragment || fragment is SearchChooseDataFragment) {
+            hideBottomNavBar()
+        }
+    }
+
+    private fun showBottomNavBar() {
+        if (isBottomBarVisible) return
+
+        val bNav = binging.bNav
+
+        bNav.apply {
+            visibility = View.VISIBLE
+            translationY = height.toFloat()
+        }
+            .animate()
+            .translationY(0f)
+            .setDuration(1000)
+            .start()
+
+        isBottomBarVisible = true
+    }
+
+    private fun hideBottomNavBar() {
+        if (!isBottomBarVisible) return
+
+        val bNav = binging.bNav
+        val height = bNav.height.toFloat()
+
+        bNav.apply {
+            visibility = View.VISIBLE
+            translationY = 0f
+        }
+            .animate()
+            .translationY(height)
+            .setDuration(1000)
+            .start()
+
+        isBottomBarVisible = false
     }
 
     private fun launchOnBoardFragment() {
