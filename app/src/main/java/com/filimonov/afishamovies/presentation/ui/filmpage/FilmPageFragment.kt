@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -251,23 +250,8 @@ class FilmPageFragment : Fragment() {
     }
 
     private fun setClickListenerOnBack() {
-        if (FilmPageMode.valueOf(mode) == FilmPageMode.DEFAULT) {
-            binding.ivBack.setOnClickListener {
-                (requireActivity() as MainActivity).closeFragment(this)
-            }
-        } else {
-            binding.ivBack.visibility = View.INVISIBLE
-            requireActivity().onBackPressedDispatcher.addCallback(
-                viewLifecycleOwner,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        if (parentFragmentManager.backStackEntryCount > 1) {
-                            (requireActivity() as MainActivity).closeFragment(this@FilmPageFragment)
-                        } else {
-                            requireActivity().finish()
-                        }
-                    }
-                })
+        binding.ivBack.setOnClickListener {
+            (requireActivity() as MainActivity).closeFragment()
         }
     }
 

@@ -165,7 +165,7 @@ class ListPageFragment : Fragment() {
 
     private fun setToolbar() {
         binding.ivBack.setOnClickListener {
-            (requireActivity() as MainActivity).closeFragment(this)
+            (requireActivity() as MainActivity).closeFragment()
         }
         binding.tvTitle.text = requireContext().resources.getText(titleId)
     }

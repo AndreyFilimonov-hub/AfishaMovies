@@ -219,7 +219,7 @@ class GalleryFragment : Fragment() {
 
     private fun setClickListenerOnBack() {
         binding.ivBack.setOnClickListener {
-            (requireActivity() as MainActivity).closeFragment(this)
+            (requireActivity() as MainActivity).closeFragment()
         }
     }
 

@@ -145,7 +145,7 @@ class SearchChooseDataFragment : Fragment() {
                     putInt(CHOOSE_YEAR_TO_NAME_KEY, viewModel.selectedYearTo ?: Int.MAX_VALUE)
                 }
             )
-            (requireActivity() as MainActivity).closeFragment(this)
+            (requireActivity() as MainActivity).closeFragment()
         }
     }
 
@@ -174,7 +174,7 @@ class SearchChooseDataFragment : Fragment() {
 
     private fun setupBackButton() {
         binding.ivBack.setOnClickListener {
-            (requireActivity() as MainActivity).closeFragment(this)
+            (requireActivity() as MainActivity).closeFragment()
         }
     }
 

@@ -328,7 +328,7 @@ class SearchSettingsFragment : Fragment() {
 
         binding.buttonSubmit.setOnClickListener {
             sendSettingsToPreviousFragment()
-            (requireActivity() as MainActivity).closeFragment(this)
+            (requireActivity() as MainActivity).closeFragment()
         }
     }
 
@@ -400,7 +400,7 @@ class SearchSettingsFragment : Fragment() {
 
     private fun setupBackButton() {
         binding.ivBack.setOnClickListener {
-            (requireActivity() as MainActivity).closeFragment(this)
+            (requireActivity() as MainActivity).closeFragment()
         }
     }
 

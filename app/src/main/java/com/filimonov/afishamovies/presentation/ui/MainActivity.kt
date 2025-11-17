@@ -213,12 +213,8 @@ class MainActivity : AppCompatActivity() {
         setVisibleBottomNavBar(fragment)
     }
 
-    fun closeFragment(fragment: Fragment) {
+    fun closeFragment() {
         supportFragmentManager.popBackStack()
-        supportFragmentManager.addOnBackStackChangedListener {
-            currentStack.remove(fragment)
-            setVisibleBottomNavBar(currentStack.last())
-        }
     }
 
     private fun isFirstLaunch(): Boolean {
@@ -294,6 +290,22 @@ class MainActivity : AppCompatActivity() {
             .start()
 
         isBottomBarVisible = false
+    }
+
+    private fun setupBackPressed() {
+        onBackPressedDispatcher.addCallback {
+            closeFragment()
+        }
+    }
+
+    private fun setupOnBackStackChangedListener() {
+        supportFragmentManager.addOnBackStackChangedListener {
+            val topFragment = supportFragmentManager.fragments.lastOrNull { it.isVisible }
+            topFragment?.let {
+                currentStack.removeAll { !it.isAdded }
+                setVisibleBottomNavBar(topFragment)
+            }
+        }
     }
 
     private fun launchOnBoardFragment() {

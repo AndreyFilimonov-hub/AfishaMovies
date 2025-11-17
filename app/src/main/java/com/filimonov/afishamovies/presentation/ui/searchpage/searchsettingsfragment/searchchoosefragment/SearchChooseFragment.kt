@@ -145,7 +145,7 @@ class SearchChooseFragment : Fragment() {
 
     private fun setupBackButton() {
         binding.ivBack.setOnClickListener {
-            (requireActivity() as MainActivity).closeFragment(this)
+            (requireActivity() as MainActivity).closeFragment()
         }
     }
 
@@ -184,7 +184,7 @@ class SearchChooseFragment : Fragment() {
                 )
             }
         }
-        (requireActivity() as MainActivity).closeFragment(this)
+        (requireActivity() as MainActivity).closeFragment()
     }
 
     private fun setupButtonReset() {
