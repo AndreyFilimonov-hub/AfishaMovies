@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
@@ -17,8 +18,6 @@ import com.filimonov.afishamovies.presentation.ui.homepage.HomePageFragment
 import com.filimonov.afishamovies.presentation.ui.onboard.OnBoardFragment
 import com.filimonov.afishamovies.presentation.ui.searchpage.SearchPageFragment
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SearchSettingsFragment
-import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosedatafragment.SearchChooseDataFragment
-import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment.SearchChooseFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,6 +44,11 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binging.root)
 
+        setupBackPressed()
+        initFragments()
+        setOnBottomNavigationBarItemsClickListener()
+        setupOnBackStackChangedListener()
+
         val isHandled = handleDeepLink(intent)
         if (!isHandled) {
             if (isFirstLaunch()) {
@@ -53,14 +57,11 @@ class MainActivity : AppCompatActivity() {
                 launchHomePageFragment()
             }
         }
-
-        initFragments()
-
-        setOnBottomNavigationBarItemsClickListener()
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        setIntent(intent)
         handleDeepLink(intent)
     }
 
@@ -78,7 +79,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFragments() {
-        searchStack.add(SearchPageFragment.newInstance())
+        val homePageFragment = HomePageFragment.newInstance()
+        val searchPageFragment = SearchPageFragment.newInstance()
+
+        homeStack.add(homePageFragment)
+        searchStack.add(searchPageFragment)
+
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, homePageFragment)
+            .add(R.id.fragment_container, searchPageFragment)
+            .hide(searchPageFragment)
+            .commitNow()
         // TODO: profileFragment
     }
 
@@ -170,6 +181,7 @@ class MainActivity : AppCompatActivity() {
         if (currentStack.size < 2) return
 
         val transaction = supportFragmentManager.beginTransaction()
+            .setReorderingAllowed(true)
             .setCustomAnimations(
                 R.anim.no_anim,
                 R.anim.slide_out_to_right,
@@ -183,7 +195,7 @@ class MainActivity : AppCompatActivity() {
         val lastFragment = current.last()
 
         current.forEach { fragment ->
-            if (fragment != current.first() && fragment != current.last()) {
+            if (fragment != rootFragment && fragment != lastFragment) {
                 transaction.remove(fragment)
             }
         }
@@ -194,6 +206,7 @@ class MainActivity : AppCompatActivity() {
         transaction.commitAllowingStateLoss()
 
         current.retainAll(listOf(rootFragment))
+        supportFragmentManager.fragments.retainAll(current)
     }
 
     fun openFragment(fragment: Fragment) {
@@ -233,15 +246,23 @@ class MainActivity : AppCompatActivity() {
         if (data.host == "afisha.app" && data.path?.startsWith("/film") == true) {
             val movieId = data.getQueryParameter("movieId")?.toIntOrNull()
             if (movieId != null) {
+                val filmPageFragment = FilmPageFragment.newInstance(
+                    movieId,
+                    FilmPageMode.FROM_DEEPLINK.name
+                )
+                currentStack.add(filmPageFragment)
                 supportFragmentManager.beginTransaction()
-                    .add(
-                        R.id.fragment_container, FilmPageFragment.newInstance(
-                            movieId,
-                            FilmPageMode.FROM_DEEPLINK.name
-                        )
+                    .setCustomAnimations(
+                        android.R.anim.fade_in,
+                        R.anim.no_anim,
+                        R.anim.slide_in_from_left,
+                        R.anim.slide_out_to_right
                     )
+                    .add(R.id.fragment_container, filmPageFragment)
                     .addToBackStack(null)
+                    .hide(currentStack[currentStack.size - 2])
                     .commit()
+
                 return true
             }
         }
@@ -250,9 +271,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setVisibleBottomNavBar(fragment: Fragment) {
-        if (fragment is SearchSettingsFragment) {
+        if (fragment is SearchPageFragment || fragment is HomePageFragment) {
             showBottomNavBar()
-        } else if (fragment is SearchChooseFragment || fragment is SearchChooseDataFragment) {
+        } else if (fragment is SearchSettingsFragment) {
             hideBottomNavBar()
         }
     }
@@ -315,8 +336,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun launchHomePageFragment() {
-        val homePageFragment = HomePageFragment.newInstance()
-        homeStack.add(homePageFragment)
+        val homePageFragment = homeStack.first()
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, homePageFragment)
             .commit()
