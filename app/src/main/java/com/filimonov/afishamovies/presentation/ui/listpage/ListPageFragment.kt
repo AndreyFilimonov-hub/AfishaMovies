@@ -1,11 +1,9 @@
 package com.filimonov.afishamovies.presentation.ui.listpage
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -13,11 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.Slide
 import androidx.transition.TransitionManager
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentListPageBinding
+import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.listpage.mediabannergridadapter.MediaBannerGridAdapter
@@ -32,8 +30,22 @@ private const val MODE = "mode"
 
 class ListPageFragment : Fragment() {
 
-    private var _binding: FragmentListPageBinding? = null
+    companion object {
+        private const val UNDEFINED_ID = -1
+        private const val UNDEFINED_TITLE = -1
 
+        @JvmStatic
+        fun newInstance(id: Int, titleResId: Int, mode: ListPageMode) =
+            ListPageFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(CATEGORY_OR_MOVIE_ID, id)
+                    putInt(TITLE, titleResId)
+                    putString(MODE, mode.name)
+                }
+            }
+    }
+
+    private var _binding: FragmentListPageBinding? = null
     private val binding: FragmentListPageBinding
         get() = _binding ?: throw RuntimeException("FragmentListPageBinding == null")
 
@@ -57,13 +69,8 @@ class ListPageFragment : Fragment() {
     private val mediaBannerGridAdapter by lazy {
         MediaBannerGridAdapter(
             onMediaBannerClick = {
-                requireActivity().supportFragmentManager.beginTransaction()
-                    .addToBackStack(null)
-                    .add(
-                        R.id.fragment_container,
-                        FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
-                    )
-                    .commit()
+                val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
+                (requireActivity() as MainActivity).openFragment(filmPageFragment)
             },
             onPersonBannerClick = {
                 // TODO: launch ActorPageFragment
@@ -78,16 +85,6 @@ class ListPageFragment : Fragment() {
         super.onCreate(savedInstanceState)
         parseArgs()
         component.inject(this)
-        enterTransition = Slide(Gravity.END).apply {
-            duration = 500L
-            interpolator = AccelerateInterpolator()
-            propagation = null
-        }
-        exitTransition = Slide(Gravity.START).apply {
-            duration = 500L
-            interpolator = AccelerateInterpolator()
-            propagation = null
-        }
     }
 
     override fun onCreateView(
@@ -105,6 +102,11 @@ class ListPageFragment : Fragment() {
         setToolbar()
         setupRecyclerView()
         observeViewModel()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setupRecyclerView() {
@@ -163,7 +165,7 @@ class ListPageFragment : Fragment() {
 
     private fun setToolbar() {
         binding.ivBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).closeFragment()
         }
         binding.tvTitle.text = requireContext().resources.getText(titleId)
     }
@@ -207,20 +209,5 @@ class ListPageFragment : Fragment() {
             throw RuntimeException("Param mode is empty")
         }
         mode = ListPageMode.valueOf(modeBundle)
-    }
-
-    companion object {
-        private const val UNDEFINED_ID = -1
-        private const val UNDEFINED_TITLE = -1
-
-        @JvmStatic
-        fun newInstance(id: Int, titleResId: Int, mode: ListPageMode) =
-            ListPageFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(CATEGORY_OR_MOVIE_ID, id)
-                    putInt(TITLE, titleResId)
-                    putString(MODE, mode.name)
-                }
-            }
     }
 }
