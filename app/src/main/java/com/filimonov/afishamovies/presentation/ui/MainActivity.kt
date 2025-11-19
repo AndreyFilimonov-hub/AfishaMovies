@@ -263,6 +263,8 @@ class MainActivity : AppCompatActivity() {
                     .hide(currentStack[currentStack.size - 2])
                     .commit()
 
+                showBottomNavBar()
+
                 return true
             }
         }
