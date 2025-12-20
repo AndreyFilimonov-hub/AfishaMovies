@@ -59,4 +59,8 @@
     <string name="action">Боевик</string>
     <string name="western">Вестерн</string>
     <string name="drama">Драма</string>
+    <string name="watched">Просмотрено</string>
+    <string name="collections">Коллекции</string>
+    <string name="add_your_collection">+ Создать свою коллекцию</string>
+    <string name="you_have_interested">Вам было интересно</string>
 </resources>
