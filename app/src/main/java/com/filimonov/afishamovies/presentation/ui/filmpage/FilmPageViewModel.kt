@@ -43,7 +43,7 @@ class FilmPageViewModel @Inject constructor(
                 }
             } catch (e: CancellationException) {
                 throw e
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 _state.value = FilmPageState.Error
             }
         }
@@ -66,18 +66,20 @@ class FilmPageViewModel @Inject constructor(
             .take(10)
     }
 
-    fun actorsCount(): Int {
+    fun actorsCount(): String {
         return (_state.value as FilmPageState.Success).filmPage
             .persons
             .filter { it.character != null }
             .size
+            .toString()
     }
 
-    fun workersCount(): Int {
+    fun workersCount(): String {
         return (_state.value as FilmPageState.Success).filmPage
             .persons
             .filter { it.character == null }
             .size
+            .toString()
     }
 
     override fun onCleared() {

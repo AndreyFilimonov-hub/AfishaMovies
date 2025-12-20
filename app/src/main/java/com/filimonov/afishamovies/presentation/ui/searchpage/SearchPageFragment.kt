@@ -1,7 +1,6 @@
 package com.filimonov.afishamovies.presentation.ui.searchpage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchPageBinding
+import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchpageadapter.SearchItemAdapter
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SearchSettingsFragment
+import com.filimonov.afishamovies.presentation.utils.ViewAnimator
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -27,10 +28,17 @@ import javax.inject.Inject
 
 class SearchPageFragment : Fragment() {
 
-    private var _binding: FragmentSearchPageBinding? = null
+    companion object {
 
+        @JvmStatic
+        fun newInstance() = SearchPageFragment()
+    }
+
+    private var _binding: FragmentSearchPageBinding? = null
     private val binding: FragmentSearchPageBinding
         get() = _binding ?: throw RuntimeException("FragmentSearchPageBinding == null")
+
+    private var shortAnimationDuration: Long = 0
 
     private var showType: ShowType = ShowType.ALL
     private var sortType: SortType = SortType.DATE
@@ -57,23 +65,22 @@ class SearchPageFragment : Fragment() {
 
     private val searchItemAdapter = SearchItemAdapter(
         onMediaBannerClick = {
-            Log.d("AAA", it.toString()) // TODO: remove
-            requireActivity().supportFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .add(
-                    R.id.fragment_container,
-                    FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
-                )
-                .commit()
+            val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
+            (requireActivity() as MainActivity).openFragment(filmPageFragment)
         },
         onRetryButtonClick = {
             viewModel.sendRequest(binding.sbMain.text.toString().trim())
         }
     )
 
+    private val viewAnimator = ViewAnimator()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         component.inject(this)
+
+        shortAnimationDuration =
+            resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     }
 
     override fun onCreateView(
@@ -93,22 +100,32 @@ class SearchPageFragment : Fragment() {
         observeViewModel()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.state.collect { state ->
                     when (state) {
                         SearchPageState.Empty -> {
-                            binding.pbLoading.visibility = View.GONE
-                            binding.rvReplySearch.visibility = View.GONE
-                            binding.tvEmpty.visibility = View.VISIBLE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.llNoInternet, shortAnimationDuration)
+                                setupVisibilityGone(binding.pbLoading, shortAnimationDuration)
+                                setupVisibilityGone(binding.rvReplySearch, shortAnimationDuration)
+                                setupVisibilityVisible(binding.tvEmpty, shortAnimationDuration)
+                            }
                         }
 
                         SearchPageState.Error -> {
-                            binding.rvReplySearch.visibility = View.GONE
-                            binding.tvEmpty.visibility = View.GONE
-                            binding.pbLoading.visibility = View.GONE
-                            binding.llNoInternet.visibility = View.VISIBLE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.tvEmpty, shortAnimationDuration)
+                                setupVisibilityGone(binding.pbLoading, shortAnimationDuration)
+                                setupVisibilityGone(binding.rvReplySearch, shortAnimationDuration)
+                                setupVisibilityVisible(binding.llNoInternet, shortAnimationDuration)
+                            }
                             setupNoInternetRetryButton()
                         }
 
@@ -127,18 +144,27 @@ class SearchPageFragment : Fragment() {
                         }
 
                         SearchPageState.Loading -> {
-                            binding.rvReplySearch.visibility = View.GONE
-                            binding.llNoInternet.visibility = View.GONE
-                            binding.pbLoading.visibility = View.VISIBLE
-                            binding.tvEmpty.visibility = View.GONE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.llNoInternet, shortAnimationDuration)
+                                setupVisibilityGone(binding.tvEmpty, shortAnimationDuration)
+                                setupVisibilityGone(binding.rvReplySearch, shortAnimationDuration)
+                                setupVisibilityVisible(binding.pbLoading, shortAnimationDuration)
+                            }
                         }
 
                         is SearchPageState.Success -> {
-                            binding.rvReplySearch.visibility = View.VISIBLE
-                            binding.llNoInternet.visibility = View.GONE
-                            binding.pbLoading.visibility = View.GONE
-                            binding.tvEmpty.visibility = View.GONE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.llNoInternet, shortAnimationDuration)
+                                setupVisibilityGone(binding.pbLoading, shortAnimationDuration)
+                                setupVisibilityGone(binding.tvEmpty, shortAnimationDuration)
+                                setupVisibilityVisible(binding.rvReplySearch, shortAnimationDuration)
+                            }
+
                             searchItemAdapter.submitList(state.result)
+
+                            binding.rvReplySearch.doOnNextLayout {
+                                binding.rvReplySearch.scrollToPosition(0)
+                            }
                         }
                     }
                 }
@@ -160,24 +186,20 @@ class SearchPageFragment : Fragment() {
 
     private fun setupSearchBar() {
         binding.ivFilter.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .add(
-                    R.id.fragment_container,
-                    SearchSettingsFragment.newInstance(
-                        viewModel.showType.name,
-                        viewModel.country,
-                        viewModel.genre,
-                        viewModel.yearFrom,
-                        viewModel.yearTo,
-                        viewModel.ratingFrom,
-                        viewModel.ratingTo,
-                        viewModel.sortType.name,
-                        viewModel.isDontWatched
-                    )
-                )
-                .addToBackStack(null)
-                .commit()
+            val searchSettingsFragment = SearchSettingsFragment.newInstance(
+                viewModel.showType.name,
+                viewModel.country,
+                viewModel.genre,
+                viewModel.yearFrom,
+                viewModel.yearTo,
+                viewModel.ratingFrom,
+                viewModel.ratingTo,
+                viewModel.sortType.name,
+                viewModel.isDontWatched
+            )
+            (requireActivity() as MainActivity).openFragment(searchSettingsFragment)
         }
+
         binding.sbMain.doOnTextChanged { query, _, _, _ ->
             viewModel.sendRequest(query.toString())
         }
@@ -252,10 +274,6 @@ class SearchPageFragment : Fragment() {
         )
 
         viewModel.updateList()
-
-        binding.rvReplySearch.doOnNextLayout {
-            binding.rvReplySearch.scrollToPosition(0)
-        }
     }
 
     private fun setPaddingRootView() {
@@ -269,11 +287,5 @@ class SearchPageFragment : Fragment() {
             layoutParams.bottomMargin = bottomHeight
             rootView.layoutParams = layoutParams
         }
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() = SearchPageFragment()
     }
 }

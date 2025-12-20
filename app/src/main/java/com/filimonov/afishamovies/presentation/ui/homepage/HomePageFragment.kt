@@ -1,17 +1,14 @@
 package com.filimonov.afishamovies.presentation.ui.homepage
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateInterpolator
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.transition.Slide
 import androidx.transition.TransitionManager
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
@@ -22,12 +19,20 @@ import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.homepage.sectionadapter.SectionAdapter
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageMode
+import com.filimonov.afishamovies.presentation.utils.ViewAnimator
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HomePageFragment : Fragment() {
+
+    companion object {
+
+        @JvmStatic
+        fun newInstance() =
+            HomePageFragment()
+    }
 
     private var _binding: FragmentHomePageBinding? = null
     private val binding: FragmentHomePageBinding
@@ -48,40 +53,28 @@ class HomePageFragment : Fragment() {
 
     private val sectionAdapter = SectionAdapter(
         onShowAllClick = {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .add(
-                    R.id.fragment_container,
-                    ListPageFragment.newInstance(it.categoryId, it.title, ListPageMode.MEDIA)
-                )
-                .commit()
+            val listPageFragment =
+                ListPageFragment.newInstance(it.categoryId, it.title, ListPageMode.MEDIA)
+            (requireActivity() as MainActivity).openFragment(listPageFragment)
         },
         onMediaClick = {
-            requireActivity().supportFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .add(
-                    R.id.fragment_container,
-                    FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
-                )
-                .commit()
+            val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
+            (requireActivity() as MainActivity).openFragment(filmPageFragment)
         }
     )
+
+    private var shortAnimationDuration: Long = 0
+
+    private val viewAnimator = ViewAnimator()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         component.inject(this)
-        enterTransition = Slide(Gravity.END).apply {
-            duration = 500L
-            interpolator = AccelerateInterpolator()
-            propagation = null
-        }
-        exitTransition = Slide(Gravity.START).apply {
-            duration = 500L
-            interpolator = AccelerateInterpolator()
-            propagation = null
-        }
 
         (requireActivity() as? MainActivity)?.setFirstLaunchShown()
+
+        shortAnimationDuration =
+            resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     }
 
     override fun onCreateView(
@@ -105,6 +98,11 @@ class HomePageFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun setPaddingRootView() {
         val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bNav)
         val rootView = binding.root
@@ -125,21 +123,25 @@ class HomePageFragment : Fragment() {
                     TransitionManager.beginDelayedTransition(binding.success)
                     when (it) {
                         is HomePageState.Loading -> {
-                            binding.error.visibility = View.INVISIBLE
-                            binding.success.visibility = View.INVISIBLE
-                            binding.loading.visibility = View.VISIBLE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.error, shortAnimationDuration)
+                                setupVisibilityGone(binding.success, shortAnimationDuration)
+                                setupVisibilityVisible(binding.loading, shortAnimationDuration)
+                            }
                         }
 
                         HomePageState.Error -> {
-                            binding.loading.visibility = View.INVISIBLE
-                            binding.error.visibility = View.VISIBLE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.loading, shortAnimationDuration)
+                                setupVisibilityVisible(binding.error, shortAnimationDuration)
+                            }
                         }
 
                         is HomePageState.Success -> {
-                            onBottomNav()
-
-                            binding.loading.visibility = View.INVISIBLE
-                            binding.success.visibility = View.VISIBLE
+                            with(viewAnimator) {
+                                setupVisibilityGone(binding.loading, shortAnimationDuration)
+                                setupVisibilityVisible(binding.success, shortAnimationDuration)
+                            }
 
                             sectionAdapter.submitList(it.categories)
                         }
@@ -147,30 +149,6 @@ class HomePageFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun onBottomNav() {
-        val bNav = (requireActivity() as MainActivity).binging.bNav
-        bNav.apply {
-            visibility = View.VISIBLE
-            translationY = height.toFloat()
-        }
-            .animate()
-            .translationY(0f)
-            .setDuration(1000)
-            .start()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() =
-            HomePageFragment()
     }
 
     fun scrollToTop() {

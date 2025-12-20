@@ -1,7 +1,6 @@
 package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.searchchoosefragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,17 +15,38 @@ import androidx.transition.Fade
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchChooseBinding
+import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchChooseFragment : Fragment() {
 
+    companion object {
+
+        private const val CHOOSE_ITEM = "choose_item_key"
+        private const val FILTER_MODE = "filter_mode_key"
+
+        const val CHOOSE_COUNTRY_MODE_KEY = "choose_country_mode_key"
+        const val CHOOSE_COUNTRY_NAME_KEY = "choose_country_name_key"
+
+        const val CHOOSE_GENRE_MODE_KEY = "choose_genre_mode_key"
+        const val CHOOSE_GENRE_NAME_KEY = "choose_genre_name_key"
+
+        @JvmStatic
+        fun newInstance(chooseItem: String?, filterMode: String) =
+            SearchChooseFragment().apply {
+                arguments = Bundle().apply {
+                    putString(CHOOSE_ITEM, chooseItem)
+                    putString(FILTER_MODE, filterMode)
+                }
+            }
+    }
+
     private var chooseItem: String? = null
     private lateinit var filterMode: FilterMode
 
     private var _binding: FragmentSearchChooseBinding? = null
-
     private val binding: FragmentSearchChooseBinding
         get() = _binding ?: throw RuntimeException("FragmentSearchChooseBinding == null")
 
@@ -82,6 +102,11 @@ class SearchChooseFragment : Fragment() {
         setupButtonReset()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
@@ -120,7 +145,7 @@ class SearchChooseFragment : Fragment() {
 
     private fun setupBackButton() {
         binding.ivBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).closeFragment()
         }
     }
 
@@ -148,7 +173,6 @@ class SearchChooseFragment : Fragment() {
                         putString(CHOOSE_COUNTRY_NAME_KEY, viewModel.chooseItem)
                     }
                 )
-                parentFragmentManager.popBackStack()
             }
 
             FilterMode.GENRE -> {
@@ -158,13 +182,12 @@ class SearchChooseFragment : Fragment() {
                         putString(CHOOSE_GENRE_NAME_KEY, viewModel.chooseItem)
                     }
                 )
-                parentFragmentManager.popBackStack()
             }
         }
+        (requireActivity() as MainActivity).closeFragment()
     }
 
     private fun setupButtonReset() {
-        Log.d("AAA", "${viewModel.chooseItem}")
         if (viewModel.chooseItem == requireContext().getString(R.string.any) ||
             viewModel.chooseItem == requireContext().getString(R.string.any_v2) ||
             viewModel.chooseItem == null
@@ -215,26 +238,5 @@ class SearchChooseFragment : Fragment() {
                 it.getString(FILTER_MODE) ?: throw RuntimeException("param mode is absent")
             filterMode = FilterMode.valueOf(filterModeBundle)
         }
-    }
-
-    companion object {
-
-        private const val CHOOSE_ITEM = "choose_item_key"
-        private const val FILTER_MODE = "filter_mode_key"
-
-        const val CHOOSE_COUNTRY_MODE_KEY = "choose_country_mode_key"
-        const val CHOOSE_COUNTRY_NAME_KEY = "choose_country_name_key"
-
-        const val CHOOSE_GENRE_MODE_KEY = "choose_genre_mode_key"
-        const val CHOOSE_GENRE_NAME_KEY = "choose_genre_name_key"
-
-        @JvmStatic
-        fun newInstance(chooseItem: String?, filterMode: String) =
-            SearchChooseFragment().apply {
-                arguments = Bundle().apply {
-                    putString(CHOOSE_ITEM, chooseItem)
-                    putString(FILTER_MODE, filterMode)
-                }
-            }
     }
 }

@@ -19,8 +19,29 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchChooseDataFragment : Fragment() {
-    private var _binding: FragmentSearchChooseDataBinding? = null
 
+    companion object {
+
+        const val CHOOSE_YEAR_MODE_KEY = "choose_year_mode_key"
+        const val CHOOSE_YEAR_FROM_NAME_KEY = "choose_year_from_name_key"
+        const val CHOOSE_YEAR_TO_NAME_KEY = "choose_year_to_name_key"
+
+        private const val SELECTED_YEAR_FROM_KEY = "selected_year_from"
+        private const val SELECTED_YEAR_TO_KEY = "selected_year_to"
+        private const val UNDEFINED_YEAR_FROM = Int.MIN_VALUE
+        private const val UNDEFINED_YEAR_TO = Int.MAX_VALUE
+
+        @JvmStatic
+        fun newInstance(selectedYearFrom: Int?, selectedYearTo: Int?) =
+            SearchChooseDataFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(SELECTED_YEAR_FROM_KEY, selectedYearFrom ?: UNDEFINED_YEAR_FROM)
+                    putInt(SELECTED_YEAR_TO_KEY, selectedYearTo ?: UNDEFINED_YEAR_TO)
+                }
+            }
+    }
+
+    private var _binding: FragmentSearchChooseDataBinding? = null
     private val binding: FragmentSearchChooseDataBinding
         get() = _binding ?: throw RuntimeException("FragmentSearchChooseDataBinding == null")
 
@@ -85,11 +106,15 @@ class SearchChooseDataFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         checkButtonEnable()
-        offBottomNav()
         setupBackButton()
         setupRecyclerView()
         setupClickListeners()
         observeViewModel()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setupRecyclerView() {
@@ -120,7 +145,7 @@ class SearchChooseDataFragment : Fragment() {
                     putInt(CHOOSE_YEAR_TO_NAME_KEY, viewModel.selectedYearTo ?: Int.MAX_VALUE)
                 }
             )
-            parentFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).closeFragment()
         }
     }
 
@@ -149,19 +174,8 @@ class SearchChooseDataFragment : Fragment() {
 
     private fun setupBackButton() {
         binding.ivBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).closeFragment()
         }
-    }
-
-    private fun offBottomNav() {
-        val bNav = (requireActivity() as MainActivity).binging.bNav
-        bNav.animate()
-            .translationY(bNav.height.toFloat())
-            .setDuration(1000)
-            .withEndAction {
-                bNav.visibility = View.GONE
-            }
-            .start()
     }
 
     private fun parseArgs() {
@@ -180,26 +194,5 @@ class SearchChooseDataFragment : Fragment() {
                 selectedYearToBundle
             }
         }
-    }
-
-    companion object {
-
-        const val CHOOSE_YEAR_MODE_KEY = "choose_year_mode_key"
-        const val CHOOSE_YEAR_FROM_NAME_KEY = "choose_year_from_name_key"
-        const val CHOOSE_YEAR_TO_NAME_KEY = "choose_year_to_name_key"
-
-        private const val SELECTED_YEAR_FROM_KEY = "selected_year_from"
-        private const val SELECTED_YEAR_TO_KEY = "selected_year_to"
-        private const val UNDEFINED_YEAR_FROM = Int.MIN_VALUE
-        private const val UNDEFINED_YEAR_TO = Int.MAX_VALUE
-
-        @JvmStatic
-        fun newInstance(selectedYearFrom: Int?, selectedYearTo: Int?) =
-            SearchChooseDataFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(SELECTED_YEAR_FROM_KEY, selectedYearFrom ?: UNDEFINED_YEAR_FROM)
-                    putInt(SELECTED_YEAR_TO_KEY, selectedYearTo ?: UNDEFINED_YEAR_TO)
-                }
-            }
     }
 }

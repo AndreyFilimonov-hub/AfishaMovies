@@ -5,18 +5,15 @@ import android.animation.ValueAnimator
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.transition.Slide
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchSettingsBinding
@@ -44,8 +41,58 @@ private const val IS_DONT_WATCH_KEY = "is_dont_watch_key"
 
 class SearchSettingsFragment : Fragment() {
 
-    private var _binding: FragmentSearchSettingsBinding? = null
+    companion object {
+        const val FILTERS_KEY = "filters_key"
 
+        const val SHOW_NAME_KEY = "show_name_key"
+
+        const val COUNTRY_NAME_KEY = "country_name_key"
+
+        const val GENRE_NAME_KEY = "genre_name_key"
+
+        const val YEAR_FROM_NAME_KEY = "year_from_name_key"
+        const val YEAR_TO_NAME_KEY = "year_to_name_key"
+
+        const val RATING_FROM_NAME_KEY = "rating_from_name_key"
+        const val RATING_TO_NAME_KEY = "rating_to_name_key"
+
+        const val SORT_NAME_KEY = "sort_name_key"
+
+        const val IS_DONT_WATCHED_NAME_KEY = "is_dont_watched_name_key"
+
+        private const val YEAR_FROM_DEFAULT = Int.MIN_VALUE
+        private const val YEAR_TO_DEFAULT = Int.MAX_VALUE
+        private const val RATING_FROM_DEFAULT = 1f
+        private const val RATING_TO_DEFAULT = 10f
+
+        @JvmStatic
+        fun newInstance(
+            showType: String?,
+            country: String?,
+            genre: String?,
+            yearFrom: Int?,
+            yearTo: Int?,
+            ratingFrom: Float?,
+            ratingTo: Float?,
+            sortType: String?,
+            isDontWatched: Boolean
+        ) =
+            SearchSettingsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(SHOW_TYPE_KEY, showType)
+                    putString(COUNTRY_KEY, country)
+                    putString(GENRE_KEY, genre)
+                    putInt(YEAR_FROM_KEY, yearFrom ?: YEAR_FROM_DEFAULT)
+                    putInt(YEAR_TO_KEY, yearTo ?: YEAR_TO_DEFAULT)
+                    putFloat(RATING_FROM_KEY, ratingFrom ?: RATING_FROM_DEFAULT)
+                    putFloat(RATING_TO_KEY, ratingTo ?: RATING_TO_DEFAULT)
+                    putString(SORT_TYPE_KEY, sortType)
+                    putBoolean(IS_DONT_WATCH_KEY, isDontWatched)
+                }
+            }
+    }
+
+    private var _binding: FragmentSearchSettingsBinding? = null
     private val binding: FragmentSearchSettingsBinding
         get() = _binding ?: throw RuntimeException("FragmentSearchSettingsBinding == null")
 
@@ -90,16 +137,6 @@ class SearchSettingsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         parseArgs()
         component.inject(this)
-        enterTransition = Slide(Gravity.END).apply {
-            duration = 500L
-            interpolator = AccelerateInterpolator()
-            propagation = null
-        }
-        exitTransition = Slide(Gravity.START).apply {
-            duration = 500L
-            interpolator = AccelerateInterpolator()
-            propagation = null
-        }
     }
 
     override fun onCreateView(
@@ -112,7 +149,6 @@ class SearchSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        offBottomNav()
         setupRangeSlider()
         setupFragmentResultListeners()
         observeViewModel()
@@ -120,6 +156,11 @@ class SearchSettingsFragment : Fragment() {
         setupMaterialButtonClickListeners()
         setupButtonClickListeners()
         setupLinearLayoutsClickListeners()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun observeViewModel() {
@@ -240,34 +281,22 @@ class SearchSettingsFragment : Fragment() {
             viewModel.updateIsDontWatched(!viewModel.isDontWatched)
         }
         binding.llCountry.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .add(
-                    R.id.fragment_container, SearchChooseFragment.newInstance(
-                        viewModel.country,
-                        FilterMode.COUNTRY.name
-                    )
-                )
-                .commit()
+            val searchChooseCountryFragment = SearchChooseFragment.newInstance(
+                viewModel.country,
+                FilterMode.COUNTRY.name
+            )
+            (requireActivity() as MainActivity).openFragment(searchChooseCountryFragment)
         }
         binding.llGenre.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .add(
-                    R.id.fragment_container, SearchChooseFragment.newInstance(
-                        viewModel.genre,
-                        FilterMode.GENRE.name
-                    )
-                )
-                .commit()
+            val searchChooseGenreFragment = SearchChooseFragment.newInstance(
+                viewModel.genre,
+                FilterMode.GENRE.name
+            )
+            (requireActivity() as MainActivity).openFragment(searchChooseGenreFragment)
         }
         binding.llPeriod.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .addToBackStack(null)
-                .add(
-                    R.id.fragment_container, SearchChooseDataFragment.newInstance(yearFrom, yearTo)
-                )
-                .commit()
+            val searchChooseDataFragment = SearchChooseDataFragment.newInstance(yearFrom, yearTo)
+            (requireActivity() as MainActivity).openFragment(searchChooseDataFragment)
         }
     }
 
@@ -299,7 +328,7 @@ class SearchSettingsFragment : Fragment() {
 
         binding.buttonSubmit.setOnClickListener {
             sendSettingsToPreviousFragment()
-            parentFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).closeFragment()
         }
     }
 
@@ -371,19 +400,8 @@ class SearchSettingsFragment : Fragment() {
 
     private fun setupBackButton() {
         binding.ivBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStack()
+            (requireActivity() as MainActivity).closeFragment()
         }
-    }
-
-    private fun offBottomNav() {
-        val bNav = (requireActivity() as MainActivity).binging.bNav
-        bNav.animate()
-            .translationY(bNav.height.toFloat())
-            .setDuration(1000)
-            .withEndAction {
-                bNav.visibility = View.GONE
-            }
-            .start()
     }
 
     private fun animateBackgroundColor(
@@ -418,56 +436,5 @@ class SearchSettingsFragment : Fragment() {
             sortType = SortType.valueOf(it.getString(SORT_TYPE_KEY, SortType.DATE.name))
             isDontWatched = it.getBoolean(IS_DONT_WATCH_KEY)
         }
-    }
-
-    companion object {
-        const val FILTERS_KEY = "filters_key"
-
-        const val SHOW_NAME_KEY = "show_name_key"
-
-        const val COUNTRY_NAME_KEY = "country_name_key"
-
-        const val GENRE_NAME_KEY = "genre_name_key"
-
-        const val YEAR_FROM_NAME_KEY = "year_from_name_key"
-        const val YEAR_TO_NAME_KEY = "year_to_name_key"
-
-        const val RATING_FROM_NAME_KEY = "rating_from_name_key"
-        const val RATING_TO_NAME_KEY = "rating_to_name_key"
-
-        const val SORT_NAME_KEY = "sort_name_key"
-
-        const val IS_DONT_WATCHED_NAME_KEY = "is_dont_watched_name_key"
-
-        private const val YEAR_FROM_DEFAULT = Int.MIN_VALUE
-        private const val YEAR_TO_DEFAULT = Int.MAX_VALUE
-        private const val RATING_FROM_DEFAULT = 1f
-        private const val RATING_TO_DEFAULT = 10f
-
-        @JvmStatic
-        fun newInstance(
-            showType: String?,
-            country: String?,
-            genre: String?,
-            yearFrom: Int?,
-            yearTo: Int?,
-            ratingFrom: Float?,
-            ratingTo: Float?,
-            sortType: String?,
-            isDontWatched: Boolean
-        ) =
-            SearchSettingsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(SHOW_TYPE_KEY, showType)
-                    putString(COUNTRY_KEY, country)
-                    putString(GENRE_KEY, genre)
-                    putInt(YEAR_FROM_KEY, yearFrom ?: YEAR_FROM_DEFAULT)
-                    putInt(YEAR_TO_KEY, yearTo ?: YEAR_TO_DEFAULT)
-                    putFloat(RATING_FROM_KEY, ratingFrom ?: RATING_FROM_DEFAULT)
-                    putFloat(RATING_TO_KEY, ratingTo ?: RATING_TO_DEFAULT)
-                    putString(SORT_TYPE_KEY, sortType)
-                    putBoolean(IS_DONT_WATCH_KEY, isDontWatched)
-                }
-            }
     }
 }
