@@ -11,5 +11,5 @@ data class MediaBannerDbModel(
     val name: String,
     val genreMain: String?,
     val rating: String?,
-    val posterUrl: String?,
+    val posterUrl: String?
 )
