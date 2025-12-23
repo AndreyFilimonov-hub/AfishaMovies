@@ -63,4 +63,6 @@
     <string name="collections">Коллекции</string>
     <string name="add_your_collection">+ Создать свою коллекцию</string>
     <string name="you_have_interested">Вам было интересно</string>
+    <string name="liked">Любимые</string>
+    <string name="want_to_watch">Хочу посмотреть</string>
 </resources>
