@@ -74,4 +74,9 @@ class ProfilePageRepositoryImpl @Inject constructor(
     override suspend fun getCollectionIdByKey(key: String): Int {
         return collectionDao.getCollectionIdByKey(key)
     }
+
+    override suspend fun clearCollection(collectionId: Int) {
+        collectionMediaBannerDao.clearCollection(collectionId)
+        mediaBannerDao.deleteUnusedMediaBanners()
+    }
 }
