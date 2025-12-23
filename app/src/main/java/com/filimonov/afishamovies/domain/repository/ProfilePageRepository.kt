@@ -18,4 +18,6 @@ interface ProfilePageRepository {
     suspend fun getCollectionIdByKey(key: String): Int
 
     suspend fun getCollections(): List<CollectionEntity>
+
+    suspend fun clearCollection(collectionId: Int)
 }
