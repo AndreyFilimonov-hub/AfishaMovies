@@ -7,5 +7,7 @@ import androidx.room.PrimaryKey
 data class CollectionDbModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val name: String
+    val name: String,
+    val isDefault: Boolean,
+    val collectionKey: String? = null
 )
