@@ -1,5 +1,6 @@
 package com.filimonov.afishamovies.data.mapper
 
+import com.filimonov.afishamovies.data.database.model.MediaBannerDbModel
 import com.filimonov.afishamovies.data.model.filmpage.FilmPageDto
 import com.filimonov.afishamovies.data.model.filmpage.ImagePreviewDto
 import com.filimonov.afishamovies.data.model.filmpage.PersonBannerDto
@@ -109,4 +110,18 @@ fun SearchMediaBannerDto.toSearchMediaBannerEntity(): SearchMediaBannerEntity {
 
 fun List<SearchMediaBannerDto>.toSearchMediaBannerListEntity(): List<SearchMediaBannerEntity> {
     return this.map { it.toSearchMediaBannerEntity() }
+}
+
+fun MediaBannerDbModel.toMediaBannerEntity(): MediaBannerEntity {
+    return MediaBannerEntity(
+        id = this.mediaBannerId,
+        name = this.name,
+        genreMain = this.genreMain,
+        rating = this.rating,
+        posterUrl = this.posterUrl
+    )
+}
+
+fun List<MediaBannerDbModel>.toMediaBannerEntityList(): List<MediaBannerEntity> {
+    return this.map { it.toMediaBannerEntity() }
 }
