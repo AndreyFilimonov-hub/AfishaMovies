@@ -1,5 +1,6 @@
 package com.filimonov.afishamovies.domain.repository
 
+import com.filimonov.afishamovies.domain.entities.CollectionEntity
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 
 interface ProfilePageRepository {
@@ -14,7 +15,7 @@ interface ProfilePageRepository {
 
     suspend fun deleteCollection(collectionId: Int)
 
-    suspend fun clearCollection(collectionId: Int) // maybe useless method
-
     suspend fun getCollectionIdByKey(key: String): Int
+
+    suspend fun getCollections(): List<CollectionEntity>
 }
