@@ -3,6 +3,7 @@ package com.filimonov.afishamovies.data.database.dao
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy.Companion.REPLACE
 import androidx.room.Query
 import androidx.room.Transaction
 import com.filimonov.afishamovies.data.database.model.CollectionMediaBannerCrossRef
@@ -11,17 +12,30 @@ import com.filimonov.afishamovies.data.database.model.MediaBannerDbModel
 @Dao
 interface CollectionMediaBannerDao {
 
-    @Insert
+    @Insert(onConflict = REPLACE)
     suspend fun addMediaBannerToCollection(crossRef: CollectionMediaBannerCrossRef)
 
     @Delete
     suspend fun deleteMediaBannerFromCollection(crossRef: CollectionMediaBannerCrossRef)
 
+    @Query("DELETE FROM collection_media_banners WHERE collectionId =:collectionId")
+    suspend fun clearCollection(collectionId: Int)
+
+    @Query("""
+        DELETE FROM collection_media_banners
+        WHERE collectionId IN (
+            SELECT id
+            FROM collections
+            WHERE collectionKey = 'INTERESTED'
+        )
+    """)
+    suspend fun clearInterestedCollection()
+
     @Transaction
     @Query("""
         SELECT media_banners.* FROM media_banners
         INNER JOIN collection_media_banners
-        ON media_banners.mediaBannerId = collection_media_banners.collectionId
+            ON media_banners.mediaBannerId = collection_media_banners.mediaBannerId
         WHERE collection_media_banners.collectionId = :collectionId
     """)
     suspend fun getMediaBannersForCollection(collectionId: Int): List<MediaBannerDbModel>
