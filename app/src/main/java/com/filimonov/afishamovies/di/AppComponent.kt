@@ -1,6 +1,6 @@
 package com.filimonov.afishamovies.di
 
-import android.content.Context
+import android.app.Application
 import com.filimonov.afishamovies.di.filmpagecomponent.FilmPageComponent
 import com.filimonov.afishamovies.di.gallerypagecomponent.GalleryComponent
 import com.filimonov.afishamovies.di.homepagecomponent.HomePageComponent
@@ -10,7 +10,7 @@ import dagger.BindsInstance
 import dagger.Component
 
 @ApplicationScope
-@Component(modules = [DomainModule::class, NetworkModule::class])
+@Component(modules = [DomainModule::class, NetworkModule::class, DataModule::class])
 interface AppComponent {
 
     fun homePageComponent(): HomePageComponent.Factory
@@ -26,7 +26,7 @@ interface AppComponent {
     @Component.Factory
     interface AppComponentFactory {
 
-        fun create(@BindsInstance context: Context): AppComponent
+        fun create(@BindsInstance application: Application): AppComponent
 
     }
 }
