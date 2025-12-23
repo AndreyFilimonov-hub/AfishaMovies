@@ -6,7 +6,9 @@ import com.filimonov.afishamovies.data.database.dao.MediaBannerDao
 import com.filimonov.afishamovies.data.database.model.CollectionDbModel
 import com.filimonov.afishamovies.data.database.model.CollectionMediaBannerCrossRef
 import com.filimonov.afishamovies.data.database.model.MediaBannerDbModel
+import com.filimonov.afishamovies.data.mapper.toCollectionEntityList
 import com.filimonov.afishamovies.data.mapper.toMediaBannerEntityList
+import com.filimonov.afishamovies.domain.entities.CollectionEntity
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.repository.ProfilePageRepository
 import javax.inject.Inject
@@ -65,9 +67,8 @@ class ProfilePageRepositoryImpl @Inject constructor(
         collectionDao.deleteCollection(collectionId)
     }
 
-    override suspend fun clearCollection(collectionId: Int) {
-        collectionMediaBannerDao.clearCollection(collectionId)
-        mediaBannerDao.deleteUnusedMediaBanners()
+    override suspend fun getCollections(): List<CollectionEntity> {
+        return collectionDao.getCollectionsWithCounts().toCollectionEntityList()
     }
 
     override suspend fun getCollectionIdByKey(key: String): Int {
