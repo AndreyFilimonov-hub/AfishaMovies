@@ -4,9 +4,17 @@ import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 
 interface ProfilePageRepository {
 
-    fun getWatchedMediaBannerList(): List<MediaBannerEntity>
+    suspend fun getMediaBannerListForCollection(collectionId: Int): List<MediaBannerEntity>
 
-    fun getWasInterestingMediaBannerList(): List<MediaBannerEntity>
+    suspend fun addMediaBannerToCollection(mediaBannerEntity: MediaBannerEntity, collectionId: Int)
 
-    // TODO add collection usecase later
+    suspend fun deleteMediaBannerFromCollection(mediaBannerId: Int, collectionId: Int)
+
+    suspend fun createCollection(name: String)
+
+    suspend fun deleteCollection(collectionId: Int)
+
+    suspend fun clearCollection(collectionId: Int) // maybe useless method
+
+    suspend fun getCollectionIdByKey(key: String): Int
 }
