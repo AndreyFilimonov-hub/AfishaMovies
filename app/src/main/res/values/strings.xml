@@ -65,4 +65,6 @@
     <string name="you_have_interested">Вам было интересно</string>
     <string name="liked">Любимые</string>
     <string name="want_to_watch">Хочу посмотреть</string>
+    <string name="clear_history">Очистить историю</string>
+    <string name="empty_collection">Здесь пока ничего нет,\n как только пополните коллекцию\nтут что-то появится</string>
 </resources>

@@ -18,6 +18,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/iv_delete_collection"
+        android:layout_width="@dimen/delete_collection_size"
+        android:layout_height="@dimen/delete_collection_size"
+        android:contentDescription="@null"
+        android:src="@drawable/delete_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="@dimen/padding_5dp"/>
+
+
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
@@ -29,7 +40,7 @@
         tools:text="@string/liked" />
 
     <TextView
-        android:id="@+id/tv_rating"
+        android:id="@+id/tv_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_6dp"

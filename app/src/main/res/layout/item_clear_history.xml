@@ -5,7 +5,7 @@
     android:layout_height="156dp">
 
     <ImageButton
-        android:id="@+id/ib_show_all"
+        android:id="@+id/ib_clear_history"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@drawable/white_circle"
@@ -13,7 +13,7 @@
         android:contentDescription="@null"
         android:elevation="8dp"
         android:focusable="true"
-        android:src="@drawable/arrow_right"
+        android:src="@drawable/bucket_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,10 +23,11 @@
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/show_all"
+        android:text="@string/clear_history"
+        android:gravity="center"
         android:textSize="@dimen/text_size_14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ib_show_all" />
+        app:layout_constraintTop_toBottomOf="@id/ib_clear_history" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
