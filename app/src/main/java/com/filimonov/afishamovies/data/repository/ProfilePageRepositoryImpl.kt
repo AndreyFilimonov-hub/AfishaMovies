@@ -11,6 +11,8 @@ import com.filimonov.afishamovies.data.mapper.toMediaBannerEntityList
 import com.filimonov.afishamovies.domain.entities.CollectionEntity
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.repository.ProfilePageRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ProfilePageRepositoryImpl @Inject constructor(
@@ -19,9 +21,9 @@ class ProfilePageRepositoryImpl @Inject constructor(
     private val collectionMediaBannerDao: CollectionMediaBannerDao
 ) : ProfilePageRepository {
 
-    override suspend fun getMediaBannerListForCollection(collectionId: Int): List<MediaBannerEntity> {
+    override suspend fun getMediaBannerListForCollection(collectionId: Int): Flow<List<MediaBannerEntity>> {
         return collectionMediaBannerDao.getMediaBannersForCollection(collectionId)
-            .toMediaBannerEntityList()
+            .map { it.toMediaBannerEntityList() }
     }
 
     override suspend fun addMediaBannerToCollection(
@@ -67,8 +69,9 @@ class ProfilePageRepositoryImpl @Inject constructor(
         collectionDao.deleteCollection(collectionId)
     }
 
-    override suspend fun getCollections(): List<CollectionEntity> {
-        return collectionDao.getCollectionsWithCounts().toCollectionEntityList()
+    override suspend fun getCollections(): Flow<List<CollectionEntity>> {
+        return collectionDao.getCollectionsWithCounts()
+            .map { it.toCollectionEntityList() }
     }
 
     override suspend fun getCollectionIdByKey(key: String): Int {
