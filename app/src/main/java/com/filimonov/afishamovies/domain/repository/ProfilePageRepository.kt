@@ -2,10 +2,11 @@ package com.filimonov.afishamovies.domain.repository
 
 import com.filimonov.afishamovies.domain.entities.CollectionEntity
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
+import kotlinx.coroutines.flow.Flow
 
 interface ProfilePageRepository {
 
-    suspend fun getMediaBannerListForCollection(collectionId: Int): List<MediaBannerEntity>
+    suspend fun getMediaBannerListForCollection(collectionId: Int): Flow<List<MediaBannerEntity>>
 
     suspend fun addMediaBannerToCollection(mediaBannerEntity: MediaBannerEntity, collectionId: Int)
 
@@ -17,7 +18,7 @@ interface ProfilePageRepository {
 
     suspend fun getCollectionIdByKey(key: String): Int
 
-    suspend fun getCollections(): List<CollectionEntity>
+    suspend fun getCollections(): Flow<List<CollectionEntity>>
 
     suspend fun clearCollection(collectionId: Int)
 }

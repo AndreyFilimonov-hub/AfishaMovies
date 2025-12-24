@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.Query
 import com.filimonov.afishamovies.data.database.model.CollectionDbModel
 import com.filimonov.afishamovies.data.model.profilepage.CollectionCountDto
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CollectionDao {
@@ -27,10 +28,10 @@ interface CollectionDao {
     FROM collections c
     LEFT JOIN collection_media_banners cmb
         ON c.id = cmb.collectionId
-        WHERE c.collectionKey NOT IN ('WATCHED', 'INTERESTED')
+        WHERE c.collectionKey NOT IN ('watched', 'interested')
     GROUP BY c.id, c.name, c.isDefault
     """)
-    suspend fun getCollectionsWithCounts(): List<CollectionCountDto>
+    suspend fun getCollectionsWithCounts(): Flow<List<CollectionCountDto>>
 
     @Query("SELECT id FROM collections WHERE collectionkey = :key LIMIT 1")
     suspend fun getCollectionIdByKey(key: String): Int

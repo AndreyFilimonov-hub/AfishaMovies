@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import com.filimonov.afishamovies.data.database.model.CollectionMediaBannerCrossRef
 import com.filimonov.afishamovies.data.database.model.MediaBannerDbModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CollectionMediaBannerDao {
@@ -38,5 +39,5 @@ interface CollectionMediaBannerDao {
             ON media_banners.mediaBannerId = collection_media_banners.mediaBannerId
         WHERE collection_media_banners.collectionId = :collectionId
     """)
-    suspend fun getMediaBannersForCollection(collectionId: Int): List<MediaBannerDbModel>
+    suspend fun getMediaBannersForCollection(collectionId: Int): Flow<List<MediaBannerDbModel>>
 }
