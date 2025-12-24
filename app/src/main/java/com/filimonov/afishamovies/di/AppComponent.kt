@@ -5,6 +5,7 @@ import com.filimonov.afishamovies.di.filmpagecomponent.FilmPageComponent
 import com.filimonov.afishamovies.di.gallerypagecomponent.GalleryComponent
 import com.filimonov.afishamovies.di.homepagecomponent.HomePageComponent
 import com.filimonov.afishamovies.di.listpagecomponent.ListPageComponent
+import com.filimonov.afishamovies.di.profilepagecomponent.ProfilePageComponent
 import com.filimonov.afishamovies.di.searchpagecomponent.SearchPageComponent
 import dagger.BindsInstance
 import dagger.Component
@@ -22,6 +23,8 @@ interface AppComponent {
     fun galleryComponent(): GalleryComponent.Factory
 
     fun searchPageComponent(): SearchPageComponent.Factory
+
+    fun profilePageComponent(): ProfilePageComponent.Factory
 
     @Component.Factory
     interface AppComponentFactory {
