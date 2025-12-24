@@ -9,6 +9,7 @@ import com.filimonov.afishamovies.domain.usecases.DeleteCollectionUseCase
 import com.filimonov.afishamovies.domain.usecases.GetCollectionIdByKeyUseCase
 import com.filimonov.afishamovies.domain.usecases.GetCollectionsUseCase
 import com.filimonov.afishamovies.domain.usecases.GetMediaBannersByCollectionUseCase
+import com.filimonov.afishamovies.presentation.ui.profilepage.mediabanneradapter.MediaBannerModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,12 +56,28 @@ class ProfilePageViewModel @Inject constructor(
                     val collectionList = collectionListDeferred.await()
                     val interestedList = interestedListDeferred.await()
 
+                    val watchedListSize = if (watchedList.isEmpty()) {
+                        ""
+                    } else {
+                        watchedList.size.toString()
+                    }
+                    val interestedListSize = if (interestedList.isEmpty()) {
+                        ""
+                    } else {
+                        interestedList.size.toString()
+                    }
+
+                    val watchedListMapped = watchedList.take(10)
+                        .map { MediaBannerModel.Banner(it) } + MediaBannerModel.ClearHistory
+                    val interestedListMapped = interestedList.take(10)
+                        .map { MediaBannerModel.Banner(it) } + MediaBannerModel.ClearHistory
+
                     _state.value = ProfilePageState.Success(
-                        watchedList.take(10),
+                        watchedListMapped,
                         collectionList,
-                        interestedList.take(10),
-                        watchedList.size,
-                        interestedList.size
+                        interestedListMapped,
+                        watchedListSize,
+                        interestedListSize
                     )
                 }
             } catch (_: Exception) {
