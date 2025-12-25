@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class GetMediaBannersByCollectionUseCase @Inject constructor(private val repository: ProfilePageRepository) {
 
-    suspend operator fun invoke(collectionId: Int): Flow<List<MediaBannerEntity>> {
+    operator fun invoke(collectionId: Int): Flow<List<MediaBannerEntity>> {
         return repository.getMediaBannerListForCollection(collectionId)
     }
 }

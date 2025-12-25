@@ -29,9 +29,9 @@ interface CollectionDao {
     LEFT JOIN collection_media_banners cmb
         ON c.id = cmb.collectionId
         WHERE c.collectionKey NOT IN ('watched', 'interested')
-    GROUP BY c.id, c.name, c.isDefault
+    GROUP BY c.id, c.name
     """)
-    suspend fun getCollectionsWithCounts(): Flow<List<CollectionCountDto>>
+    fun getCollectionsWithCounts(): Flow<List<CollectionCountDto>>
 
     @Query("SELECT id FROM collections WHERE collectionkey = :key LIMIT 1")
     suspend fun getCollectionIdByKey(key: String): Int

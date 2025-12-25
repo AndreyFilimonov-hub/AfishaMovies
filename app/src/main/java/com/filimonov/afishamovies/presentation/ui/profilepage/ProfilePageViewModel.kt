@@ -85,6 +85,7 @@ class ProfilePageViewModel @Inject constructor(
                 DefaultCollection.WATCHED -> clearCollectionUseCase(watchedCollectionId)
                 DefaultCollection.INTERESTED -> clearCollectionUseCase(interestedCollectionId)
                 DefaultCollection.LIKED,
+                DefaultCollection.USER,
                 DefaultCollection.WANT_TO_WATCH -> {
                     // не чистятся
                 }
@@ -92,9 +93,9 @@ class ProfilePageViewModel @Inject constructor(
         }
     }
 
-    fun createCollection(name: String) {
+    fun createCollection(name: String, key: DefaultCollection) {
         viewModelScope.launch {
-            createCollectionUseCase(name)
+            createCollectionUseCase(name, key)
         }
     }
 

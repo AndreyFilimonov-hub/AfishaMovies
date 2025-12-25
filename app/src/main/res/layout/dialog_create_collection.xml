@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/margin_horizontal"
+    android:background="@drawable/bg_dialog">
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="@dimen/delete_collection_size"
+        android:layout_height="@dimen/delete_collection_size"
+        android:contentDescription="@null"
+        android:padding="@dimen/padding_5dp"
+        android:src="@drawable/delete_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxBackgroundColor="@color/white"
+        app:hintEnabled="false"
+        app:boxBackgroundMode="none"
+        app:boxStrokeColor="@color/blue"
+        android:layout_marginHorizontal="@dimen/margin_horizontal"
+        app:layout_constraintBottom_toTopOf="@id/bt_ready"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_close">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ellipsize="none"
+            android:textCursorDrawable="@drawable/edittext_cursor"
+            android:hint="@string/create_collection_hint"
+            android:singleLine="false"
+            android:scrollHorizontally="false"/>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/bt_ready"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/blue"
+        android:text="@string/ready"
+        android:textSize="@dimen/text_size_16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
