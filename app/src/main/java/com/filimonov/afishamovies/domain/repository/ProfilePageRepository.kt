@@ -11,6 +11,10 @@ interface ProfilePageRepository {
 
     suspend fun addMediaBannerToCollection(mediaBannerEntity: MediaBannerEntity, collectionId: Int)
 
+    suspend fun addMediaBannerToInterestedCollection(mediaBannerEntity: MediaBannerEntity)
+
+    suspend fun getMediaBannerById(mediaBannerId: Int): MediaBannerEntity
+
     suspend fun deleteMediaBannerFromCollection(mediaBannerId: Int, collectionId: Int)
 
     suspend fun createCollection(name: String, key: DefaultCollection)

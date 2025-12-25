@@ -9,7 +9,7 @@ import com.filimonov.afishamovies.data.database.model.MediaBannerDbModel
 @Dao
 interface MediaBannerDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addMediaBanner(mediaBanner: MediaBannerDbModel)
 
     @Query("""
@@ -32,4 +32,7 @@ interface MediaBannerDao {
         )
     """)
     suspend fun deleteUnusedMediaBanners()
+
+    @Query("SELECT * FROM media_banners WHERE mediaBannerId = :mediaBannerId LIMIT 1")
+    suspend fun getMediaBannerById(mediaBannerId: Int): MediaBannerDbModel
 }

@@ -29,5 +29,6 @@ import androidx.room.Index
 )
 data class CollectionMediaBannerCrossRef(
     val collectionId: Int,
-    val mediaBannerId: Int
+    val mediaBannerId: Int,
+    val addedAt: Long
 )

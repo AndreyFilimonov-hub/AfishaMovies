@@ -38,6 +38,18 @@ interface CollectionMediaBannerDao {
         INNER JOIN collection_media_banners
             ON media_banners.mediaBannerId = collection_media_banners.mediaBannerId
         WHERE collection_media_banners.collectionId = :collectionId
+        ORDER BY collection_media_banners.addedAt DESC
     """)
     fun getMediaBannersForCollection(collectionId: Int): Flow<List<MediaBannerDbModel>>
+
+    @Query("""
+        UPDATE collection_media_banners
+        SET addedAt = :time
+        WHERE collectionId = :collectionId AND mediaBannerId = :mediaBannerId
+    """)
+    suspend fun updateAddedAt(
+        collectionId: Int,
+        mediaBannerId: Int,
+        time: Long
+    )
 }

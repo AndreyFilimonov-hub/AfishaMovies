@@ -7,6 +7,7 @@ import com.filimonov.afishamovies.data.database.model.CollectionDbModel
 import com.filimonov.afishamovies.data.database.model.CollectionMediaBannerCrossRef
 import com.filimonov.afishamovies.data.database.model.MediaBannerDbModel
 import com.filimonov.afishamovies.data.mapper.toCollectionEntityList
+import com.filimonov.afishamovies.data.mapper.toMediaBannerEntity
 import com.filimonov.afishamovies.data.mapper.toMediaBannerEntityList
 import com.filimonov.afishamovies.domain.entities.CollectionEntity
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
@@ -44,7 +45,30 @@ class ProfilePageRepositoryImpl @Inject constructor(
         collectionMediaBannerDao.addMediaBannerToCollection(
             CollectionMediaBannerCrossRef(
                 collectionId,
-                mediaBannerEntity.id
+                mediaBannerEntity.id,
+                System.currentTimeMillis()
+            )
+        )
+    }
+
+    override suspend fun addMediaBannerToInterestedCollection(mediaBannerEntity: MediaBannerEntity) {
+        val interestedId = collectionDao.getCollectionIdByKey(DefaultCollection.INTERESTED.key)
+
+        mediaBannerDao.addMediaBanner(
+            MediaBannerDbModel(
+                0,
+                mediaBannerEntity.id,
+                mediaBannerEntity.name,
+                mediaBannerEntity.genreMain,
+                mediaBannerEntity.rating,
+                mediaBannerEntity.posterUrl
+            )
+        )
+        collectionMediaBannerDao.addMediaBannerToCollection(
+            CollectionMediaBannerCrossRef(
+                interestedId,
+                mediaBannerEntity.id,
+                System.currentTimeMillis()
             )
         )
     }
@@ -56,10 +80,15 @@ class ProfilePageRepositoryImpl @Inject constructor(
         collectionMediaBannerDao.deleteMediaBannerFromCollection(
             CollectionMediaBannerCrossRef(
                 collectionId,
-                mediaBannerId
+                mediaBannerId,
+                System.currentTimeMillis()
             )
         )
         mediaBannerDao.deleteMediaBannerById(mediaBannerId)
+    }
+
+    override suspend fun getMediaBannerById(mediaBannerId: Int): MediaBannerEntity {
+        return mediaBannerDao.getMediaBannerById(mediaBannerId).toMediaBannerEntity()
     }
 
     override suspend fun createCollection(name: String, key: DefaultCollection) {
