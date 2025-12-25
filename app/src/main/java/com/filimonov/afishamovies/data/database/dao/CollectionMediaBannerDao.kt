@@ -39,5 +39,5 @@ interface CollectionMediaBannerDao {
             ON media_banners.mediaBannerId = collection_media_banners.mediaBannerId
         WHERE collection_media_banners.collectionId = :collectionId
     """)
-    suspend fun getMediaBannersForCollection(collectionId: Int): Flow<List<MediaBannerDbModel>>
+    fun getMediaBannersForCollection(collectionId: Int): Flow<List<MediaBannerDbModel>>
 }

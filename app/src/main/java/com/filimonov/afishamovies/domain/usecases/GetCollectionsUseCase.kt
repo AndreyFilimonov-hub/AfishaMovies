@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class GetCollectionsUseCase @Inject constructor(private val repository: ProfilePageRepository) {
 
-    suspend operator fun invoke(): Flow<List<CollectionEntity>> {
+    operator fun invoke(): Flow<List<CollectionEntity>> {
         return repository.getCollections()
     }
 }
