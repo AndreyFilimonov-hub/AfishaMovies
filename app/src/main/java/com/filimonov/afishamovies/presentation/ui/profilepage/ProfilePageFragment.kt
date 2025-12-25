@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentProfilePageBinding
@@ -69,6 +70,7 @@ class ProfilePageFragment : Fragment() {
         onMediaBannerClick = {
             val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
             (requireActivity() as MainActivity).openFragment(filmPageFragment)
+            viewModel.addMediaBannerToInterestedCollection(it)
         },
         onClearHistoryClick = {
             viewModel.clearCollection(DefaultCollection.INTERESTED)
@@ -144,7 +146,14 @@ class ProfilePageFragment : Fragment() {
         }
 
         watchedMediaBannerAdapter.submitList(state.watchedList)
-        interestedMediaBannerAdapter.submitList(state.interestedList)
+        interestedMediaBannerAdapter.submitList(state.interestedList) {
+            with(binding.rvWasInteresting) {
+                post {
+                    val layoutManager = this.layoutManager as LinearLayoutManager
+                    layoutManager.scrollToPositionWithOffset(0, 0)
+                }
+            }
+        }
         collectionAdapter.submitList(state.collectionList)
 
         binding.tvAllWatched.apply {
