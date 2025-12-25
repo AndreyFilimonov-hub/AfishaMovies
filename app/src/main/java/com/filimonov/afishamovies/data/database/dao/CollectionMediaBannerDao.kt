@@ -27,7 +27,7 @@ interface CollectionMediaBannerDao {
         WHERE collectionId IN (
             SELECT id
             FROM collections
-            WHERE collectionKey = 'INTERESTED'
+            WHERE collectionKey = 'interested'
         )
     """)
     suspend fun clearInterestedCollection()

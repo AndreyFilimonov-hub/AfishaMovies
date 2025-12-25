@@ -10,7 +10,7 @@ class ClearHistoryViewHolder(
 
     fun bind() {
         binding.ibClearHistory.setOnClickListener {
-            onClick
+            onClick()
         }
     }
 }
