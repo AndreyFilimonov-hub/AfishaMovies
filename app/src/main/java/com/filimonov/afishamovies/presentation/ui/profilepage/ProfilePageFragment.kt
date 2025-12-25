@@ -1,5 +1,6 @@
 package com.filimonov.afishamovies.presentation.ui.profilepage
 
+import android.animation.LayoutTransition
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.profilepage.collectionadapter.CollectionAdapter
 import com.filimonov.afishamovies.presentation.ui.profilepage.collectionadapter.CollectionItemDecoration
+import com.filimonov.afishamovies.presentation.ui.profilepage.dialogfragment.CreateCollectionDialog
 import com.filimonov.afishamovies.presentation.ui.profilepage.mediabanneradapter.MediaBannerAdapter
 import com.filimonov.afishamovies.presentation.utils.HorizontalSpaceItemDecoration
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
@@ -28,6 +30,8 @@ import javax.inject.Inject
 class ProfilePageFragment : Fragment() {
 
     companion object {
+
+        private const val CREATE_COLLECTION_TAG = "create_collection_dialog"
 
         @JvmStatic
         fun newInstance() = ProfilePageFragment()
@@ -76,7 +80,7 @@ class ProfilePageFragment : Fragment() {
 
         },
         onDeleteCollectionClick = { id ->
-
+            viewModel.deleteCollection(id)
         }
     )
 
@@ -96,7 +100,9 @@ class ProfilePageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setPaddingRootView()
+        setLayoutTransition()
         setupRecyclerView()
+        setupClickListeners()
         observeViewModel()
     }
 
@@ -161,6 +167,15 @@ class ProfilePageFragment : Fragment() {
         }
     }
 
+    private fun setupClickListeners() {
+        binding.tvAddCollection.setOnClickListener {
+            val dialog = CreateCollectionDialog { name ->
+                viewModel.createCollection(name, DefaultCollection.USER)
+            }
+            dialog.show(parentFragmentManager, CREATE_COLLECTION_TAG)
+        }
+    }
+
     private fun setupRecyclerView() {
         with(binding.rvWatched) {
             adapter = watchedMediaBannerAdapter
@@ -184,6 +199,12 @@ class ProfilePageFragment : Fragment() {
             adapter = collectionAdapter
             addItemDecoration(CollectionItemDecoration())
         }
+    }
+
+    private fun setLayoutTransition() {
+        val transition = LayoutTransition()
+        transition.enableTransitionType(LayoutTransition.CHANGING)
+        binding.constraint.layoutTransition = transition
     }
 
     private fun setPaddingRootView() {
