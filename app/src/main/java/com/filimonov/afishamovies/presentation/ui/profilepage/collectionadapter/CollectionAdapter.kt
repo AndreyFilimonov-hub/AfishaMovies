@@ -7,7 +7,7 @@ import com.filimonov.afishamovies.databinding.ItemCollectionBinding
 import com.filimonov.afishamovies.domain.entities.CollectionEntity
 
 class CollectionAdapter(
-    private val onCollectionClickListener: () -> Unit,
+    private val onCollectionClickListener: (CollectionEntity) -> Unit,
     private val onDeleteCollectionClick: (Int) -> Unit
 ) : ListAdapter<CollectionEntity, CollectionViewHolder>(CollectionDiffCallback()) {
 

@@ -9,7 +9,7 @@ import com.filimonov.afishamovies.domain.entities.CollectionEntity
 
 class CollectionViewHolder(
     private val binding: ItemCollectionBinding,
-    private val onCollectionClickListener: () -> Unit,
+    private val onCollectionClickListener: (CollectionEntity) -> Unit,
     private val onDeleteCollectionClick: (Int) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -37,7 +37,7 @@ class CollectionViewHolder(
         }
 
         binding.root.setOnClickListener {
-            onCollectionClickListener
+            onCollectionClickListener(collection)
         }
     }
 }
