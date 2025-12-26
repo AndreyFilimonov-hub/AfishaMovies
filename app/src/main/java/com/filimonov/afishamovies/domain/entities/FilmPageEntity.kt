@@ -9,5 +9,8 @@ data class FilmPageEntity(
     val posterUrl: String?,
     val countryMovieLengthAgeRating: String,
     val persons: List<PersonBannerEntity>,
-    val similarMovies: List<MediaBannerEntity>?
+    val similarMovies: List<MediaBannerEntity>?,
+    var isLiked: Boolean,
+    var isWantToWatch: Boolean,
+    var isWatched: Boolean
 )
