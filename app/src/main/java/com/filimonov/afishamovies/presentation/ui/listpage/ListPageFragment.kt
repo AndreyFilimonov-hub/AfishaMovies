@@ -32,14 +32,14 @@ class ListPageFragment : Fragment() {
 
     companion object {
         private const val UNDEFINED_ID = -1
-        private const val UNDEFINED_TITLE = -1
+        private const val UNDEFINED_TITLE = ""
 
         @JvmStatic
-        fun newInstance(id: Int, titleResId: Int, mode: ListPageMode) =
+        fun newInstance(id: Int, title: String, mode: ListPageMode) =
             ListPageFragment().apply {
                 arguments = Bundle().apply {
                     putInt(CATEGORY_OR_MOVIE_ID, id)
-                    putInt(TITLE, titleResId)
+                    putString(TITLE, title)
                     putString(MODE, mode.name)
                 }
             }
@@ -50,7 +50,7 @@ class ListPageFragment : Fragment() {
         get() = _binding ?: throw RuntimeException("FragmentListPageBinding == null")
 
     private var id: Int = UNDEFINED_ID
-    private var titleId: Int = UNDEFINED_TITLE
+    private var title: String = UNDEFINED_TITLE
     private lateinit var mode: ListPageMode
 
     private val component by lazy {
@@ -71,6 +71,7 @@ class ListPageFragment : Fragment() {
             onMediaBannerClick = {
                 val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
                 (requireActivity() as MainActivity).openFragment(filmPageFragment)
+                viewModel.addMediaBannerToInterestedCollection(it)
             },
             onPersonBannerClick = {
                 // TODO: launch ActorPageFragment
@@ -167,7 +168,7 @@ class ListPageFragment : Fragment() {
         binding.ivBack.setOnClickListener {
             (requireActivity() as MainActivity).closeFragment()
         }
-        binding.tvTitle.text = requireContext().resources.getText(titleId)
+        binding.tvTitle.text = title
     }
 
     private fun setPaddingRootView() {
@@ -196,11 +197,11 @@ class ListPageFragment : Fragment() {
         if (!args.containsKey(TITLE)) {
             throw RuntimeException("Param title is absent")
         }
-        val titleBundle = args.getInt(TITLE)
-        if (titleBundle < 0) {
+        val titleBundle = args.getString(TITLE) ?: ""
+        if (titleBundle.isEmpty()) {
             throw RuntimeException("Param title is empty")
         }
-        titleId = titleBundle
+        title = titleBundle
         if (!args.containsKey(MODE)) {
             throw RuntimeException("Param mode is absent")
         }
