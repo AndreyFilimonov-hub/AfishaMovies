@@ -82,6 +82,10 @@ class ProfilePageViewModel @Inject constructor(
         }
     }
 
+    fun getInterestedCollectionId() = interestedCollectionId
+
+    fun getWatchedCollectionId() = watchedCollectionId
+
     fun clearCollection(collectionKey: DefaultCollection) {
         viewModelScope.launch {
             when (collectionKey) {

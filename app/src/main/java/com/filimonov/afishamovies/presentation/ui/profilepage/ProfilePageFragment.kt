@@ -18,6 +18,8 @@ import com.filimonov.afishamovies.domain.enums.DefaultCollection
 import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
+import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
+import com.filimonov.afishamovies.presentation.ui.listpage.ListPageMode
 import com.filimonov.afishamovies.presentation.ui.profilepage.collectionadapter.CollectionAdapter
 import com.filimonov.afishamovies.presentation.ui.profilepage.collectionadapter.CollectionItemDecoration
 import com.filimonov.afishamovies.presentation.ui.profilepage.dialogfragment.CreateCollectionDialog
@@ -60,6 +62,7 @@ class ProfilePageFragment : Fragment() {
         onMediaBannerClick = {
             val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
             (requireActivity() as MainActivity).openFragment(filmPageFragment)
+            viewModel.addMediaBannerToInterestedCollection(it)
         },
         onClearHistoryClick = {
             viewModel.clearCollection(DefaultCollection.WATCHED)
@@ -78,8 +81,13 @@ class ProfilePageFragment : Fragment() {
     )
 
     private val collectionAdapter = CollectionAdapter(
-        onCollectionClickListener = {
-
+        onCollectionClickListener = { collection ->
+            val listPageFragment = ListPageFragment.newInstance(
+                collection.id,
+                collection.name,
+                ListPageMode.COLLECTION
+            )
+            (requireActivity() as MainActivity).openFragment(listPageFragment)
         },
         onDeleteCollectionClick = { id ->
             viewModel.deleteCollection(id)
@@ -182,6 +190,22 @@ class ProfilePageFragment : Fragment() {
                 viewModel.createCollection(name, DefaultCollection.USER)
             }
             dialog.show(parentFragmentManager, CREATE_COLLECTION_TAG)
+        }
+        binding.tvAllWatched.setOnClickListener {
+            val listPageFragment = ListPageFragment.newInstance(
+                viewModel.getWatchedCollectionId(),
+                getString(R.string.watched),
+                ListPageMode.COLLECTION
+            )
+            (requireActivity() as MainActivity).openFragment(listPageFragment)
+        }
+        binding.tvAllWasInteresting.setOnClickListener {
+            val listPageFragment = ListPageFragment.newInstance(
+                viewModel.getInterestedCollectionId(),
+                getString(R.string.you_have_interested),
+                ListPageMode.COLLECTION
+            )
+            (requireActivity() as MainActivity).openFragment(listPageFragment)
         }
     }
 
