@@ -1,6 +1,6 @@
 package com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment
 
-import android.content.Context
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.di.searchpagecomponent.searchsettingscomponent.CountryQualifier
@@ -29,7 +29,7 @@ class SearchSettingsViewModel @Inject constructor(
     @RatingFromQualifier var ratingFrom: Float,
     @RatingToQualifier var ratingTo: Float,
     @IsDontWatchedQualifier var isDontWatched: Boolean,
-    private val appContext: Context
+    private val appContext: Application
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<SearchSettingsState>(

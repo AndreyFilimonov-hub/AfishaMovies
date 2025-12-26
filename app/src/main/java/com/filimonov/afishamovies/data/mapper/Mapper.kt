@@ -1,11 +1,14 @@
 package com.filimonov.afishamovies.data.mapper
 
+import com.filimonov.afishamovies.data.database.model.MediaBannerDbModel
 import com.filimonov.afishamovies.data.model.filmpage.FilmPageDto
 import com.filimonov.afishamovies.data.model.filmpage.ImagePreviewDto
 import com.filimonov.afishamovies.data.model.filmpage.PersonBannerDto
 import com.filimonov.afishamovies.data.model.gallery.GalleryImageDto
 import com.filimonov.afishamovies.data.model.mediabanner.MediaBannerDto
+import com.filimonov.afishamovies.data.model.profilepage.CollectionCountDto
 import com.filimonov.afishamovies.data.model.searchpage.SearchMediaBannerDto
+import com.filimonov.afishamovies.domain.entities.CollectionEntity
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
 import com.filimonov.afishamovies.domain.entities.GalleryImageEntity
 import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
@@ -109,4 +112,31 @@ fun SearchMediaBannerDto.toSearchMediaBannerEntity(): SearchMediaBannerEntity {
 
 fun List<SearchMediaBannerDto>.toSearchMediaBannerListEntity(): List<SearchMediaBannerEntity> {
     return this.map { it.toSearchMediaBannerEntity() }
+}
+
+fun MediaBannerDbModel.toMediaBannerEntity(): MediaBannerEntity {
+    return MediaBannerEntity(
+        id = this.mediaBannerId,
+        name = this.name,
+        genreMain = this.genreMain,
+        rating = this.rating,
+        posterUrl = this.posterUrl
+    )
+}
+
+fun List<MediaBannerDbModel>.toMediaBannerEntityList(): List<MediaBannerEntity> {
+    return this.map { it.toMediaBannerEntity() }
+}
+
+fun CollectionCountDto.toCollectionEntity(): CollectionEntity {
+    return CollectionEntity(
+        id = this.id,
+        name = this.name,
+        countElements = this.count,
+        isDefault = this.isDefault
+    )
+}
+
+fun List<CollectionCountDto>.toCollectionEntityList(): List<CollectionEntity> {
+    return this.map { it.toCollectionEntity() }
 }

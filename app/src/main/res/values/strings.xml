@@ -59,4 +59,15 @@
     <string name="action">Боевик</string>
     <string name="western">Вестерн</string>
     <string name="drama">Драма</string>
+    <string name="watched">Просмотрено</string>
+    <string name="collections">Коллекции</string>
+    <string name="add_your_collection">+ Создать свою коллекцию</string>
+    <string name="you_have_interested">Вам было интересно</string>
+    <string name="liked">Любимые</string>
+    <string name="want_to_watch">Хочу посмотреть</string>
+    <string name="clear_history">Очистить историю</string>
+    <string name="empty_collection">Здесь пока ничего нет,\n как только пополните коллекцию\nтут что-то появится</string>
+    <string name="ready">Готово</string>
+    <string name="create_collection_hint">Придумайте название для вашей новой коллекции</string>
+    <string name="empty_collection_name_error">Имя коллекции не должно быть пустым</string>
 </resources>

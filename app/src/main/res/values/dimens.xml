@@ -76,4 +76,8 @@
     <dimen name="padding_vertical_16dp">16dp</dimen>
     <dimen name="margin_end_16dp">16dp</dimen>
     <dimen name="margin_vertical_16dp">16dp</dimen>
+    <dimen name="padding_horizontal_8dp">8dp</dimen>
+    <dimen name="item_collection_size">146dp</dimen>
+    <dimen name="delete_collection_size">32dp</dimen>
+    <dimen name="padding_5dp">5dp</dimen>
 </resources>

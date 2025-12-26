@@ -8,7 +8,7 @@
         android:id="@+id/ib_show_all"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:background="@drawable/show_all"
+        android:background="@drawable/white_circle"
         android:clickable="true"
         android:contentDescription="@null"
         android:elevation="8dp"
