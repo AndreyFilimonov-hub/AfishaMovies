@@ -8,14 +8,30 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.data.database.dao.CollectionDao
 import com.filimonov.afishamovies.data.database.dao.CollectionMediaBannerDao
+import com.filimonov.afishamovies.data.database.dao.FilmPageDao
+import com.filimonov.afishamovies.data.database.dao.FilmPersonDao
+import com.filimonov.afishamovies.data.database.dao.FilmSimilarMediaBannerDao
 import com.filimonov.afishamovies.data.database.dao.MediaBannerDao
+import com.filimonov.afishamovies.data.database.dao.PersonDao
 import com.filimonov.afishamovies.data.database.model.CollectionDbModel
 import com.filimonov.afishamovies.data.database.model.CollectionMediaBannerCrossRef
+import com.filimonov.afishamovies.data.database.model.FilmPageDbModel
+import com.filimonov.afishamovies.data.database.model.FilmPersonCrossRef
+import com.filimonov.afishamovies.data.database.model.FilmSimilarMediaBannerCrossRef
 import com.filimonov.afishamovies.data.database.model.MediaBannerDbModel
+import com.filimonov.afishamovies.data.database.model.PersonDbModel
 import com.filimonov.afishamovies.domain.enums.DefaultCollection
 
 @Database(
-    entities = [CollectionDbModel::class, MediaBannerDbModel::class, CollectionMediaBannerCrossRef::class],
+    entities = [
+        CollectionDbModel::class,
+        MediaBannerDbModel::class,
+        CollectionMediaBannerCrossRef::class,
+        FilmPageDbModel::class,
+        PersonDbModel::class,
+        FilmPersonCrossRef::class,
+        FilmSimilarMediaBannerCrossRef::class
+    ],
     version = 1,
     exportSchema = false
 )
@@ -59,4 +75,8 @@ abstract class AfishaDataBase() : RoomDatabase() {
     abstract fun collectionDao(): CollectionDao
     abstract fun mediaBannerDao(): MediaBannerDao
     abstract fun collectionMediaBannerDao(): CollectionMediaBannerDao
+    abstract fun filmPageDao(): FilmPageDao
+    abstract fun personDao(): PersonDao
+    abstract fun filmPersonDao(): FilmPersonDao
+    abstract fun filmSimilarMediaBannerDao(): FilmSimilarMediaBannerDao
 }
