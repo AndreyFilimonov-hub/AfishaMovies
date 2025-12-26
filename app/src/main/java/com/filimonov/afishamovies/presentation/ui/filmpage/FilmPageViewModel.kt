@@ -3,11 +3,17 @@ package com.filimonov.afishamovies.presentation.ui.filmpage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filimonov.afishamovies.di.MovieIdQualifier
+import com.filimonov.afishamovies.domain.entities.FilmPageEntity
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
+import com.filimonov.afishamovies.domain.enums.DefaultCollection
+import com.filimonov.afishamovies.domain.usecases.AddMediaBannerToCollectionUseCase
+import com.filimonov.afishamovies.domain.usecases.AddMediaBannerToInterestedCollectionUseCase
 import com.filimonov.afishamovies.domain.usecases.ClearCachedPersonListUseCase
+import com.filimonov.afishamovies.domain.usecases.GetCollectionIdByKeyUseCase
 import com.filimonov.afishamovies.domain.usecases.GetFilmPageByIdUseCase
 import com.filimonov.afishamovies.domain.usecases.GetImagePreviewListByMovieIdUseCase
+import com.filimonov.afishamovies.domain.usecases.GetMediaBannerByIdFromLocalUseCase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -18,6 +24,10 @@ import javax.inject.Inject
 
 class FilmPageViewModel @Inject constructor(
     @MovieIdQualifier private val movieId: Int,
+    private val addMediaBannerToInterestedCollectionUseCase: AddMediaBannerToInterestedCollectionUseCase,
+    private val addMediaBannerToCollectionUseCase: AddMediaBannerToCollectionUseCase,
+    private val getCollectionIdByKeyUseCase: GetCollectionIdByKeyUseCase,
+    private val getMediaBannerByIdFromLocalUseCase: GetMediaBannerByIdFromLocalUseCase,
     private val getFilmPageByIdUseCase: GetFilmPageByIdUseCase,
     private val getImagePreviewListByMovieIdUseCase: GetImagePreviewListByMovieIdUseCase,
     private val clearCachedPersonListUseCase: ClearCachedPersonListUseCase
@@ -80,6 +90,20 @@ class FilmPageViewModel @Inject constructor(
             .filter { it.character == null }
             .size
             .toString()
+    }
+
+    fun addMediaToDefaultCollection(filmPageEntity: FilmPageEntity, collection: DefaultCollection) {
+        viewModelScope.launch {
+            val collectionId = getCollectionIdByKeyUseCase(collection.key)
+            val mediaBannerEntity = getMediaBannerByIdFromLocalUseCase(filmPageEntity.id)
+            addMediaBannerToCollectionUseCase(mediaBannerEntity, collectionId)
+        }
+    }
+
+    fun addMediaBannerToInterestedCollection(mediaBannerEntity: MediaBannerEntity) {
+        viewModelScope.launch {
+            addMediaBannerToInterestedCollectionUseCase(mediaBannerEntity)
+        }
     }
 
     override fun onCleared() {

@@ -54,12 +54,13 @@ class HomePageFragment : Fragment() {
     private val sectionAdapter = SectionAdapter(
         onShowAllClick = {
             val listPageFragment =
-                ListPageFragment.newInstance(it.categoryId, it.title, ListPageMode.MEDIA)
+                ListPageFragment.newInstance(it.categoryId, getString(it.title), ListPageMode.MEDIA)
             (requireActivity() as MainActivity).openFragment(listPageFragment)
         },
         onMediaClick = {
             val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
             (requireActivity() as MainActivity).openFragment(filmPageFragment)
+            viewModel.addMediaBannerToInterestedCollection(it)
         }
     )
 

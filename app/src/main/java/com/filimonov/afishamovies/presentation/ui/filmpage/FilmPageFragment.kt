@@ -16,6 +16,7 @@ import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentFilmPageBinding
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
 import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
+import com.filimonov.afishamovies.domain.enums.DefaultCollection
 import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.ui.filmpage.imagepreviewadapter.ImagePreviewAdapter
 import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.ActorsItemDecoration
@@ -88,6 +89,7 @@ class FilmPageFragment : Fragment() {
         onClick = {
             val filmPageFragment = newInstance(it.id, FilmPageMode.DEFAULT.name)
             (requireActivity() as MainActivity).openFragment(filmPageFragment)
+            viewModel.addMediaBannerToInterestedCollection(it)
         }
     )
 
@@ -179,7 +181,7 @@ class FilmPageFragment : Fragment() {
                 binding.tvAllSimilarMovie.setOnClickListener {
                     val listPageFragment = ListPageFragment.newInstance(
                         this.id,
-                        R.string.similar_movie,
+                        getString(R.string.similar_movie),
                         ListPageMode.SIMILAR_MOVIES
                     )
                     (requireActivity() as MainActivity).openFragment(listPageFragment)
@@ -215,7 +217,7 @@ class FilmPageFragment : Fragment() {
             binding.tvAllPersonInFilm.setOnClickListener {
                 val listPageFragment = ListPageFragment.newInstance(
                     this.id,
-                    R.string.person_in_film,
+                    getString(R.string.person_in_film),
                     ListPageMode.ACTOR
                 )
                 (requireActivity() as MainActivity).openFragment(listPageFragment)
@@ -224,7 +226,7 @@ class FilmPageFragment : Fragment() {
             binding.tvAllWorkersInFilm.setOnClickListener {
                 val listPageFragment = ListPageFragment.newInstance(
                     this.id,
-                    R.string.worker_in_film,
+                    getString(R.string.worker_in_film),
                     ListPageMode.WORKER
                 )
                 (requireActivity() as MainActivity).openFragment(listPageFragment)
@@ -246,6 +248,19 @@ class FilmPageFragment : Fragment() {
                 val shareIntent = Intent.createChooser(sendIntent, getString(R.string.share_via))
                 startActivity(shareIntent)
             }
+            setupIconsClickListeners(this)
+        }
+    }
+
+    private fun setupIconsClickListeners(filmPageEntity: FilmPageEntity) {
+        binding.ivLike.setOnClickListener {
+            viewModel.addMediaToDefaultCollection(filmPageEntity, DefaultCollection.LIKED)
+        }
+        binding.ivDontShow.setOnClickListener {
+            viewModel.addMediaToDefaultCollection(filmPageEntity, DefaultCollection.WATCHED)
+        }
+        binding.ivFavourite.setOnClickListener {
+            viewModel.addMediaToDefaultCollection(filmPageEntity, DefaultCollection.WANT_TO_WATCH)
         }
     }
 
