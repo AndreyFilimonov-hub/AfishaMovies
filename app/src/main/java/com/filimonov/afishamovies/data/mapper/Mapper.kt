@@ -49,7 +49,10 @@ fun FilmPageDto.toFilmPageEntity(): FilmPageEntity {
         yearGenres = "${this.year}, ${this.genres.joinToString { it.name }}",
         countryMovieLengthAgeRating = "${
             this.countries.map { it.name }.first()
-        }, ${(movieLength ?: seriesLength)?.toMovieLengthFormat()}, ${this.ageRating}+"
+        }, ${(movieLength ?: seriesLength)?.toMovieLengthFormat()}, ${this.ageRating}+",
+        isLiked = false,
+        isWantToWatch = false,
+        isWatched = false // TODO replace from db or maybe remove this mapper
     )
 }
 

@@ -30,5 +30,6 @@ import androidx.room.Index
 data class FilmPersonCrossRef(
     val filmId: Int,
     val personId: Int,
-    val role: String?
+    val character: String?,
+    val profession: String
 )
