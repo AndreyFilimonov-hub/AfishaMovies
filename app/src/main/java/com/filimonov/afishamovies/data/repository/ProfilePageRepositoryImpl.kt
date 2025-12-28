@@ -2,7 +2,11 @@ package com.filimonov.afishamovies.data.repository
 
 import com.filimonov.afishamovies.data.database.dao.CollectionDao
 import com.filimonov.afishamovies.data.database.dao.CollectionMediaBannerDao
+import com.filimonov.afishamovies.data.database.dao.FilmPageDao
+import com.filimonov.afishamovies.data.database.dao.FilmPersonDao
+import com.filimonov.afishamovies.data.database.dao.FilmSimilarMediaBannerDao
 import com.filimonov.afishamovies.data.database.dao.MediaBannerDao
+import com.filimonov.afishamovies.data.database.dao.PersonDao
 import com.filimonov.afishamovies.data.database.model.CollectionDbModel
 import com.filimonov.afishamovies.data.database.model.CollectionMediaBannerCrossRef
 import com.filimonov.afishamovies.data.database.model.MediaBannerDbModel
@@ -20,7 +24,11 @@ import javax.inject.Inject
 class ProfilePageRepositoryImpl @Inject constructor(
     private val collectionDao: CollectionDao,
     private val mediaBannerDao: MediaBannerDao,
-    private val collectionMediaBannerDao: CollectionMediaBannerDao
+    private val collectionMediaBannerDao: CollectionMediaBannerDao,
+    private val filmPageDao: FilmPageDao,
+    private val personDao: PersonDao,
+    private val filmPersonDao: FilmPersonDao,
+    private val filmSimilarMediaBannerDao: FilmSimilarMediaBannerDao
 ) : ProfilePageRepository {
 
     override fun getMediaBannerListForCollection(collectionId: Int): Flow<List<MediaBannerEntity>> {
@@ -53,7 +61,6 @@ class ProfilePageRepositoryImpl @Inject constructor(
 
     override suspend fun addMediaBannerToInterestedCollection(mediaBannerEntity: MediaBannerEntity) {
         val interestedId = collectionDao.getCollectionIdByKey(DefaultCollection.INTERESTED.key)
-
         mediaBannerDao.addMediaBanner(
             MediaBannerDbModel(
                 0,
