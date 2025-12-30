@@ -25,10 +25,6 @@ class ProfilePageRepositoryImpl @Inject constructor(
     private val collectionDao: CollectionDao,
     private val mediaBannerDao: MediaBannerDao,
     private val collectionMediaBannerDao: CollectionMediaBannerDao,
-    private val filmPageDao: FilmPageDao,
-    private val personDao: PersonDao,
-    private val filmPersonDao: FilmPersonDao,
-    private val filmSimilarMediaBannerDao: FilmSimilarMediaBannerDao
 ) : ProfilePageRepository {
 
     override fun getMediaBannerListForCollection(collectionId: Int): Flow<List<MediaBannerEntity>> {

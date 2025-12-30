@@ -15,5 +15,16 @@ interface FilmPageRepository {
 
     fun getSimilarMovies(id: Int): List<MediaBannerEntity>
 
-    fun clearCachedPersonList(movieId: Int)
+    fun clearCachedPersonListAndSimilarMovies(movieId: Int)
+
+    suspend fun saveFilmPageToDb(filmPageEntity: FilmPageEntity)
+
+    suspend fun deleteUnusedFilmPage()
+
+    suspend fun updateDefaultCategoriesFlags(
+        filmId: Int,
+        isLiked: Boolean?,
+        isWantToWatch: Boolean?,
+        isWatched: Boolean?
+    )
 }
