@@ -71,7 +71,6 @@ class ListPageFragment : Fragment() {
             onMediaBannerClick = {
                 val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
                 (requireActivity() as MainActivity).openFragment(filmPageFragment)
-                viewModel.addMediaBannerToInterestedCollection(it)
             },
             onPersonBannerClick = {
                 // TODO: launch ActorPageFragment

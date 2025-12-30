@@ -64,6 +64,8 @@ class FilmPageViewModel @Inject constructor(
 
                     _state.value =
                         FilmPageState.Success(filmPage.await(), imagePreviews.await()?.take(10))
+
+                    saveMediaBannerInInterestedCollection()
                 }
             } catch (e: CancellationException) {
                 throw e
@@ -76,6 +78,13 @@ class FilmPageViewModel @Inject constructor(
     private fun saveFilmPageToDb(filmPageEntity: FilmPageEntity) {
         viewModelScope.launch {
             addFilmPageToDbUseCase(filmPageEntity)
+        }
+    }
+
+    private fun saveMediaBannerInInterestedCollection() {
+        viewModelScope.launch {
+            val mediaBannerEntity = getMediaBannerByIdFromLocalUseCase(movieId)
+            addMediaBannerToInterestedCollectionUseCase(mediaBannerEntity)
         }
     }
 
@@ -112,31 +121,24 @@ class FilmPageViewModel @Inject constructor(
             .toString()
     }
 
-    private fun addMediaBannerToDefaultCollection(filmPageEntity: FilmPageEntity, collection: DefaultCollection) {
+    private fun addMediaBannerToDefaultCollection(collection: DefaultCollection) {
         viewModelScope.launch {
             val collectionId = getCollectionIdByKeyUseCase(collection.key)
-            val mediaBannerEntity = getMediaBannerByIdFromLocalUseCase(filmPageEntity.id)
+            val mediaBannerEntity = getMediaBannerByIdFromLocalUseCase(movieId)
             addMediaBannerToCollectionUseCase(mediaBannerEntity, collectionId)
         }
     }
 
-    fun addMediaBannerToInterestedCollection(mediaBannerEntity: MediaBannerEntity) {
-        viewModelScope.launch {
-            addMediaBannerToInterestedCollectionUseCase(mediaBannerEntity)
-        }
-    }
-
     private fun deleteFromCollection(
-        filmId: Int,
         collectionId: Int? = null,
         collection: DefaultCollection
     ) {
         viewModelScope.launch {
             if (collectionId == null) {
                 val collectionIdFromDb = getCollectionIdByKeyUseCase(collection.key)
-                deleteMediaBannerFromCollectionUseCase(filmId, collectionIdFromDb)
+                deleteMediaBannerFromCollectionUseCase(movieId, collectionIdFromDb)
             } else {
-                deleteMediaBannerFromCollectionUseCase(filmId, collectionId)
+                deleteMediaBannerFromCollectionUseCase(movieId, collectionId)
             }
             deleteUnusedFilmPageUseCase()
         }
@@ -152,11 +154,14 @@ class FilmPageViewModel @Inject constructor(
         viewModelScope.launch {
             if (updatedEntity.isLiked) {
                 saveFilmPageToDb(updatedEntity)
-                addMediaBannerToDefaultCollection(updatedEntity, DefaultCollection.LIKED)
+                addMediaBannerToDefaultCollection(DefaultCollection.LIKED)
             } else {
-                deleteFromCollection(filmId =  updatedEntity.id, collection =  DefaultCollection.LIKED)
+                deleteFromCollection(collection = DefaultCollection.LIKED)
             }
-            updateDefaultCategoriesFlagsUseCase(filmId = updatedEntity.id, isLiked = updatedEntity.isLiked)
+            updateDefaultCategoriesFlagsUseCase(
+                filmId = updatedEntity.id,
+                isLiked = updatedEntity.isLiked
+            )
         }
     }
 
@@ -164,17 +169,21 @@ class FilmPageViewModel @Inject constructor(
         val currentState = _state.value
         if (currentState !is FilmPageState.Success) return
 
-        val updatedEntity = currentState.filmPage.copy(isWantToWatch = !currentState.filmPage.isWantToWatch)
+        val updatedEntity =
+            currentState.filmPage.copy(isWantToWatch = !currentState.filmPage.isWantToWatch)
         _state.value = currentState.copy(filmPage = updatedEntity)
 
         viewModelScope.launch {
             if (updatedEntity.isWantToWatch) {
                 saveFilmPageToDb(updatedEntity)
-                addMediaBannerToDefaultCollection(updatedEntity, DefaultCollection.WANT_TO_WATCH)
+                addMediaBannerToDefaultCollection(DefaultCollection.WANT_TO_WATCH)
             } else {
-                deleteFromCollection(filmId =  updatedEntity.id, collection =  DefaultCollection.WANT_TO_WATCH)
+                deleteFromCollection(collection = DefaultCollection.WANT_TO_WATCH)
             }
-            updateDefaultCategoriesFlagsUseCase(filmId = updatedEntity.id, isWantToWatch = updatedEntity.isWantToWatch)
+            updateDefaultCategoriesFlagsUseCase(
+                filmId = updatedEntity.id,
+                isWantToWatch = updatedEntity.isWantToWatch
+            )
         }
     }
 
@@ -188,11 +197,14 @@ class FilmPageViewModel @Inject constructor(
         viewModelScope.launch {
             if (updatedEntity.isWatched) {
                 saveFilmPageToDb(updatedEntity)
-                addMediaBannerToDefaultCollection(updatedEntity, DefaultCollection.WATCHED)
+                addMediaBannerToDefaultCollection(DefaultCollection.WATCHED)
             } else {
-                deleteFromCollection(filmId =  updatedEntity.id, collection =  DefaultCollection.WATCHED)
+                deleteFromCollection(collection = DefaultCollection.WATCHED)
             }
-            updateDefaultCategoriesFlagsUseCase(filmId = updatedEntity.id, isWatched = updatedEntity.isWatched)
+            updateDefaultCategoriesFlagsUseCase(
+                filmId = updatedEntity.id,
+                isWatched = updatedEntity.isWatched
+            )
         }
     }
 

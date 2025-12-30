@@ -4,8 +4,6 @@ package com.filimonov.afishamovies.presentation.ui.searchpage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
-import com.filimonov.afishamovies.domain.usecases.AddMediaBannerToInterestedCollectionUseCase
 import com.filimonov.afishamovies.domain.usecases.GetMoviesByQueryUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -20,7 +18,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchPageViewModel @Inject constructor(
-    private val addMediaBannerToInterestedCollectionUseCase: AddMediaBannerToInterestedCollectionUseCase,
     private val getMoviesByQueryUseCase: GetMoviesByQueryUseCase
 ) : ViewModel() {
 
@@ -159,12 +156,6 @@ class SearchPageViewModel @Inject constructor(
         this.ratingTo = ratingTo ?: RATING_TO_DEFAULT
         this.sortType = sortType
         this.isDontWatched = isDontWatched
-    }
-
-    fun addMediaBannerToInterestedCollection(mediaBannerEntity: MediaBannerEntity) {
-        viewModelScope.launch {
-            addMediaBannerToInterestedCollectionUseCase(mediaBannerEntity)
-        }
     }
 
     companion object {

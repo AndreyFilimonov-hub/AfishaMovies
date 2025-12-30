@@ -62,7 +62,6 @@ class ProfilePageFragment : Fragment() {
         onMediaBannerClick = {
             val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
             (requireActivity() as MainActivity).openFragment(filmPageFragment)
-            viewModel.addMediaBannerToInterestedCollection(it)
         },
         onClearHistoryClick = {
             viewModel.clearCollection(DefaultCollection.WATCHED)
@@ -73,7 +72,6 @@ class ProfilePageFragment : Fragment() {
         onMediaBannerClick = {
             val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
             (requireActivity() as MainActivity).openFragment(filmPageFragment)
-            viewModel.addMediaBannerToInterestedCollection(it)
         },
         onClearHistoryClick = {
             viewModel.clearCollection(DefaultCollection.INTERESTED)

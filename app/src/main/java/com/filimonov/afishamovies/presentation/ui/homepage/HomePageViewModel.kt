@@ -3,9 +3,7 @@ package com.filimonov.afishamovies.presentation.ui.homepage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.filimonov.afishamovies.R
-import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.enums.Category
-import com.filimonov.afishamovies.domain.usecases.AddMediaBannerToInterestedCollectionUseCase
 import com.filimonov.afishamovies.domain.usecases.GetMediaBannersByCategoryFromRemoteUseCase
 import com.filimonov.afishamovies.presentation.ui.homepage.mediabannerhorizontaladapter.HomePageMedia
 import com.filimonov.afishamovies.presentation.ui.homepage.sectionadapter.MediaSection
@@ -19,8 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HomePageViewModel @Inject constructor(
-    private val getMediaBannersByCategoryFromRemoteUseCase: GetMediaBannersByCategoryFromRemoteUseCase,
-    private val addMediaBannerToInterestedCollectionUseCase: AddMediaBannerToInterestedCollectionUseCase,
+    private val getMediaBannersByCategoryFromRemoteUseCase: GetMediaBannersByCategoryFromRemoteUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<HomePageState>(HomePageState.Loading)
@@ -70,11 +67,5 @@ class HomePageViewModel @Inject constructor(
     fun reloadData() {
         _state.value = HomePageState.Loading
         loadData()
-    }
-
-    fun addMediaBannerToInterestedCollection(mediaBannerEntity: MediaBannerEntity) {
-        viewModelScope.launch {
-            addMediaBannerToInterestedCollectionUseCase(mediaBannerEntity)
-        }
     }
 }

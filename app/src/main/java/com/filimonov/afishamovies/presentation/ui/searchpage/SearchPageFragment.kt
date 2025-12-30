@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentSearchPageBinding
-import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
@@ -68,15 +67,6 @@ class SearchPageFragment : Fragment() {
         onMediaBannerClick = {
             val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
             (requireActivity() as MainActivity).openFragment(filmPageFragment)
-            viewModel.addMediaBannerToInterestedCollection(
-                MediaBannerEntity(
-                    it.id,
-                    it.name,
-                    it.genres?.first(),
-                    it.rating,
-                    it.posterUrl
-                )
-            )
         },
         onRetryButtonClick = {
             viewModel.sendRequest(binding.sbMain.text.toString().trim())

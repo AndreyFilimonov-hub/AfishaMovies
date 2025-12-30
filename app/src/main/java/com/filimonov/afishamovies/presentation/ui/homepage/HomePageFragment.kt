@@ -60,7 +60,6 @@ class HomePageFragment : Fragment() {
         onMediaClick = {
             val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
             (requireActivity() as MainActivity).openFragment(filmPageFragment)
-            viewModel.addMediaBannerToInterestedCollection(it)
         }
     )
 
