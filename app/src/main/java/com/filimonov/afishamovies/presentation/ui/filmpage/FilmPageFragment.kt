@@ -16,7 +16,6 @@ import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentFilmPageBinding
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
 import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
-import com.filimonov.afishamovies.domain.enums.DefaultCollection
 import com.filimonov.afishamovies.presentation.ui.MainActivity
 import com.filimonov.afishamovies.presentation.ui.filmpage.imagepreviewadapter.ImagePreviewAdapter
 import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.ActorsItemDecoration
@@ -114,6 +113,7 @@ class FilmPageFragment : Fragment() {
 
         setPaddingRootView()
         setClickListenerOnBack()
+        setupIconsClickListeners()
         observeViewModel()
     }
 
@@ -140,15 +140,17 @@ class FilmPageFragment : Fragment() {
         }
     }
 
-    private fun setupImagesToGallery(list: List<ImagePreviewEntity>) {
-        binding.rvGallery.adapter = imagePreviewAdapter
-        binding.rvGallery.addItemDecoration(
-            HorizontalSpaceItemDecoration(
-                requireContext().resources.getDimensionPixelSize(R.dimen.margin_start),
-                requireContext().resources.getDimensionPixelSize(R.dimen.space_between)
+    private fun setupImagesToGallery(list: List<ImagePreviewEntity>?) {
+        list?.let {
+            binding.rvGallery.adapter = imagePreviewAdapter
+            binding.rvGallery.addItemDecoration(
+                HorizontalSpaceItemDecoration(
+                    requireContext().resources.getDimensionPixelSize(R.dimen.margin_start),
+                    requireContext().resources.getDimensionPixelSize(R.dimen.space_between)
+                )
             )
-        )
-        imagePreviewAdapter.submitList(list)
+            imagePreviewAdapter.submitList(list)
+        }
     }
 
     private fun setupFilmPageEntity(filmPage: FilmPageEntity) {
@@ -156,6 +158,8 @@ class FilmPageFragment : Fragment() {
             binding.tvRatingName.text = this.ratingName
             binding.tvYearGenres.text = this.yearGenres
             binding.tvCountryTimeAge.text = this.countryMovieLengthAgeRating
+
+            setupIconsView(filmPage)
 
             if (this.shortDescription == null) {
                 binding.tvShortDescription.visibility = View.GONE
@@ -248,19 +252,39 @@ class FilmPageFragment : Fragment() {
                 val shareIntent = Intent.createChooser(sendIntent, getString(R.string.share_via))
                 startActivity(shareIntent)
             }
-            setupIconsClickListeners(this)
         }
     }
 
-    private fun setupIconsClickListeners(filmPageEntity: FilmPageEntity) {
+    private fun setupIconsClickListeners() {
         binding.ivLike.setOnClickListener {
-            viewModel.addMediaToDefaultCollection(filmPageEntity, DefaultCollection.LIKED)
+            viewModel.toggleLike()
         }
-        binding.ivDontShow.setOnClickListener {
-            viewModel.addMediaToDefaultCollection(filmPageEntity, DefaultCollection.WATCHED)
+        binding.ivWatched.setOnClickListener {
+            viewModel.toggleWatched()
         }
-        binding.ivFavourite.setOnClickListener {
-            viewModel.addMediaToDefaultCollection(filmPageEntity, DefaultCollection.WANT_TO_WATCH)
+        binding.ivWantToWatch.setOnClickListener {
+            viewModel.toggleWantToWatch()
+        }
+    }
+
+    private fun setupIconsView(filmPage: FilmPageEntity) {
+        with(filmPage) {
+
+            if (isLiked) {
+                binding.ivLike.setImageResource(R.drawable.like_active)
+            } else {
+                binding.ivLike.setImageResource(R.drawable.like)
+            }
+            if (isWantToWatch) {
+                binding.ivWantToWatch.setImageResource(R.drawable.want_to_watch_active)
+            } else {
+                binding.ivWantToWatch.setImageResource(R.drawable.want_to_watch)
+            }
+            if (isWatched) {
+                binding.ivWatched.setImageResource(R.drawable.watch)
+            } else {
+                binding.ivWatched.setImageResource(R.drawable.dont_watch)
+            }
         }
     }
 
