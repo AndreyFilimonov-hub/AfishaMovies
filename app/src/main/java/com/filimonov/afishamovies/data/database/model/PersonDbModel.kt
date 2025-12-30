@@ -13,6 +13,6 @@ import androidx.room.PrimaryKey
 data class PersonDbModel(
     @PrimaryKey(autoGenerate = true)
     val personId: Int,
-    val name: String,
+    val name: String?,
     val photoUrl: String?
 )
