@@ -21,6 +21,7 @@ class AfishaMoviesApp : Application() {
         CoroutineScope(Dispatchers.IO).launch {
             db.collectionMediaBannerDao().clearInterestedCollection()
             db.mediaBannerDao().deleteUnusedMediaBanners()
+            db.filmPageDao().deleteUnusedFilmPages()
         }
     }
 }
