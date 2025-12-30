@@ -1,8 +1,5 @@
 package com.filimonov.afishamovies.presentation.ui.profilepage.dialogfragment
 
-import android.app.Dialog
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.DialogCreateCollectionBinding
-import java.lang.RuntimeException
 
 class CreateCollectionDialog(
     private val onCollectionCreated: (String) -> Unit
