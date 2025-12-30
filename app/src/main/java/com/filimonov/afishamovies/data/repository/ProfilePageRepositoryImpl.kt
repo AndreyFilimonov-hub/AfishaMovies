@@ -2,11 +2,7 @@ package com.filimonov.afishamovies.data.repository
 
 import com.filimonov.afishamovies.data.database.dao.CollectionDao
 import com.filimonov.afishamovies.data.database.dao.CollectionMediaBannerDao
-import com.filimonov.afishamovies.data.database.dao.FilmPageDao
-import com.filimonov.afishamovies.data.database.dao.FilmPersonDao
-import com.filimonov.afishamovies.data.database.dao.FilmSimilarMediaBannerDao
 import com.filimonov.afishamovies.data.database.dao.MediaBannerDao
-import com.filimonov.afishamovies.data.database.dao.PersonDao
 import com.filimonov.afishamovies.data.database.model.CollectionDbModel
 import com.filimonov.afishamovies.data.database.model.CollectionMediaBannerCrossRef
 import com.filimonov.afishamovies.data.database.model.MediaBannerDbModel
