@@ -27,8 +27,8 @@ interface MediaBannerDao {
         DELETE FROM media_banners
         WHERE NOT EXISTS (
             SELECT 1
-            FROM collection_media_banners cmb
-            WHERE cmb.mediaBannerId = media_banners.mediaBannerId
+            FROM collection_media_banners cmb, film_similar_media_banners fsmb
+            WHERE cmb.mediaBannerId = media_banners.mediaBannerId OR fsmb.mediaBannerId = media_banners.mediaBannerId
         )
     """)
     suspend fun deleteUnusedMediaBanners()

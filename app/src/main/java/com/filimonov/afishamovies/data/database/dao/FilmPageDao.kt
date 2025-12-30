@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.IGNORE
 import androidx.room.Query
 import com.filimonov.afishamovies.data.database.model.FilmPageDbModel
-import com.filimonov.afishamovies.data.model.filmpage.FilmPageDbDto
 
 @Dao
 interface FilmPageDao {
@@ -26,7 +25,7 @@ interface FilmPageDao {
     suspend fun deleteUnusedFilmPages()
 
     @Query("SELECT * FROM film_detail WHERE filmId = :filmId LIMIT 1")
-    suspend fun getFilmPageById(filmId: Int): FilmPageDbDto
+    suspend fun getFilmPageById(filmId: Int): FilmPageDbModel?
 
     @Query("""
         UPDATE film_detail
