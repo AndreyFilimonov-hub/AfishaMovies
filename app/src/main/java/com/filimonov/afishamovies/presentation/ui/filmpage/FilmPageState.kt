@@ -11,6 +11,6 @@ sealed class FilmPageState {
 
     data class Success(
         val filmPage: FilmPageEntity,
-        val imagePreviews: List<ImagePreviewEntity>
+        val imagePreviews: List<ImagePreviewEntity>?
     ) : FilmPageState()
 }
