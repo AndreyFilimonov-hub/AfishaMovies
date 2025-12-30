@@ -1,7 +1,10 @@
 package com.filimonov.afishamovies.data.mapper
 
+import com.filimonov.afishamovies.data.database.model.FilmPageDbModel
 import com.filimonov.afishamovies.data.database.model.MediaBannerDbModel
+import com.filimonov.afishamovies.data.database.model.PersonDbModel
 import com.filimonov.afishamovies.data.model.filmpage.FilmPageDto
+import com.filimonov.afishamovies.data.model.filmpage.FilmPersonFromDbDto
 import com.filimonov.afishamovies.data.model.filmpage.ImagePreviewDto
 import com.filimonov.afishamovies.data.model.filmpage.PersonBannerDto
 import com.filimonov.afishamovies.data.model.gallery.GalleryImageDto
@@ -37,6 +40,22 @@ fun List<MediaBannerEntity>.toListPageMediaBannerList(): List<ListPageMedia> {
     return this.map { ListPageMedia.MediaBanner(it) }
 }
 
+fun FilmPageEntity.toDbModel(): FilmPageDbModel {
+    return FilmPageDbModel(
+        id = 0,
+        filmId = this.id,
+        ratingName = this.ratingName,
+        yearGenres = this.yearGenres,
+        description = this.description,
+        shortDescription = this.shortDescription,
+        posterUrl = this.posterUrl,
+        countryMovieLengthAgeRating = this.countryMovieLengthAgeRating,
+        isLiked = this.isLiked,
+        isWantToWatch = this.isWantToWatch,
+        isWatched = this.isWatched
+    )
+}
+
 fun FilmPageDto.toFilmPageEntity(): FilmPageEntity {
     return FilmPageEntity(
         id = this.id,
@@ -56,6 +75,14 @@ fun FilmPageDto.toFilmPageEntity(): FilmPageEntity {
     )
 }
 
+fun PersonBannerEntity.toDbModel(): PersonDbModel {
+    return PersonDbModel(
+        this.id,
+        this.name,
+        this.photo
+    )
+}
+
 fun PersonBannerDto.toPersonBannerEntity(): PersonBannerEntity {
     return PersonBannerEntity(
         id = this.id,
@@ -64,6 +91,20 @@ fun PersonBannerDto.toPersonBannerEntity(): PersonBannerEntity {
         character = this.description,
         profession = this.profession
     )
+}
+
+fun FilmPersonFromDbDto.toPerson(): PersonBannerEntity {
+    return PersonBannerEntity(
+        id = this.personId,
+        name = this.name,
+        photo = this.photoUrl,
+        character = this.character,
+        profession = this.profession
+    )
+}
+
+fun List<FilmPersonFromDbDto>.toPersonList(): List<PersonBannerEntity> {
+    return this.map { it.toPerson() }
 }
 
 fun List<PersonBannerDto>.toPersonBannerListEntity(): List<PersonBannerEntity> {
