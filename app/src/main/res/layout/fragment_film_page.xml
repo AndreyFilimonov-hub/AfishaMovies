@@ -65,12 +65,12 @@
             android:focusable="true"
             android:src="@drawable/like"
             app:layout_constraintBottom_toBottomOf="@id/fl_poster"
-            app:layout_constraintEnd_toStartOf="@+id/iv_favourite"
+            app:layout_constraintEnd_toStartOf="@+id/iv_want_to_watch"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
-            android:id="@+id/iv_favourite"
+            android:id="@+id/iv_want_to_watch"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_marginHorizontal="@dimen/margin_6dp"
@@ -79,13 +79,13 @@
             android:clickable="true"
             android:contentDescription="@null"
             android:focusable="true"
-            android:src="@drawable/favourite"
+            android:src="@drawable/want_to_watch"
             app:layout_constraintBottom_toBottomOf="@id/fl_poster"
-            app:layout_constraintEnd_toStartOf="@+id/iv_dont_show"
+            app:layout_constraintEnd_toStartOf="@+id/iv_watched"
             app:layout_constraintStart_toEndOf="@+id/iv_like" />
 
         <ImageView
-            android:id="@+id/iv_dont_show"
+            android:id="@+id/iv_watched"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:layout_marginHorizontal="@dimen/margin_6dp"
@@ -94,10 +94,10 @@
             android:clickable="true"
             android:contentDescription="@null"
             android:focusable="true"
-            android:src="@drawable/dont_show"
+            android:src="@drawable/dont_watch"
             app:layout_constraintBottom_toBottomOf="@id/fl_poster"
             app:layout_constraintEnd_toStartOf="@+id/iv_repost"
-            app:layout_constraintStart_toEndOf="@+id/iv_favourite" />
+            app:layout_constraintStart_toEndOf="@+id/iv_want_to_watch" />
 
         <ImageView
             android:id="@+id/iv_repost"
@@ -112,7 +112,7 @@
             android:src="@drawable/repost"
             app:layout_constraintBottom_toBottomOf="@id/fl_poster"
             app:layout_constraintEnd_toStartOf="@+id/iv_more"
-            app:layout_constraintStart_toEndOf="@+id/iv_dont_show" />
+            app:layout_constraintStart_toEndOf="@+id/iv_watched" />
 
         <ImageView
             android:id="@+id/iv_more"
