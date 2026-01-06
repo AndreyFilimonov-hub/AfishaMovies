@@ -2,7 +2,9 @@ package com.filimonov.afishamovies.presentation.ui.profilepage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.enums.DefaultCollection
+import com.filimonov.afishamovies.domain.usecases.AddMediaBannerToInterestedCollectionUseCase
 import com.filimonov.afishamovies.domain.usecases.ClearCollectionUseCase
 import com.filimonov.afishamovies.domain.usecases.CreateCollectionUseCase
 import com.filimonov.afishamovies.domain.usecases.DeleteCollectionUseCase
@@ -18,6 +20,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ProfilePageViewModel @Inject constructor(
+    private val addMediaBannerToInterestedCollectionUseCase: AddMediaBannerToInterestedCollectionUseCase,
     private val createCollectionUseCase: CreateCollectionUseCase,
     private val deleteCollectionUseCase: DeleteCollectionUseCase,
     private val getCollectionsUseCase: GetCollectionsUseCase,
@@ -106,6 +109,12 @@ class ProfilePageViewModel @Inject constructor(
     fun deleteCollection(collectionId: Int) {
         viewModelScope.launch {
             deleteCollectionUseCase(collectionId)
+        }
+    }
+
+    fun addMediaBannerToInterestedCollection(mediaBannerEntity: MediaBannerEntity) {
+        viewModelScope.launch {
+            addMediaBannerToInterestedCollectionUseCase(mediaBannerEntity)
         }
     }
 }

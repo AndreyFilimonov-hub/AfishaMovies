@@ -60,6 +60,7 @@ class ProfilePageFragment : Fragment() {
 
     private val watchedMediaBannerAdapter = MediaBannerAdapter(
         onMediaBannerClick = {
+            viewModel.addMediaBannerToInterestedCollection(it)
             val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
             (requireActivity() as MainActivity).openFragment(filmPageFragment)
         },
@@ -70,6 +71,7 @@ class ProfilePageFragment : Fragment() {
 
     private val interestedMediaBannerAdapter = MediaBannerAdapter(
         onMediaBannerClick = {
+            viewModel.addMediaBannerToInterestedCollection(it)
             val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
             (requireActivity() as MainActivity).openFragment(filmPageFragment)
         },

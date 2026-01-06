@@ -17,6 +17,7 @@ import com.filimonov.afishamovies.databinding.FragmentFilmPageBinding
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
 import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
 import com.filimonov.afishamovies.presentation.ui.MainActivity
+import com.filimonov.afishamovies.presentation.ui.filmpage.bottomsheetfragment.AddFilmPageToCollectionBottomSheetFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.imagepreviewadapter.ImagePreviewAdapter
 import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.ActorsItemDecoration
 import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.PersonAdapter
@@ -86,6 +87,7 @@ class FilmPageFragment : Fragment() {
 
     private val similarMovieAdapter = SimilarMovieAdapter(
         onClick = {
+            viewModel.addMediaBannerToInterestedCollection(it)
             val filmPageFragment = newInstance(it.id, FilmPageMode.DEFAULT.name)
             (requireActivity() as MainActivity).openFragment(filmPageFragment)
         }
@@ -263,6 +265,10 @@ class FilmPageFragment : Fragment() {
         }
         binding.ivWantToWatch.setOnClickListener {
             viewModel.toggleWantToWatch()
+        }
+        binding.ivMore.setOnClickListener {
+            val bottomSheet = AddFilmPageToCollectionBottomSheetFragment()
+            bottomSheet.show(parentFragmentManager, "a")
         }
     }
 

@@ -69,6 +69,7 @@ class ListPageFragment : Fragment() {
     private val mediaBannerGridAdapter by lazy {
         MediaBannerGridAdapter(
             onMediaBannerClick = {
+                viewModel.addMediaBannerToInterestedCollection(it)
                 val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
                 (requireActivity() as MainActivity).openFragment(filmPageFragment)
             },

@@ -64,8 +64,6 @@ class FilmPageViewModel @Inject constructor(
 
                     _state.value =
                         FilmPageState.Success(filmPage.await(), imagePreviews.await()?.take(10))
-
-                    saveMediaBannerInInterestedCollection()
                 }
             } catch (e: CancellationException) {
                 throw e
@@ -81,9 +79,8 @@ class FilmPageViewModel @Inject constructor(
         }
     }
 
-    private fun saveMediaBannerInInterestedCollection() {
+    fun addMediaBannerToInterestedCollection(mediaBannerEntity: MediaBannerEntity) {
         viewModelScope.launch {
-            val mediaBannerEntity = getMediaBannerByIdFromLocalUseCase(movieId)
             addMediaBannerToInterestedCollectionUseCase(mediaBannerEntity)
         }
     }
