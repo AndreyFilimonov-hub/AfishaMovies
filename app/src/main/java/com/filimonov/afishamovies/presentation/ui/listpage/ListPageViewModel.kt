@@ -81,12 +81,6 @@ class ListPageViewModel @Inject constructor(
         }
     }
 
-    fun addMediaBannerToInterestedCollection(mediaBannerEntity: MediaBannerEntity) {
-        viewModelScope.launch {
-            addMediaBannerToInterestedCollectionUseCase(mediaBannerEntity)
-        }
-    }
-
     private fun loadMedia() {
         val mediasFromCache =
             getMediaBannersByCategoryFromLocalUseCase(Category.entries[id])
@@ -115,6 +109,12 @@ class ListPageViewModel @Inject constructor(
                 .collect {
                     _state.value = ListPageState.Success(it.toListPageMediaBannerList())
                 }
+        }
+    }
+
+    fun addMediaBannerToInterestedCollection(mediaBannerEntity: MediaBannerEntity) {
+        viewModelScope.launch {
+            addMediaBannerToInterestedCollectionUseCase(mediaBannerEntity)
         }
     }
 }

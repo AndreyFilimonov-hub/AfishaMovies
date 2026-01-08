@@ -66,17 +66,12 @@ class SearchPageFragment : Fragment() {
 
     private val searchItemAdapter = SearchItemAdapter(
         onMediaBannerClick = {
+            val mediaBanner = MediaBannerEntity(
+                it.id, it.name, it.genres?.first(), it.rating, it.posterUrl
+            )
+            viewModel.addMediaBannerToInterestedCollection(mediaBanner)
             val filmPageFragment = FilmPageFragment.newInstance(it.id, FilmPageMode.DEFAULT.name)
             (requireActivity() as MainActivity).openFragment(filmPageFragment)
-            viewModel.addMediaBannerToInterestedCollection(
-                MediaBannerEntity(
-                    it.id,
-                    it.name,
-                    it.genres?.first(),
-                    it.rating,
-                    it.posterUrl
-                )
-            )
         },
         onRetryButtonClick = {
             viewModel.sendRequest(binding.sbMain.text.toString().trim())

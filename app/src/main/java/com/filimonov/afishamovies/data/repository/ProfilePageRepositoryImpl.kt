@@ -7,9 +7,11 @@ import com.filimonov.afishamovies.data.database.model.CollectionDbModel
 import com.filimonov.afishamovies.data.database.model.CollectionMediaBannerCrossRef
 import com.filimonov.afishamovies.data.database.model.MediaBannerDbModel
 import com.filimonov.afishamovies.data.mapper.toCollectionEntityList
+import com.filimonov.afishamovies.data.mapper.toCollectionWithMovieEntityList
 import com.filimonov.afishamovies.data.mapper.toMediaBannerEntity
 import com.filimonov.afishamovies.data.mapper.toMediaBannerEntityList
 import com.filimonov.afishamovies.domain.entities.CollectionEntity
+import com.filimonov.afishamovies.domain.entities.CollectionWithMovieEntity
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.enums.DefaultCollection
 import com.filimonov.afishamovies.domain.repository.ProfilePageRepository
@@ -20,7 +22,7 @@ import javax.inject.Inject
 class ProfilePageRepositoryImpl @Inject constructor(
     private val collectionDao: CollectionDao,
     private val mediaBannerDao: MediaBannerDao,
-    private val collectionMediaBannerDao: CollectionMediaBannerDao
+    private val collectionMediaBannerDao: CollectionMediaBannerDao,
 ) : ProfilePageRepository {
 
     override fun getMediaBannerListForCollection(collectionId: Int): Flow<List<MediaBannerEntity>> {
@@ -53,7 +55,6 @@ class ProfilePageRepositoryImpl @Inject constructor(
 
     override suspend fun addMediaBannerToInterestedCollection(mediaBannerEntity: MediaBannerEntity) {
         val interestedId = collectionDao.getCollectionIdByKey(DefaultCollection.INTERESTED.key)
-
         mediaBannerDao.addMediaBanner(
             MediaBannerDbModel(
                 0,
@@ -89,6 +90,10 @@ class ProfilePageRepositoryImpl @Inject constructor(
 
     override suspend fun getMediaBannerById(mediaBannerId: Int): MediaBannerEntity {
         return mediaBannerDao.getMediaBannerById(mediaBannerId).toMediaBannerEntity()
+    }
+
+    override fun getAllCollectionsWithCountsByMediaBannerId(mediaBannerId: Int): Flow<List<CollectionWithMovieEntity>> {
+        return collectionDao.getAllCollectionsWithCountsByMediaBannerId(mediaBannerId).map { it.toCollectionWithMovieEntityList() }
     }
 
     override suspend fun createCollection(name: String, key: DefaultCollection) {

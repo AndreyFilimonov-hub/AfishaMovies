@@ -17,7 +17,7 @@ class CollectionViewHolder(
         val context = binding.root.context
         val icon = when (collection.name) {
             context.getString(R.string.liked) -> ContextCompat.getDrawable(context,R.drawable.like_black)
-            context.getString(R.string.want_to_watch) -> ContextCompat.getDrawable(context, R.drawable.favourite_black)
+            context.getString(R.string.want_to_watch) -> ContextCompat.getDrawable(context, R.drawable.want_to_watch_black)
             else -> ContextCompat.getDrawable(context, R.drawable.person_black)
         }
         binding.ivIcon.setImageDrawable(icon)

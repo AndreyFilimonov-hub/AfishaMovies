@@ -16,6 +16,7 @@ import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.homepage.HomePageFragment
 import com.filimonov.afishamovies.presentation.ui.onboard.OnBoardFragment
+import com.filimonov.afishamovies.presentation.ui.profilepage.ProfilePageFragment
 import com.filimonov.afishamovies.presentation.ui.searchpage.SearchPageFragment
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SearchSettingsFragment
 
@@ -81,16 +82,19 @@ class MainActivity : AppCompatActivity() {
     private fun initFragments() {
         val homePageFragment = HomePageFragment.newInstance()
         val searchPageFragment = SearchPageFragment.newInstance()
+        val profilePageFragment = ProfilePageFragment.newInstance()
 
         homeStack.add(homePageFragment)
         searchStack.add(searchPageFragment)
+        profileStack.add(profilePageFragment)
 
         supportFragmentManager.beginTransaction()
             .add(R.id.fragment_container, homePageFragment)
             .add(R.id.fragment_container, searchPageFragment)
+            .add(R.id.fragment_container, profilePageFragment)
             .hide(searchPageFragment)
+            .hide(profilePageFragment)
             .commitNow()
-        // TODO: profileFragment
     }
 
     private fun switchTab(stack: MutableList<Fragment>) {

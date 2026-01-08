@@ -1,14 +1,19 @@
 package com.filimonov.afishamovies.data.mapper
 
+import com.filimonov.afishamovies.data.database.model.FilmPageDbModel
 import com.filimonov.afishamovies.data.database.model.MediaBannerDbModel
+import com.filimonov.afishamovies.data.database.model.PersonDbModel
 import com.filimonov.afishamovies.data.model.filmpage.FilmPageDto
+import com.filimonov.afishamovies.data.model.filmpage.FilmPersonFromDbDto
 import com.filimonov.afishamovies.data.model.filmpage.ImagePreviewDto
 import com.filimonov.afishamovies.data.model.filmpage.PersonBannerDto
 import com.filimonov.afishamovies.data.model.gallery.GalleryImageDto
 import com.filimonov.afishamovies.data.model.mediabanner.MediaBannerDto
 import com.filimonov.afishamovies.data.model.profilepage.CollectionCountDto
+import com.filimonov.afishamovies.data.model.profilepage.CollectionCountWithMovieDto
 import com.filimonov.afishamovies.data.model.searchpage.SearchMediaBannerDto
 import com.filimonov.afishamovies.domain.entities.CollectionEntity
+import com.filimonov.afishamovies.domain.entities.CollectionWithMovieEntity
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
 import com.filimonov.afishamovies.domain.entities.GalleryImageEntity
 import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
@@ -37,6 +42,22 @@ fun List<MediaBannerEntity>.toListPageMediaBannerList(): List<ListPageMedia> {
     return this.map { ListPageMedia.MediaBanner(it) }
 }
 
+fun FilmPageEntity.toDbModel(): FilmPageDbModel {
+    return FilmPageDbModel(
+        id = 0,
+        filmId = this.id,
+        ratingName = this.ratingName,
+        yearGenres = this.yearGenres,
+        description = this.description,
+        shortDescription = this.shortDescription,
+        posterUrl = this.posterUrl,
+        countryMovieLengthAgeRating = this.countryMovieLengthAgeRating,
+        isLiked = this.isLiked,
+        isWantToWatch = this.isWantToWatch,
+        isWatched = this.isWatched
+    )
+}
+
 fun FilmPageDto.toFilmPageEntity(): FilmPageEntity {
     return FilmPageEntity(
         id = this.id,
@@ -49,7 +70,18 @@ fun FilmPageDto.toFilmPageEntity(): FilmPageEntity {
         yearGenres = "${this.year}, ${this.genres.joinToString { it.name }}",
         countryMovieLengthAgeRating = "${
             this.countries.map { it.name }.first()
-        }, ${(movieLength ?: seriesLength)?.toMovieLengthFormat()}, ${this.ageRating}+"
+        }, ${(movieLength ?: seriesLength)?.toMovieLengthFormat()}, ${this.ageRating}+",
+        isLiked = false,
+        isWantToWatch = false,
+        isWatched = false // TODO replace from db or maybe remove this mapper
+    )
+}
+
+fun PersonBannerEntity.toDbModel(): PersonDbModel {
+    return PersonDbModel(
+        this.id,
+        this.name,
+        this.photo
     )
 }
 
@@ -61,6 +93,20 @@ fun PersonBannerDto.toPersonBannerEntity(): PersonBannerEntity {
         character = this.description,
         profession = this.profession
     )
+}
+
+fun FilmPersonFromDbDto.toPerson(): PersonBannerEntity {
+    return PersonBannerEntity(
+        id = this.personId,
+        name = this.name,
+        photo = this.photoUrl,
+        character = this.character,
+        profession = this.profession
+    )
+}
+
+fun List<FilmPersonFromDbDto>.toPersonList(): List<PersonBannerEntity> {
+    return this.map { it.toPerson() }
 }
 
 fun List<PersonBannerDto>.toPersonBannerListEntity(): List<PersonBannerEntity> {
@@ -139,4 +185,19 @@ fun CollectionCountDto.toCollectionEntity(): CollectionEntity {
 
 fun List<CollectionCountDto>.toCollectionEntityList(): List<CollectionEntity> {
     return this.map { it.toCollectionEntity() }
+}
+
+
+fun CollectionCountWithMovieDto.toCollectionWithMovieEntity(): CollectionWithMovieEntity {
+    return CollectionWithMovieEntity(
+        id = this.id,
+        name = this.name,
+        countElements = this.count,
+        isDefault = this.isDefault,
+        isMovieInCollection = this.isMovieInCollection
+    )
+}
+
+fun List<CollectionCountWithMovieDto>.toCollectionWithMovieEntityList(): List<CollectionWithMovieEntity> {
+    return this.map { it.toCollectionWithMovieEntity() }
 }

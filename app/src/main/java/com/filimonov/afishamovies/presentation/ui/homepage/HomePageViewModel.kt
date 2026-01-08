@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 class HomePageViewModel @Inject constructor(
     private val getMediaBannersByCategoryFromRemoteUseCase: GetMediaBannersByCategoryFromRemoteUseCase,
-    private val addMediaBannerToInterestedCollectionUseCase: AddMediaBannerToInterestedCollectionUseCase,
+    private val addMediaBannerToInterestedCollectionUseCase: AddMediaBannerToInterestedCollectionUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<HomePageState>(HomePageState.Loading)

@@ -2,6 +2,7 @@ package com.filimonov.afishamovies.presentation.utils
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 fun Int.toMovieLengthFormat(): String {
     val hours = this / 60
@@ -29,6 +30,13 @@ fun Double.roundRating(): String {
     return this.toString().substring(0, 3)
 }
 
-fun ImageView.loadImage(url: String?) {
+fun ImageView.loadImageBigPoster(url: String?) {
     Glide.with(this).load(url).into(this)
+}
+
+fun ImageView.loadImageBanner(url: String?) {
+    Glide.with(this)
+        .load(url)
+        .transform(RoundedCorners((4 * context.resources.displayMetrics.density).toInt()))
+        .into(this)
 }

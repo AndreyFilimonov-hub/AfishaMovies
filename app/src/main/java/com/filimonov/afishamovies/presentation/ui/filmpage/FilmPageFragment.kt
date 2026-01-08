@@ -16,8 +16,8 @@ import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentFilmPageBinding
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
 import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
-import com.filimonov.afishamovies.domain.enums.DefaultCollection
 import com.filimonov.afishamovies.presentation.ui.MainActivity
+import com.filimonov.afishamovies.presentation.ui.filmpage.bottomsheetfragment.AddFilmPageToCollectionBottomSheetFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.imagepreviewadapter.ImagePreviewAdapter
 import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.ActorsItemDecoration
 import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.PersonAdapter
@@ -28,7 +28,7 @@ import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageMode
 import com.filimonov.afishamovies.presentation.utils.HorizontalSpaceItemDecoration
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
-import com.filimonov.afishamovies.presentation.utils.loadImage
+import com.filimonov.afishamovies.presentation.utils.loadImageBigPoster
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -42,6 +42,7 @@ class FilmPageFragment : Fragment() {
 
         private const val UNDEFINED_ID = -1
         private const val UNDEFINED_MODE = ""
+        private const val CREATE_BOTTOM_SHEET_TAG = "CREATE_BOTTOM_SHEET_TAG"
 
         @JvmStatic
         fun newInstance(movieId: Int, mode: String) =
@@ -87,9 +88,9 @@ class FilmPageFragment : Fragment() {
 
     private val similarMovieAdapter = SimilarMovieAdapter(
         onClick = {
+            viewModel.addMediaBannerToInterestedCollection(it)
             val filmPageFragment = newInstance(it.id, FilmPageMode.DEFAULT.name)
             (requireActivity() as MainActivity).openFragment(filmPageFragment)
-            viewModel.addMediaBannerToInterestedCollection(it)
         }
     )
 
@@ -114,6 +115,7 @@ class FilmPageFragment : Fragment() {
 
         setPaddingRootView()
         setClickListenerOnBack()
+        setupIconsClickListeners()
         observeViewModel()
     }
 
@@ -140,15 +142,17 @@ class FilmPageFragment : Fragment() {
         }
     }
 
-    private fun setupImagesToGallery(list: List<ImagePreviewEntity>) {
-        binding.rvGallery.adapter = imagePreviewAdapter
-        binding.rvGallery.addItemDecoration(
-            HorizontalSpaceItemDecoration(
-                requireContext().resources.getDimensionPixelSize(R.dimen.margin_start),
-                requireContext().resources.getDimensionPixelSize(R.dimen.space_between)
+    private fun setupImagesToGallery(list: List<ImagePreviewEntity>?) {
+        list?.let {
+            binding.rvGallery.adapter = imagePreviewAdapter
+            binding.rvGallery.addItemDecoration(
+                HorizontalSpaceItemDecoration(
+                    requireContext().resources.getDimensionPixelSize(R.dimen.margin_start),
+                    requireContext().resources.getDimensionPixelSize(R.dimen.space_between)
+                )
             )
-        )
-        imagePreviewAdapter.submitList(list)
+            imagePreviewAdapter.submitList(list)
+        }
     }
 
     private fun setupFilmPageEntity(filmPage: FilmPageEntity) {
@@ -156,6 +160,8 @@ class FilmPageFragment : Fragment() {
             binding.tvRatingName.text = this.ratingName
             binding.tvYearGenres.text = this.yearGenres
             binding.tvCountryTimeAge.text = this.countryMovieLengthAgeRating
+
+            setupIconsView()
 
             if (this.shortDescription == null) {
                 binding.tvShortDescription.visibility = View.GONE
@@ -192,7 +198,7 @@ class FilmPageFragment : Fragment() {
                 binding.rvSimilarMovie.visibility = View.GONE
             }
 
-            binding.ivPoster.loadImage(this.posterUrl)
+            binding.ivPoster.loadImageBigPoster(this.posterUrl)
 
             binding.rvActors.adapter = actorsAdapter
             binding.rvActors.addItemDecoration(
@@ -248,19 +254,34 @@ class FilmPageFragment : Fragment() {
                 val shareIntent = Intent.createChooser(sendIntent, getString(R.string.share_via))
                 startActivity(shareIntent)
             }
-            setupIconsClickListeners(this)
         }
     }
 
-    private fun setupIconsClickListeners(filmPageEntity: FilmPageEntity) {
+    private fun setupIconsClickListeners() {
         binding.ivLike.setOnClickListener {
-            viewModel.addMediaToDefaultCollection(filmPageEntity, DefaultCollection.LIKED)
+            viewModel.toggleLike()
         }
-        binding.ivDontShow.setOnClickListener {
-            viewModel.addMediaToDefaultCollection(filmPageEntity, DefaultCollection.WATCHED)
+        binding.ivWatched.setOnClickListener {
+            viewModel.toggleWatched()
         }
-        binding.ivFavourite.setOnClickListener {
-            viewModel.addMediaToDefaultCollection(filmPageEntity, DefaultCollection.WANT_TO_WATCH)
+        binding.ivWantToWatch.setOnClickListener {
+            viewModel.toggleWantToWatch()
+        }
+        binding.ivMore.setOnClickListener {
+            val bottomSheet = AddFilmPageToCollectionBottomSheetFragment.newInstance(movieId)
+            bottomSheet.show(childFragmentManager, CREATE_BOTTOM_SHEET_TAG)
+        }
+    }
+
+    private fun setupIconsView() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.collectionState.collect { state ->
+                    binding.ivLike.setImageResource(if (state.isLiked) R.drawable.like_active else R.drawable.like)
+                    binding.ivWantToWatch.setImageResource(if (state.isWantToWatch) R.drawable.want_to_watch_active else R.drawable.want_to_watch)
+                    binding.ivWatched.setImageResource(if (state.isWatched) R.drawable.watch else R.drawable.dont_watch)
+                }
+            }
         }
     }
 
