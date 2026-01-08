@@ -42,6 +42,7 @@ class FilmPageFragment : Fragment() {
 
         private const val UNDEFINED_ID = -1
         private const val UNDEFINED_MODE = ""
+        private const val CREATE_BOTTOM_SHEET_TAG = "CREATE_BOTTOM_SHEET_TAG"
 
         @JvmStatic
         fun newInstance(movieId: Int, mode: String) =
@@ -268,7 +269,7 @@ class FilmPageFragment : Fragment() {
         }
         binding.ivMore.setOnClickListener {
             val bottomSheet = AddFilmPageToCollectionBottomSheetFragment.newInstance(movieId)
-            bottomSheet.show(childFragmentManager, "a")
+            bottomSheet.show(childFragmentManager, CREATE_BOTTOM_SHEET_TAG)
         }
     }
 
