@@ -14,12 +14,15 @@ import com.filimonov.afishamovies.data.mapper.toImagePreviewListEntity
 import com.filimonov.afishamovies.data.mapper.toMediaBannerEntityList
 import com.filimonov.afishamovies.data.mapper.toPersonList
 import com.filimonov.afishamovies.data.network.FilmPageService
+import com.filimonov.afishamovies.domain.entities.FilmPageCollectionsState
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
 import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
 import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
 import com.filimonov.afishamovies.domain.enums.TypeImage
 import com.filimonov.afishamovies.domain.repository.FilmPageRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class FilmPageRepositoryImpl @Inject constructor(
@@ -64,6 +67,11 @@ class FilmPageRepositoryImpl @Inject constructor(
             persons[id] = it.persons
             similarMovies[id] = it.similarMovies ?: emptyList()
         }
+    }
+
+    override fun getFilmPageCollectionsState(movieId: Int): Flow<FilmPageCollectionsState> {
+        return filmPageDao.getFilmPageCollectionsStateFlow(movieId)
+            .map { FilmPageCollectionsState(it?.isLiked ?: false, it?.isWantToWatch ?: false, it?.isWatched ?: false) }
     }
 
     override suspend fun getImagePreviewsByMovieId(movieId: Int): List<ImagePreviewEntity> {
