@@ -4,7 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.IGNORE
 import androidx.room.Query
+import com.filimonov.afishamovies.data.model.filmpage.FilmPageCollectionsStateDto
 import com.filimonov.afishamovies.data.database.model.FilmPageDbModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FilmPageDao {
@@ -26,6 +28,17 @@ interface FilmPageDao {
 
     @Query("SELECT * FROM film_detail WHERE filmId = :filmId LIMIT 1")
     suspend fun getFilmPageById(filmId: Int): FilmPageDbModel?
+
+    @Query("""
+        SELECT
+            isLiked,
+            isWantToWatch,
+            isWatched
+        FROM film_detail
+        WHERE filmId = :filmId
+        LIMIT 1
+    """)
+    fun getFilmPageCollectionsStateFlow(filmId: Int): Flow<FilmPageCollectionsStateDto?>
 
     @Query("""
         UPDATE film_detail
