@@ -1,7 +1,6 @@
 package com.filimonov.afishamovies.presentation.ui.filmpage.bottomsheetfragment.collectionadapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.filimonov.afishamovies.domain.entities.CollectionEntity
 import com.filimonov.afishamovies.domain.entities.CollectionWithMovieEntity
 
 class CollectionDiffCallback : DiffUtil.ItemCallback<CollectionWithMovieEntity>() {

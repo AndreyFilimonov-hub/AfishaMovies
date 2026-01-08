@@ -2,7 +2,6 @@ package com.filimonov.afishamovies.di.filmpagecomponent.addfilmpagetocollectionc
 
 import androidx.lifecycle.ViewModel
 import com.filimonov.afishamovies.di.ViewModelKey
-import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageViewModel
 import com.filimonov.afishamovies.presentation.ui.filmpage.bottomsheetfragment.AddFilmPageToCollectionViewModel
 import dagger.Binds
 import dagger.Module
