@@ -11,11 +11,13 @@ import com.filimonov.afishamovies.domain.usecases.DeleteCollectionUseCase
 import com.filimonov.afishamovies.domain.usecases.GetCollectionIdByKeyUseCase
 import com.filimonov.afishamovies.domain.usecases.GetCollectionsUseCase
 import com.filimonov.afishamovies.domain.usecases.GetMediaBannersByCollectionUseCase
+import com.filimonov.afishamovies.domain.usecases.UpdateDefaultCategoriesFlagsUseCase
 import com.filimonov.afishamovies.presentation.ui.profilepage.mediabanneradapter.MediaBannerModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,7 +28,8 @@ class ProfilePageViewModel @Inject constructor(
     private val getCollectionsUseCase: GetCollectionsUseCase,
     private val getMediaBannersByCollectionUseCase: GetMediaBannersByCollectionUseCase,
     private val getCollectionIdByKeyUseCase: GetCollectionIdByKeyUseCase,
-    private val clearCollectionUseCase: ClearCollectionUseCase
+    private val clearCollectionUseCase: ClearCollectionUseCase,
+    private val updateDefaultCategoriesFlagsUseCase: UpdateDefaultCategoriesFlagsUseCase
 ) : ViewModel() {
 
     companion object {
@@ -89,7 +92,18 @@ class ProfilePageViewModel @Inject constructor(
     fun clearCollection(collectionKey: DefaultCollection) {
         viewModelScope.launch {
             when (collectionKey) {
-                DefaultCollection.WATCHED -> clearCollectionUseCase(watchedCollectionId)
+                DefaultCollection.WATCHED -> {
+                    val mediaBanners =
+                        getMediaBannersByCollectionUseCase(watchedCollectionId).first()
+                    clearCollectionUseCase(watchedCollectionId)
+                    mediaBanners.forEach { mediaBanner ->
+                        updateDefaultCategoriesFlagsUseCase(
+                            mediaBanner.id,
+                            isWatched = false
+                        )
+                    }
+                }
+
                 DefaultCollection.INTERESTED -> clearCollectionUseCase(interestedCollectionId)
                 DefaultCollection.LIKED,
                 DefaultCollection.USER,
