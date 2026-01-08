@@ -7,7 +7,9 @@ import com.filimonov.afishamovies.data.mapper.toListPageMediaBannerList
 import com.filimonov.afishamovies.data.mapper.toListPageMediaWorkerBanners
 import com.filimonov.afishamovies.di.ModeQualifier
 import com.filimonov.afishamovies.di.listpagecomponent.IdQualifier
+import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.domain.enums.Category
+import com.filimonov.afishamovies.domain.usecases.AddMediaBannerToInterestedCollectionUseCase
 import com.filimonov.afishamovies.domain.usecases.GetMediaBannersByCategoryFromLocalUseCase
 import com.filimonov.afishamovies.domain.usecases.GetMediaBannersByCategoryFromRemoteUseCase
 import com.filimonov.afishamovies.domain.usecases.GetMediaBannersByCollectionUseCase
@@ -21,6 +23,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ListPageViewModel @Inject constructor(
+    private val addMediaBannerToInterestedCollectionUseCase: AddMediaBannerToInterestedCollectionUseCase,
     private val getMediaBannersByCategoryFromLocalUseCase: GetMediaBannersByCategoryFromLocalUseCase,
     private val getMediaBannersByCategoryFromRemoteUseCase: GetMediaBannersByCategoryFromRemoteUseCase,
     private val getPersonsUseCase: GetPersonsUseCase,
@@ -106,6 +109,12 @@ class ListPageViewModel @Inject constructor(
                 .collect {
                     _state.value = ListPageState.Success(it.toListPageMediaBannerList())
                 }
+        }
+    }
+
+    fun addMediaBannerToInterestedCollection(mediaBannerEntity: MediaBannerEntity) {
+        viewModelScope.launch {
+            addMediaBannerToInterestedCollectionUseCase(mediaBannerEntity)
         }
     }
 }

@@ -17,6 +17,7 @@ import com.filimonov.afishamovies.databinding.FragmentFilmPageBinding
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
 import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
 import com.filimonov.afishamovies.presentation.ui.MainActivity
+import com.filimonov.afishamovies.presentation.ui.filmpage.bottomsheetfragment.AddFilmPageToCollectionBottomSheetFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.imagepreviewadapter.ImagePreviewAdapter
 import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.ActorsItemDecoration
 import com.filimonov.afishamovies.presentation.ui.filmpage.personadapter.PersonAdapter
@@ -27,7 +28,7 @@ import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageMode
 import com.filimonov.afishamovies.presentation.utils.HorizontalSpaceItemDecoration
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
-import com.filimonov.afishamovies.presentation.utils.loadImage
+import com.filimonov.afishamovies.presentation.utils.loadImageBigPoster
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,6 +42,7 @@ class FilmPageFragment : Fragment() {
 
         private const val UNDEFINED_ID = -1
         private const val UNDEFINED_MODE = ""
+        private const val CREATE_BOTTOM_SHEET_TAG = "CREATE_BOTTOM_SHEET_TAG"
 
         @JvmStatic
         fun newInstance(movieId: Int, mode: String) =
@@ -86,6 +88,7 @@ class FilmPageFragment : Fragment() {
 
     private val similarMovieAdapter = SimilarMovieAdapter(
         onClick = {
+            viewModel.addMediaBannerToInterestedCollection(it)
             val filmPageFragment = newInstance(it.id, FilmPageMode.DEFAULT.name)
             (requireActivity() as MainActivity).openFragment(filmPageFragment)
         }
@@ -158,7 +161,7 @@ class FilmPageFragment : Fragment() {
             binding.tvYearGenres.text = this.yearGenres
             binding.tvCountryTimeAge.text = this.countryMovieLengthAgeRating
 
-            setupIconsView(filmPage)
+            setupIconsView()
 
             if (this.shortDescription == null) {
                 binding.tvShortDescription.visibility = View.GONE
@@ -195,7 +198,7 @@ class FilmPageFragment : Fragment() {
                 binding.rvSimilarMovie.visibility = View.GONE
             }
 
-            binding.ivPoster.loadImage(this.posterUrl)
+            binding.ivPoster.loadImageBigPoster(this.posterUrl)
 
             binding.rvActors.adapter = actorsAdapter
             binding.rvActors.addItemDecoration(
@@ -264,25 +267,20 @@ class FilmPageFragment : Fragment() {
         binding.ivWantToWatch.setOnClickListener {
             viewModel.toggleWantToWatch()
         }
+        binding.ivMore.setOnClickListener {
+            val bottomSheet = AddFilmPageToCollectionBottomSheetFragment.newInstance(movieId)
+            bottomSheet.show(childFragmentManager, CREATE_BOTTOM_SHEET_TAG)
+        }
     }
 
-    private fun setupIconsView(filmPage: FilmPageEntity) {
-        with(filmPage) {
-
-            if (isLiked) {
-                binding.ivLike.setImageResource(R.drawable.like_active)
-            } else {
-                binding.ivLike.setImageResource(R.drawable.like)
-            }
-            if (isWantToWatch) {
-                binding.ivWantToWatch.setImageResource(R.drawable.want_to_watch_active)
-            } else {
-                binding.ivWantToWatch.setImageResource(R.drawable.want_to_watch)
-            }
-            if (isWatched) {
-                binding.ivWatched.setImageResource(R.drawable.watch)
-            } else {
-                binding.ivWatched.setImageResource(R.drawable.dont_watch)
+    private fun setupIconsView() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.collectionState.collect { state ->
+                    binding.ivLike.setImageResource(if (state.isLiked) R.drawable.like_active else R.drawable.like)
+                    binding.ivWantToWatch.setImageResource(if (state.isWantToWatch) R.drawable.want_to_watch_active else R.drawable.want_to_watch)
+                    binding.ivWatched.setImageResource(if (state.isWatched) R.drawable.watch else R.drawable.dont_watch)
+                }
             }
         }
     }

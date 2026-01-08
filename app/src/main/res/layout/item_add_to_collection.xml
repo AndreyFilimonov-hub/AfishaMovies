@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_collection"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white">
@@ -35,7 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start_60dp"
         app:buttonIconTint="@color/white"
-        app:buttonTint="@color/chip_stroke_selector"
+        app:buttonTint="@color/black"
+        android:checked="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
