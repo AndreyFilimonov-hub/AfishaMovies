@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -342,6 +343,8 @@ class MainActivity : AppCompatActivity() {
             topFragment?.let {
                 currentStack.removeAll { !it.isAdded }
                 setVisibleBottomNavBar(topFragment)
+                WindowInsetsControllerCompat(window, window.decorView)
+                    .isAppearanceLightStatusBars = true
             }
         }
     }
