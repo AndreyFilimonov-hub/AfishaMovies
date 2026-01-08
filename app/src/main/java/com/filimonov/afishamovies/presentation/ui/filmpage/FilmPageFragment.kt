@@ -28,7 +28,7 @@ import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageMode
 import com.filimonov.afishamovies.presentation.utils.HorizontalSpaceItemDecoration
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
-import com.filimonov.afishamovies.presentation.utils.loadImageBigPoster
+import com.filimonov.afishamovies.presentation.utils.setupDynamicStatusBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -198,7 +198,12 @@ class FilmPageFragment : Fragment() {
                 binding.rvSimilarMovie.visibility = View.GONE
             }
 
-            binding.ivPoster.loadImageBigPoster(this.posterUrl)
+            setupDynamicStatusBar(
+                (requireActivity() as MainActivity),
+                binding.ivPoster,
+                binding.root,
+                posterUrl
+            )
 
             binding.rvActors.adapter = actorsAdapter
             binding.rvActors.addItemDecoration(
