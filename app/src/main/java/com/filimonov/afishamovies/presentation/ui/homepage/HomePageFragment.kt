@@ -109,8 +109,8 @@ class HomePageFragment : Fragment() {
 
     private fun setInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.success) { view, insets ->
-            val displayCutout = insets.getInsets(WindowInsetsCompat.Type.displayCutout())
-            view.updatePadding(top = displayCutout.top)
+            val safeInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.displayCutout())
+            view.updatePadding(top = safeInsets.top)
             insets
         }
     }

@@ -115,8 +115,8 @@ class ListPageFragment : Fragment() {
 
     private fun setInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(top = systemBars.top)
+            val safeInsets = insets.getInsets(WindowInsetsCompat.Type.statusBars() or WindowInsetsCompat.Type.displayCutout())
+            v.updatePadding(top = safeInsets.top)
             insets
         }
     }
