@@ -10,8 +10,10 @@ import com.filimonov.afishamovies.data.model.filmpage.PersonBannerDto
 import com.filimonov.afishamovies.data.model.gallery.GalleryImageDto
 import com.filimonov.afishamovies.data.model.mediabanner.MediaBannerDto
 import com.filimonov.afishamovies.data.model.profilepage.CollectionCountDto
+import com.filimonov.afishamovies.data.model.profilepage.CollectionCountWithMovieDto
 import com.filimonov.afishamovies.data.model.searchpage.SearchMediaBannerDto
 import com.filimonov.afishamovies.domain.entities.CollectionEntity
+import com.filimonov.afishamovies.domain.entities.CollectionWithMovieEntity
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
 import com.filimonov.afishamovies.domain.entities.GalleryImageEntity
 import com.filimonov.afishamovies.domain.entities.ImagePreviewEntity
@@ -183,4 +185,19 @@ fun CollectionCountDto.toCollectionEntity(): CollectionEntity {
 
 fun List<CollectionCountDto>.toCollectionEntityList(): List<CollectionEntity> {
     return this.map { it.toCollectionEntity() }
+}
+
+
+fun CollectionCountWithMovieDto.toCollectionWithMovieEntity(): CollectionWithMovieEntity {
+    return CollectionWithMovieEntity(
+        id = this.id,
+        name = this.name,
+        countElements = this.count,
+        isDefault = this.isDefault,
+        isMovieInCollection = this.isMovieInCollection
+    )
+}
+
+fun List<CollectionCountWithMovieDto>.toCollectionWithMovieEntityList(): List<CollectionWithMovieEntity> {
+    return this.map { it.toCollectionWithMovieEntity() }
 }
