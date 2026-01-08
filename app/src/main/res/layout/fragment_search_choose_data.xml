@@ -16,7 +16,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/layout_height_56dp"
-            android:layout_marginTop="@dimen/margin_top_46dp"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
