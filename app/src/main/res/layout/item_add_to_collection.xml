@@ -36,7 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start_60dp"
         app:buttonIconTint="@color/white"
-        app:buttonTint="@color/chip_stroke_selector"
+        app:buttonTint="@color/black"
+        android:checked="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
