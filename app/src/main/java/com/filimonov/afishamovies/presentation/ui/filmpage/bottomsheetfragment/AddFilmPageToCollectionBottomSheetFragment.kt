@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +21,9 @@ import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.filimonov.afishamovies.presentation.utils.loadImageBanner
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -72,7 +78,17 @@ class AddFilmPageToCollectionBottomSheetFragment() : BottomSheetDialogFragment()
         dialog.setOnShowListener {
             val bottomSheet =
                 dialog.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
-            bottomSheet?.setBackgroundColor(Color.WHITE)
+
+            bottomSheet?.let {
+                val shapeDrawable = MaterialShapeDrawable().apply {
+                    setTint(Color.WHITE)
+                    shapeAppearanceModel = ShapeAppearanceModel().toBuilder()
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 16 * resources.displayMetrics.density)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 16 * resources.displayMetrics.density)
+                        .build()
+                }
+                it.background = shapeDrawable
+            }
         }
         return dialog
     }
@@ -94,9 +110,22 @@ class AddFilmPageToCollectionBottomSheetFragment() : BottomSheetDialogFragment()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setInsets()
         binding.rvCollections.adapter = collectionWithMovieAdapter
         observeViewModel()
         setupClickListeners()
+    }
+
+    private fun setInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(
+                left = systemBars.left,
+                right = systemBars.right,
+                bottom = systemBars.bottom
+            )
+            insets
+        }
     }
 
     private fun observeViewModel() {
