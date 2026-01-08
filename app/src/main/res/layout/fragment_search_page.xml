@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".presentation.ui.searchpage.SearchPageFragment">
 
     <ImageView
@@ -22,9 +23,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_horizontal"
-        android:layout_marginTop="@dimen/margin_top"
+        android:layout_marginTop="@dimen/margin_top_16dp"
         android:background="@drawable/bg_search_bar"
         android:hint="@string/sb_main_hint"
+        android:importantForAutofill="no"
         android:inputType="text"
         android:paddingVertical="@dimen/padding_vertical_8dp"
         android:paddingStart="@dimen/padding_start_46dp"
