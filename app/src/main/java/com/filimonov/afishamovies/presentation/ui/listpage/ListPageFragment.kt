@@ -123,6 +123,7 @@ class ListPageFragment : Fragment() {
 
     private fun setupRecyclerView() {
         val layoutManager = GridLayoutManager(this.context, 2)
+
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return mediaBannerGridAdapter.getSpanPosition(position)
@@ -133,7 +134,7 @@ class ListPageFragment : Fragment() {
         binding.rvContent.addItemDecoration(
             SpaceItemDecoration(
                 mediaBannerGridAdapter,
-                resources.getDimensionPixelSize(R.dimen.margin_between_16dp),
+                resources.getDimensionPixelSize(R.dimen.margin_between_26dp),
                 resources.getDimensionPixelSize(R.dimen.margin_bottom_16dp)
             )
         )

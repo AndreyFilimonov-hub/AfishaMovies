@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/banner_container"
-    android:layout_width="120dp"
-    android:layout_height="@dimen/media_banner"
+    android:layout_width="@dimen/media_banner_width"
+    android:layout_height="@dimen/media_banner_height"
     android:clickable="true"
     android:focusable="true"
     android:foreground="@drawable/bg_ripple_banner">
