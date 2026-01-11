@@ -16,12 +16,12 @@ class BigImageViewHolder(private val binding: ItemImageGalleryBigBinding) :
     }
 
     fun bind(photo: GalleryImageEntity) {
-        Glide.with(binding.root)
+        Glide.with(binding.ivGalleryBigImage)
             .load(photo.url)
             .transform(
                 CenterCrop(),
                 RoundedCorners((RADIUS_PX * binding.root.context.resources.displayMetrics.density).toInt())
             )
-            .into(binding.root)
+            .into(binding.ivGalleryBigImage)
     }
 }
