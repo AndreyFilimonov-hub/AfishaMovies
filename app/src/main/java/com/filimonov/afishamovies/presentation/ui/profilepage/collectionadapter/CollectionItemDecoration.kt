@@ -1,18 +1,18 @@
 package com.filimonov.afishamovies.presentation.ui.profilepage.collectionadapter
 
+import android.content.Context
 import android.graphics.Rect
 import android.view.View
-import androidx.core.view.size
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
-class CollectionItemDecoration : ItemDecoration() {
+class CollectionItemDecoration(context: Context) : ItemDecoration() {
 
-    companion object {
-        private const val DP_26 = 26
-        private const val DP_16 = 16
-        private const val DP_8 = 8
-    }
+    private val spacing26 = (26 * context.resources.displayMetrics.density).toInt()
+
+    private val spacing16 = (16 * context.resources.displayMetrics.density).toInt()
+
+    private val spacing8 = (8 * context.resources.displayMetrics.density).toInt()
 
     override fun getItemOffsets(
         outRect: Rect,
@@ -26,15 +26,17 @@ class CollectionItemDecoration : ItemDecoration() {
         val column = position % 2
 
         if (column == 0) {
-            outRect.right = DP_8
+            outRect.left = spacing26
+            outRect.right = spacing8
         } else {
-            outRect.left = DP_8
+            outRect.right = spacing26
+            outRect.left = spacing8
         }
 
-        outRect.bottom = DP_16
+        outRect.bottom = spacing16
 
         if (position < 2) {
-            outRect.top = DP_16
+            outRect.top = spacing16
         }
     }
 }
