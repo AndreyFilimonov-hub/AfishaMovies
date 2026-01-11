@@ -238,7 +238,7 @@ class ProfilePageFragment : Fragment() {
         }
         with(binding.rvCollections) {
             adapter = collectionAdapter
-            addItemDecoration(CollectionItemDecoration())
+            addItemDecoration(CollectionItemDecoration(requireContext()))
         }
     }
 
