@@ -15,7 +15,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionManager
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentGalleryBinding
@@ -119,12 +118,13 @@ class GalleryFragment : Fragment() {
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                TransitionManager.beginDelayedTransition(binding.rvGallery)
                 viewModel.state.collect { state ->
                     when (state) {
                         GalleryState.InitialLoading -> {
                             with(viewAnimator) {
                                 setupVisibilityGone(binding.llNoInternet, shortAnimationDuration)
+                                setupVisibilityGone(binding.rvGallery, shortAnimationDuration)
+                                setupVisibilityGone(binding.tvEmpty, shortAnimationDuration)
                                 setupVisibilityVisible(binding.pbLoading, shortAnimationDuration)
                             }
                         }
@@ -133,6 +133,7 @@ class GalleryFragment : Fragment() {
                             with(viewAnimator) {
                                 setupVisibilityGone(binding.pbLoading, shortAnimationDuration)
                                 setupVisibilityGone(binding.rvGallery, shortAnimationDuration)
+                                setupVisibilityGone(binding.tvEmpty, shortAnimationDuration)
                                 setupVisibilityVisible(binding.llNoInternet, shortAnimationDuration)
                             }
                         }

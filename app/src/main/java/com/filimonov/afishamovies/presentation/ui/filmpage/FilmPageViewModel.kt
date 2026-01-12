@@ -59,10 +59,12 @@ class FilmPageViewModel @Inject constructor(
         loadData()
     }
 
-    private fun loadData() {
+    fun loadData() {
         viewModelScope.launch {
             try {
                 coroutineScope {
+                    _state.value = FilmPageState.Loading
+
                     val filmPage = async { getFilmPageByIdUseCase(movieId) }.await()
                     val imagePreviews = async {
                         try {
