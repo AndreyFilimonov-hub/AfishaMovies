@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/iv_gallery_big_image"
         android:layout_width="match_parent"
-        android:layout_height="308dp"
+        android:layout_height="@dimen/gallery_image_big_height_308dp"
         android:adjustViewBounds="true"
         android:contentDescription="@null"
         android:scaleType="centerCrop"

@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="@dimen/zero_dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start"
         android:layout_marginTop="@dimen/margin_top_16dp"
@@ -26,7 +26,7 @@
         android:background="@drawable/bg_ripple_rectangle"
         android:clickable="true"
         android:focusable="true"
-        android:padding="16dp"
+        android:padding="@dimen/padding_16dp"
         android:text="@string/skip"
         android:textColor="@android:color/darker_gray"
         android:textSize="@dimen/text_size_18sp"
@@ -37,7 +37,7 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/zero_dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

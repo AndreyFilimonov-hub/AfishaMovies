@@ -31,7 +31,7 @@
             android:layout_marginEnd="@dimen/margin_start"
             android:background="@drawable/bg_ripple_rectangle"
             android:clickable="true"
-            android:drawablePadding="4dp"
+            android:drawablePadding="@dimen/padding_4dp"
             android:focusable="true"
             android:gravity="center_vertical"
             android:padding="@dimen/padding_12dp"
@@ -45,7 +45,7 @@
         <FrameLayout
             android:id="@+id/watched_container"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/media_banner"
+            android:layout_height="@dimen/media_banner_height"
             android:layout_marginTop="@dimen/margin_top_24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -73,13 +73,12 @@
                 tools:listitem="@layout/item_banner" />
         </FrameLayout>
 
-
         <TextView
             android:id="@+id/tv_collections"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_start"
-            android:layout_marginTop="@dimen/margin_top_36dp"
+            android:layout_marginTop="@dimen/margin_top_16dp"
             android:text="@string/collections"
             android:textSize="@dimen/text_size_18sp"
             android:textStyle="bold"
@@ -101,7 +100,7 @@
                 android:id="@+id/tv_add_collection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_marginStart="@dimen/margin_start_24dp"
                 android:drawablePadding="@dimen/padding_12dp"
                 android:background="@drawable/bg_ripple_rectangle"
                 android:clickable="true"
@@ -116,14 +115,9 @@
             android:id="@+id/rv_collections"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_start"
-            android:layout_marginTop="@dimen/margin_top_16dp"
-            android:layout_marginEnd="@dimen/margin_end"
-            android:paddingStart="26dp"
-            android:paddingEnd="26dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:layout_constraintTop_toBottomOf="@id/ll_create_collection"
             app:spanCount="2"
+            app:layout_constraintTop_toBottomOf="@id/ll_create_collection"
             tools:listitem="@layout/item_collection" />
 
         <TextView
@@ -145,7 +139,7 @@
             android:layout_marginEnd="@dimen/margin_start"
             android:background="@drawable/bg_ripple_rectangle"
             android:clickable="true"
-            android:drawablePadding="4dp"
+            android:drawablePadding="@dimen/padding_4dp"
             android:focusable="true"
             android:gravity="center_vertical"
             android:padding="@dimen/padding_12dp"
@@ -159,7 +153,7 @@
         <FrameLayout
             android:id="@+id/interested_container"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/media_banner"
+            android:layout_height="@dimen/media_banner_height"
             android:layout_marginTop="@dimen/margin_top_24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
