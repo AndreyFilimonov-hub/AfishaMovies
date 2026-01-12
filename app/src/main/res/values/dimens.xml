@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="margin_start">26dp</dimen>
-    <dimen name="zero_dp">0dp</dimen>
     <dimen name="margin_top">80dp</dimen>
     <dimen name="margin_end">26dp</dimen>
     <dimen name="text_size_18sp">18sp</dimen>
@@ -17,7 +16,8 @@
     <dimen name="space_between">4dp</dimen>
     <dimen name="space_top_bottom_4dp">4dp</dimen>
     <dimen name="space_top_bottom_8dp">8dp</dimen>
-    <dimen name="media_banner">250dp</dimen>
+    <dimen name="media_banner_height">250dp</dimen>
+    <dimen name="media_banner_width">120dp</dimen>
     <dimen name="margin_top_24dp">24dp</dimen>
     <dimen name="margin_top_26dp">26dp</dimen>
     <dimen name="margin_top_36dp">36dp</dimen>
@@ -37,6 +37,7 @@
     <dimen name="margin_start_60dp">60dp</dimen>
     <dimen name="margin_end_60dp">60dp</dimen>
     <dimen name="margin_between_16dp">16dp</dimen>
+    <dimen name="margin_between_26dp">26dp</dimen>
     <dimen name="margin_bottom_16dp">16dp</dimen>
     <dimen name="banner_width">120dp</dimen>
     <dimen name="padding_bottom_4dp">4dp</dimen>
@@ -55,7 +56,7 @@
     <dimen name="height_70dp">70dp</dimen>
     <dimen name="width_50dp">50dp</dimen>
     <dimen name="width_70dp">70dp</dimen>
-    <dimen name="margins_start_16dp">16dp</dimen>
+    <dimen name="margin_start_16dp">16dp</dimen>
     <dimen name="margin_top_18dp">18dp</dimen>
     <dimen name="width_46dp">46dp</dimen>
     <dimen name="height_46dp">46dp</dimen>
@@ -80,4 +81,30 @@
     <dimen name="item_collection_size">146dp</dimen>
     <dimen name="delete_collection_size">32dp</dimen>
     <dimen name="padding_5dp">5dp</dimen>
+    <dimen name="gallery_image_small_width">175dp</dimen>
+    <dimen name="gallery_image_small_height">110dp</dimen>
+    <dimen name="margin_start_end_60dp">60dp</dimen>
+    <dimen name="margin_horizontal_60dp">60dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
+    <dimen name="padding_vertical_4dp">4dp</dimen>
+    <dimen name="poster_width">120dp</dimen>
+    <dimen name="margin_start_24dp">24dp</dimen>
+    <dimen name="padding_4dp">4dp</dimen>
+    <dimen name="margin_horizontal_8dp">8dp</dimen>
+    <dimen name="padding_16dp">16dp</dimen>
+    <dimen name="filter_items_rv_height_350dp">350dp</dimen>
+    <dimen name="width_32dp">32dp</dimen>
+    <dimen name="height_32dp">32dp</dimen>
+    <dimen name="margin_horizontal_32dp">32dp</dimen>
+    <dimen name="padding_10dp">10dp</dimen>
+    <dimen name="width_48dp">48dp</dimen>
+    <dimen name="height_48dp">48dp</dimen>
+    <dimen name="elevation_8dp">8dp</dimen>
+    <dimen name="gallery_image_big_height_308dp">308dp</dimen>
+    <dimen name="width_250dp">250dp</dimen>
+    <dimen name="height_150dp">150dp</dimen>
+    <dimen name="margin_4dp">4dp</dimen>
+    <dimen name="height_156dp">156dp</dimen>
+    <dimen name="margin_horizontal_16dp">16dp</dimen>
+    <dimen name="margin_vertical_2dp">2dp</dimen>
 </resources>

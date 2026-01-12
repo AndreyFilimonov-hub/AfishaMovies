@@ -19,7 +19,7 @@ import com.filimonov.afishamovies.databinding.ActivityMainBinding
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageFragment
 import com.filimonov.afishamovies.presentation.ui.filmpage.FilmPageMode
 import com.filimonov.afishamovies.presentation.ui.homepage.HomePageFragment
-import com.filimonov.afishamovies.presentation.ui.onboard.OnBoardFragment
+import com.filimonov.afishamovies.presentation.ui.onboardpage.OnBoardPageFragment
 import com.filimonov.afishamovies.presentation.ui.profilepage.ProfilePageFragment
 import com.filimonov.afishamovies.presentation.ui.searchpage.SearchPageFragment
 import com.filimonov.afishamovies.presentation.ui.searchpage.searchsettingsfragment.SearchSettingsFragment
@@ -38,7 +38,9 @@ class MainActivity : AppCompatActivity() {
 
     private var currentStack = homeStack
 
-    private var isBottomBarVisible = true
+    private var isBottomBarVisible = false
+
+    private var pendingDeepLink: Intent? = null
 
     val binging: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -50,17 +52,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(binging.root)
         setInsets()
         setupBackPressed()
-        initFragments()
         setOnBottomNavigationBarItemsClickListener()
         setupOnBackStackChangedListener()
 
-        val isHandled = handleDeepLink(intent)
-        if (!isHandled) {
-            if (isFirstLaunch()) {
-                launchOnBoardFragment()
-            } else {
-                launchHomePageFragment()
-            }
+        if (isFirstLaunch()) {
+            initFragments()
+            pendingDeepLink = intent
+            launchOnBoardFragment()
+            return
+        }
+
+        initFragments()
+
+        if (!handleDeepLink(intent)) {
+            launchHomePageFragment()
         }
     }
 
@@ -139,9 +144,21 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            in searchStack -> navigateToRootOfCurrentTab()
+            in searchStack -> {
+                if (lastOpenFragment is SearchPageFragment) {
+                    lastOpenFragment.scrollToTop()
+                } else {
+                    navigateToRootOfCurrentTab()
+                }
+            }
 
-            in profileStack -> navigateToRootOfCurrentTab()
+            in profileStack -> {
+                if (lastOpenFragment is ProfilePageFragment) {
+                    lastOpenFragment.scrollToTop()
+                } else {
+                    navigateToRootOfCurrentTab()
+                }
+            }
         }
     }
 
@@ -221,6 +238,8 @@ class MainActivity : AppCompatActivity() {
 
         transaction.commitAllowingStateLoss()
 
+        setStatusBarDarkIcons()
+
         current.retainAll(listOf(rootFragment))
         supportFragmentManager.fragments.retainAll(current)
     }
@@ -251,7 +270,7 @@ class MainActivity : AppCompatActivity() {
         return prefs.getBoolean(IS_FIRST_LAUNCH, true)
     }
 
-    fun setFirstLaunchShown() {
+    private fun setFirstLaunchShown() {
         val prefs = getSharedPreferences(APP_PREFS, MODE_PRIVATE)
         prefs.edit { putBoolean(IS_FIRST_LAUNCH, false) }
     }
@@ -343,22 +362,50 @@ class MainActivity : AppCompatActivity() {
             topFragment?.let {
                 currentStack.removeAll { !it.isAdded }
                 setVisibleBottomNavBar(topFragment)
-                WindowInsetsControllerCompat(window, window.decorView)
-                    .isAppearanceLightStatusBars = true
+                setStatusBarDarkIcons()
             }
         }
     }
 
+    private fun setStatusBarDarkIcons() {
+        WindowInsetsControllerCompat(window, window.decorView)
+            .isAppearanceLightStatusBars = true
+    }
+
     private fun launchOnBoardFragment() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, OnBoardFragment.newInstance())
+            .replace(R.id.fragment_container, OnBoardPageFragment.newInstance())
             .commit()
     }
 
-    private fun launchHomePageFragment() {
+    private fun launchHomePageFragment(fromOnBoard: Boolean = false) {
+        showBottomNavBar()
         val homePageFragment = homeStack.first()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, homePageFragment)
-            .commit()
+        val transaction = supportFragmentManager.beginTransaction()
+
+        if (fromOnBoard) {
+            transaction
+                .setCustomAnimations(
+                    R.anim.slide_in_from_right,
+                    R.anim.slide_out_to_left,
+                    R.anim.slide_in_from_right,
+                    R.anim.slide_out_to_left
+                )
+                .replace(R.id.fragment_container ,homePageFragment)
+                .commit()
+        } else {
+            transaction
+                .show(homePageFragment)
+                .commit()
+        }
+    }
+
+    fun onOnBoardFinished() {
+        pendingDeepLink?.let {
+            launchHomePageFragment(true)
+            handleDeepLink(it)
+        } ?: launchHomePageFragment(true)
+
+        setFirstLaunchShown()
     }
 }

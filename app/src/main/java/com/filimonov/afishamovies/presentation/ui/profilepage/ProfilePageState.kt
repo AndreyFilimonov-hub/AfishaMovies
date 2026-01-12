@@ -1,7 +1,6 @@
 package com.filimonov.afishamovies.presentation.ui.profilepage
 
 import com.filimonov.afishamovies.domain.entities.CollectionEntity
-import com.filimonov.afishamovies.domain.entities.MediaBannerEntity
 import com.filimonov.afishamovies.presentation.ui.profilepage.mediabanneradapter.MediaBannerModel
 
 sealed class ProfilePageState {

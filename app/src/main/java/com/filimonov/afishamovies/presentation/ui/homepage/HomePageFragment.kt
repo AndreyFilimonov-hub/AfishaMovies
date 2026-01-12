@@ -1,11 +1,13 @@
 package com.filimonov.afishamovies.presentation.ui.homepage
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -74,8 +76,6 @@ class HomePageFragment : Fragment() {
         super.onCreate(savedInstanceState)
         component.inject(this)
 
-        (requireActivity() as? MainActivity)?.setFirstLaunchShown()
-
         shortAnimationDuration =
             resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     }
@@ -138,6 +138,7 @@ class HomePageFragment : Fragment() {
                                 setupVisibilityGone(binding.success, shortAnimationDuration)
                                 setupVisibilityVisible(binding.loading, shortAnimationDuration)
                             }
+                            Log.d("AAA", "loading ${binding.loading.isVisible}")
                         }
 
                         HomePageState.Error -> {
@@ -145,6 +146,7 @@ class HomePageFragment : Fragment() {
                                 setupVisibilityGone(binding.loading, shortAnimationDuration)
                                 setupVisibilityVisible(binding.error, shortAnimationDuration)
                             }
+                            Log.d("AAA", "error ${binding.error.isVisible}")
                         }
 
                         is HomePageState.Success -> {
@@ -152,6 +154,7 @@ class HomePageFragment : Fragment() {
                                 setupVisibilityGone(binding.loading, shortAnimationDuration)
                                 setupVisibilityVisible(binding.success, shortAnimationDuration)
                             }
+                            Log.d("AAA", "error ${binding.success.isVisible}")
 
                             sectionAdapter.submitList(it.categories)
                         }

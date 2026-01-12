@@ -2,8 +2,8 @@ package com.filimonov.afishamovies.data.network
 
 
 import com.filimonov.afishamovies.BuildConfig.API_KEY
-import com.filimonov.afishamovies.data.model.filmpage.FilmPageDto
-import com.filimonov.afishamovies.data.model.filmpage.ImagePreviewResponse
+import com.filimonov.afishamovies.data.network.model.filmpage.FilmPageDto
+import com.filimonov.afishamovies.data.network.model.filmpage.ImagePreviewResponse
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path

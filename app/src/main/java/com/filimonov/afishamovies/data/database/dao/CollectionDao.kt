@@ -4,8 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.filimonov.afishamovies.data.database.model.CollectionDbModel
-import com.filimonov.afishamovies.data.model.profilepage.CollectionCountDto
-import com.filimonov.afishamovies.data.model.profilepage.CollectionCountWithMovieDto
+import com.filimonov.afishamovies.data.database.model.CollectionCountDto
+import com.filimonov.afishamovies.data.database.model.CollectionCountWithMovieDto
 import kotlinx.coroutines.flow.Flow
 
 @Dao

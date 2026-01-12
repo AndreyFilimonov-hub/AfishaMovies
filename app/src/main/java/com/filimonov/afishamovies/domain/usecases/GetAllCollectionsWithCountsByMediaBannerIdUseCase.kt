@@ -1,11 +1,11 @@
 package com.filimonov.afishamovies.domain.usecases
 
 import com.filimonov.afishamovies.domain.entities.CollectionWithMovieEntity
-import com.filimonov.afishamovies.domain.repository.ProfilePageRepository
+import com.filimonov.afishamovies.domain.repository.CollectionRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetAllCollectionsWithCountsByMediaBannerIdUseCase @Inject constructor(private val repository: ProfilePageRepository) {
+class GetAllCollectionsWithCountsByMediaBannerIdUseCase @Inject constructor(private val repository: CollectionRepository) {
 
     operator fun invoke(mediaBannerId: Int): Flow<List<CollectionWithMovieEntity>> {
         return repository.getAllCollectionsWithCountsByMediaBannerId(mediaBannerId)

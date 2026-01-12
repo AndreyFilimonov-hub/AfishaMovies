@@ -3,12 +3,12 @@ package com.filimonov.afishamovies.di
 import com.filimonov.afishamovies.data.repository.FilmPageRepositoryImpl
 import com.filimonov.afishamovies.data.repository.GalleryRepositoryImpl
 import com.filimonov.afishamovies.data.repository.MediaBannerRepositoryImpl
-import com.filimonov.afishamovies.data.repository.ProfilePageRepositoryImpl
+import com.filimonov.afishamovies.data.repository.CollectionRepositoryImpl
 import com.filimonov.afishamovies.data.repository.SearchPageRepositoryImpl
 import com.filimonov.afishamovies.domain.repository.FilmPageRepository
 import com.filimonov.afishamovies.domain.repository.GalleryRepository
 import com.filimonov.afishamovies.domain.repository.MediaBannerRepository
-import com.filimonov.afishamovies.domain.repository.ProfilePageRepository
+import com.filimonov.afishamovies.domain.repository.CollectionRepository
 import com.filimonov.afishamovies.domain.repository.SearchPageRepository
 import dagger.Binds
 import dagger.Module
@@ -34,5 +34,5 @@ interface DomainModule {
 
     @ApplicationScope
     @Binds
-    fun bindProfilePageRepository(profilePageRepositoryImpl: ProfilePageRepositoryImpl): ProfilePageRepository
+    fun bindCollectionRepository(collectionRepositoryImpl: CollectionRepositoryImpl): CollectionRepository
 }

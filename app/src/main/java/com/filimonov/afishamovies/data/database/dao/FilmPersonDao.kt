@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.IGNORE
 import androidx.room.Query
 import com.filimonov.afishamovies.data.database.model.FilmPersonCrossRef
-import com.filimonov.afishamovies.data.model.filmpage.FilmPersonFromDbDto
+import com.filimonov.afishamovies.data.database.model.FilmPersonFromDbDto
 
 @Dao
 interface FilmPersonDao {

@@ -1,7 +1,7 @@
 package com.filimonov.afishamovies.data.network
 
 import com.filimonov.afishamovies.BuildConfig.API_KEY
-import com.filimonov.afishamovies.data.model.searchpage.SearchMediaBannerResponse
+import com.filimonov.afishamovies.data.network.model.searchpage.SearchMediaBannerResponse
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Query

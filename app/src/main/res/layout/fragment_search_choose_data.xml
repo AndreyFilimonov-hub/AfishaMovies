@@ -63,7 +63,7 @@
                 android:id="@+id/tv_period_from"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margins_start_16dp"
+                android:layout_marginStart="@dimen/margin_start_16dp"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/text_size_16sp"
                 android:textStyle="bold"
@@ -74,8 +74,8 @@
 
             <ImageView
                 android:id="@+id/iv_next_from"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="@dimen/width_32dp"
+                android:layout_height="@dimen/height_32dp"
                 android:layout_marginTop="@dimen/margin_top_16dp"
                 android:layout_marginEnd="@dimen/margin_end_16dp"
                 android:contentDescription="@null"
@@ -86,8 +86,8 @@
 
             <ImageView
                 android:id="@+id/iv_back_from"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="@dimen/width_32dp"
+                android:layout_height="@dimen/height_32dp"
                 android:layout_marginTop="@dimen/margin_top_16dp"
                 android:contentDescription="@null"
                 android:src="@drawable/arrow_back"
@@ -133,7 +133,7 @@
                 android:id="@+id/tv_period_to"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margins_start_16dp"
+                android:layout_marginStart="@dimen/margin_start_16dp"
                 android:textColor="@color/blue"
                 android:textSize="@dimen/text_size_16sp"
                 android:textStyle="bold"
@@ -144,8 +144,8 @@
 
             <ImageView
                 android:id="@+id/iv_next_to"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="@dimen/width_32dp"
+                android:layout_height="@dimen/height_32dp"
                 android:layout_marginTop="@dimen/margin_top_16dp"
                 android:layout_marginEnd="@dimen/margin_end_16dp"
                 android:contentDescription="@null"
@@ -156,8 +156,8 @@
 
             <ImageView
                 android:id="@+id/iv_back_to"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="@dimen/width_32dp"
+                android:layout_height="@dimen/height_32dp"
                 android:layout_marginTop="@dimen/margin_top_16dp"
                 android:contentDescription="@null"
                 android:src="@drawable/arrow_back"

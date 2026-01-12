@@ -8,11 +8,11 @@
     tools:context=".presentation.ui.searchpage.SearchPageFragment">
 
     <ImageView
-        android:layout_width="@dimen/zero_dp"
+        android:layout_width="0dp"
         android:layout_height="@dimen/height_36dp"
         android:contentDescription="@null"
         android:paddingStart="@dimen/padding_start_16dp"
-        android:paddingEnd="@dimen/zero_dp"
+        android:paddingEnd="0dp"
         android:src="@drawable/search_icon"
         app:layout_constraintBottom_toBottomOf="@id/sb_main"
         app:layout_constraintStart_toStartOf="@id/sb_main"
@@ -32,6 +32,7 @@
         android:paddingStart="@dimen/padding_start_46dp"
         android:paddingEnd="@dimen/padding_end_60dp"
         android:singleLine="true"
+        android:ellipsize="end"
         android:textSize="@dimen/text_size_16sp"
         app:layout_constraintEnd_toStartOf="@id/iv_filter"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,12 +40,12 @@
 
     <ImageView
         android:id="@+id/iv_filter"
-        android:layout_width="@dimen/zero_dp"
+        android:layout_width="0dp"
         android:layout_height="@dimen/height_36dp"
         android:clickable="true"
         android:contentDescription="@null"
         android:focusable="true"
-        android:paddingStart="@dimen/zero_dp"
+        android:paddingStart="0dp"
         android:paddingEnd="@dimen/padding_end_16dp"
         android:src="@drawable/filter_icon"
         app:layout_constraintBottom_toBottomOf="@id/sb_main"
@@ -110,7 +111,7 @@
         android:id="@+id/tv_empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="32dp"
+        android:layout_marginHorizontal="@dimen/margin_horizontal_32dp"
         android:layout_marginTop="@dimen/margin_top"
         android:gravity="center"
         android:text="@string/empty"

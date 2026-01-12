@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.filimonov.afishamovies.databinding.ItemPersonBinding
 import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
 
-class PersonAdapter(private val onClick: (Int) -> Unit) :
+class PersonAdapter() :
     ListAdapter<PersonBannerEntity, PersonViewHolder>(PersonBannerDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PersonViewHolder {
@@ -21,6 +21,5 @@ class PersonAdapter(private val onClick: (Int) -> Unit) :
 
     override fun onBindViewHolder(holder: PersonViewHolder, position: Int) {
         holder.bind(getItem(position))
-        holder.itemView.setOnClickListener { onClick(position) }
     }
 }
