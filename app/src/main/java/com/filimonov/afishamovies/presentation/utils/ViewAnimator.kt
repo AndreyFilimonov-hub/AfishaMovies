@@ -1,7 +1,5 @@
 package com.filimonov.afishamovies.presentation.utils
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.view.View
 
 class ViewAnimator {
@@ -15,6 +13,7 @@ class ViewAnimator {
                 .alpha(1f)
                 .setDuration(duration)
                 .setListener(null)
+                .start()
         }
     }
 
@@ -22,10 +21,9 @@ class ViewAnimator {
         view.animate()
             .alpha(0f)
             .setDuration(duration)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    view.visibility = View.GONE
-                }
-            })
+            .withEndAction {
+                view.visibility = View.GONE
+            }
+            .start()
     }
 }
