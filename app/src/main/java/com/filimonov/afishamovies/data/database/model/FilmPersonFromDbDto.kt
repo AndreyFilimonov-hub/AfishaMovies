@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.data.model.filmpage
+package com.filimonov.afishamovies.data.database.model
 
 data class FilmPersonFromDbDto(
     val personId: Int,

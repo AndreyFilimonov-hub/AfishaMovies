@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.data.model.profilepage
+package com.filimonov.afishamovies.data.database.model
 
 data class CollectionCountWithMovieDto(
     val id: Int,

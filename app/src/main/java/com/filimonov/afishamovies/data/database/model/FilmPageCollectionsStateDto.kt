@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.data.model.filmpage
+package com.filimonov.afishamovies.data.database.model
 
 data class FilmPageCollectionsStateDto (
     val isLiked: Boolean,

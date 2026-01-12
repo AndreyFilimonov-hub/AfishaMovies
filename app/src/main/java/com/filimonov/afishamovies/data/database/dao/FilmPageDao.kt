@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.Companion.IGNORE
 import androidx.room.Query
-import com.filimonov.afishamovies.data.model.filmpage.FilmPageCollectionsStateDto
+import com.filimonov.afishamovies.data.database.model.FilmPageCollectionsStateDto
 import com.filimonov.afishamovies.data.database.model.FilmPageDbModel
 import kotlinx.coroutines.flow.Flow
 

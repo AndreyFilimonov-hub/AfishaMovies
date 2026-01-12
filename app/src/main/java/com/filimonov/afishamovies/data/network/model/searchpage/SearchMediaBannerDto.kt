@@ -1,10 +1,10 @@
-package com.filimonov.afishamovies.data.model.searchpage
+package com.filimonov.afishamovies.data.network.model.searchpage
 
-import com.filimonov.afishamovies.data.model.CountryDto
-import com.filimonov.afishamovies.data.model.GenreDto
-import com.filimonov.afishamovies.data.model.PosterDto
-import com.filimonov.afishamovies.data.model.RatingDto
-import com.filimonov.afishamovies.data.model.VotesDto
+import com.filimonov.afishamovies.data.network.model.CountryDto
+import com.filimonov.afishamovies.data.network.model.GenreDto
+import com.filimonov.afishamovies.data.network.model.PosterDto
+import com.filimonov.afishamovies.data.network.model.RatingDto
+import com.filimonov.afishamovies.data.network.model.VotesDto
 import com.google.gson.annotations.SerializedName
 
 data class SearchMediaBannerDto(

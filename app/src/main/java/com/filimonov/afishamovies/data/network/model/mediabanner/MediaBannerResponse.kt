@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.data.model.mediabanner
+package com.filimonov.afishamovies.data.network.model.mediabanner
 
 import com.google.gson.annotations.SerializedName
 

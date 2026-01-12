@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.data.model.searchpage
+package com.filimonov.afishamovies.data.network.model.searchpage
 
 import com.google.gson.annotations.SerializedName
 

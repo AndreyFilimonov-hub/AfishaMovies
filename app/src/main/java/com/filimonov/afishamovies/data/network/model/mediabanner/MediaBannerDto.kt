@@ -1,8 +1,8 @@
-package com.filimonov.afishamovies.data.model.mediabanner
+package com.filimonov.afishamovies.data.network.model.mediabanner
 
-import com.filimonov.afishamovies.data.model.GenreDto
-import com.filimonov.afishamovies.data.model.PosterDto
-import com.filimonov.afishamovies.data.model.RatingDto
+import com.filimonov.afishamovies.data.network.model.GenreDto
+import com.filimonov.afishamovies.data.network.model.PosterDto
+import com.filimonov.afishamovies.data.network.model.RatingDto
 import com.google.gson.annotations.SerializedName
 
 data class MediaBannerDto(

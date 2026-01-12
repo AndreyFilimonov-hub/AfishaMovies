@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.data.model.gallery
+package com.filimonov.afishamovies.data.network.model.gallery
 
 import com.google.gson.annotations.SerializedName
 
