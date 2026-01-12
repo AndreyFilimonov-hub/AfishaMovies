@@ -9,12 +9,15 @@
 
     <TextView
         android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:padding="10dp"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_20sp"
         app:layout_constraintStart_toEndOf="@id/cb_select"
+        app:layout_constraintEnd_toStartOf="@id/tv_count"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Русское кино" />
 
@@ -35,9 +38,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_start_60dp"
+        android:checked="true"
         app:buttonIconTint="@color/white"
         app:buttonTint="@color/black"
-        android:checked="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
