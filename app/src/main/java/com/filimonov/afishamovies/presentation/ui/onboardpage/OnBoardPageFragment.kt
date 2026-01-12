@@ -10,10 +10,8 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.filimonov.afishamovies.AfishaMoviesApp
-import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentOnBoardBinding
 import com.filimonov.afishamovies.presentation.ui.MainActivity
-import com.filimonov.afishamovies.presentation.ui.homepage.HomePageFragment
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import javax.inject.Inject
 
@@ -58,10 +56,9 @@ class OnBoardPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setInsets()
-        offBottomNav()
         setupViewPager()
         binding.tvSkip.setOnClickListener {
-            launchHomePageFragment()
+            (requireActivity() as MainActivity).onOnBoardFinished()
         }
     }
 
@@ -90,31 +87,5 @@ class OnBoardPageFragment : Fragment() {
         val adapter = ViewPagerAdapter(viewModel.getOnBoardModels())
         viewPager.adapter = adapter
         dotsIndicator.attachTo(viewPager)
-    }
-
-    private fun offBottomNav() {
-        val bindingMain = (requireActivity() as MainActivity).binging
-        bindingMain.bNav.visibility = View.GONE
-    }
-
-    private fun launchHomePageFragment() {
-        requireActivity().supportFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                R.anim.slide_in_from_right,
-                R.anim.slide_out_to_left,
-                R.anim.slide_in_from_right,
-                R.anim.slide_out_to_left
-            )
-            .replace(R.id.fragment_container, HomePageFragment.newInstance())
-            .commit()
-
-        (requireActivity() as MainActivity).binging.bNav.apply {
-            visibility = View.VISIBLE
-            translationY = height.toFloat()
-        }
-            .animate()
-            .translationY(0f)
-            .setDuration(1000)
-            .start()
     }
 }
