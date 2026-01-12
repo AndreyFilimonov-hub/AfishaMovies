@@ -10,7 +10,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.transition.TransitionManager
 import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.R
 import com.filimonov.afishamovies.databinding.FragmentFilmPageBinding
@@ -27,6 +26,7 @@ import com.filimonov.afishamovies.presentation.ui.gallery.GalleryFragment
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageFragment
 import com.filimonov.afishamovies.presentation.ui.listpage.ListPageMode
 import com.filimonov.afishamovies.presentation.utils.HorizontalSpaceItemDecoration
+import com.filimonov.afishamovies.presentation.utils.ViewAnimator
 import com.filimonov.afishamovies.presentation.utils.ViewModelFactory
 import com.filimonov.afishamovies.presentation.utils.setupDynamicStatusBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -67,12 +67,16 @@ class FilmPageFragment : Fragment() {
             .create(movieId)
     }
 
+    private var shortAnimationDuration: Long = 0
+
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)[FilmPageViewModel::class.java]
     }
+
+    private val viewAnimator = ViewAnimator()
 
     private val actorsAdapter = PersonAdapter(
         onClick = {
@@ -100,6 +104,7 @@ class FilmPageFragment : Fragment() {
         super.onCreate(savedInstanceState)
         parseArgs()
         component.inject(this)
+        shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     }
 
     override fun onCreateView(
@@ -115,7 +120,7 @@ class FilmPageFragment : Fragment() {
 
         setPaddingRootView()
         setClickListenerOnBack()
-        setupIconsClickListeners()
+        setupClickListeners()
         observeViewModel()
     }
 
@@ -127,14 +132,31 @@ class FilmPageFragment : Fragment() {
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                TransitionManager.beginDelayedTransition(binding.root)
                 viewModel.state.collect { state ->
                     when (state) {
-                        FilmPageState.Error -> {}
-                        FilmPageState.Loading -> {}
+                        FilmPageState.Error -> {
+                            with(viewAnimator) {
+                                setupVisibilityVisible(binding.btnError, shortAnimationDuration)
+                                setupVisibilityGone(binding.pbLoading, shortAnimationDuration)
+                                setupVisibilityGone(binding.success, shortAnimationDuration)
+                            }
+                        }
+                        FilmPageState.Loading -> {
+                            with(viewAnimator) {
+                                setupVisibilityVisible(binding.pbLoading, shortAnimationDuration)
+                                setupVisibilityGone(binding.btnError, shortAnimationDuration)
+                                setupVisibilityGone(binding.success, shortAnimationDuration)
+                            }
+                        }
                         is FilmPageState.Success -> {
                             setupFilmPageEntity(state.filmPage)
                             setupImagesToGallery(state.imagePreviews)
+
+                            with(viewAnimator) {
+                                setupVisibilityVisible(binding.success, shortAnimationDuration)
+                                setupVisibilityGone(binding.pbLoading, shortAnimationDuration)
+                                setupVisibilityGone(binding.btnError, shortAnimationDuration)
+                            }
                         }
                     }
                 }
@@ -201,7 +223,7 @@ class FilmPageFragment : Fragment() {
             setupDynamicStatusBar(
                 (requireActivity() as MainActivity),
                 binding.ivPoster,
-                binding.root,
+                binding.success,
                 posterUrl
             )
 
@@ -262,7 +284,7 @@ class FilmPageFragment : Fragment() {
         }
     }
 
-    private fun setupIconsClickListeners() {
+    private fun setupClickListeners() {
         binding.ivLike.setOnClickListener {
             viewModel.toggleLike()
         }
@@ -275,6 +297,9 @@ class FilmPageFragment : Fragment() {
         binding.ivMore.setOnClickListener {
             val bottomSheet = AddFilmPageToCollectionBottomSheetFragment.newInstance(movieId)
             bottomSheet.show(childFragmentManager, CREATE_BOTTOM_SHEET_TAG)
+        }
+        binding.btnError.setOnClickListener {
+            viewModel.loadData()
         }
     }
 
