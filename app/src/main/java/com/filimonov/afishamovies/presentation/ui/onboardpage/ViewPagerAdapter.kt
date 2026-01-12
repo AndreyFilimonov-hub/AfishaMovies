@@ -1,4 +1,4 @@
-package com.filimonov.afishamovies.presentation.ui.onboard
+package com.filimonov.afishamovies.presentation.ui.onboardpage
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
