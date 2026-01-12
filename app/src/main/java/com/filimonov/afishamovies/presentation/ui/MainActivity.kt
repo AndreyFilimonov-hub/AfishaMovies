@@ -226,6 +226,8 @@ class MainActivity : AppCompatActivity() {
 
         transaction.commitAllowingStateLoss()
 
+        setStatusBarDarkIcons()
+
         current.retainAll(listOf(rootFragment))
         supportFragmentManager.fragments.retainAll(current)
     }
@@ -348,10 +350,14 @@ class MainActivity : AppCompatActivity() {
             topFragment?.let {
                 currentStack.removeAll { !it.isAdded }
                 setVisibleBottomNavBar(topFragment)
-                WindowInsetsControllerCompat(window, window.decorView)
-                    .isAppearanceLightStatusBars = true
+                setStatusBarDarkIcons()
             }
         }
+    }
+
+    private fun setStatusBarDarkIcons() {
+        WindowInsetsControllerCompat(window, window.decorView)
+            .isAppearanceLightStatusBars = true
     }
 
     private fun launchOnBoardFragment() {
