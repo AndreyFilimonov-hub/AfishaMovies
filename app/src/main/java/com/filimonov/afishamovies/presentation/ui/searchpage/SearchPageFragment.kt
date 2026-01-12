@@ -309,4 +309,8 @@ class SearchPageFragment : Fragment() {
             rootView.layoutParams = layoutParams
         }
     }
+
+    fun scrollToTop() {
+        binding.rvReplySearch.smoothScrollToPosition(0)
+    }
 }

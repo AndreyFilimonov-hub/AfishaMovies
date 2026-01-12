@@ -261,6 +261,10 @@ class ProfilePageFragment : Fragment() {
         }
     }
 
+    fun scrollToTop() {
+        binding.root.smoothScrollTo(0, 0)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

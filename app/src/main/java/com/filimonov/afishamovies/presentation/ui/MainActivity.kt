@@ -144,9 +144,21 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            in searchStack -> navigateToRootOfCurrentTab()
+            in searchStack -> {
+                if (lastOpenFragment is SearchPageFragment) {
+                    lastOpenFragment.scrollToTop()
+                } else {
+                    navigateToRootOfCurrentTab()
+                }
+            }
 
-            in profileStack -> navigateToRootOfCurrentTab()
+            in profileStack -> {
+                if (lastOpenFragment is ProfilePageFragment) {
+                    lastOpenFragment.scrollToTop()
+                } else {
+                    navigateToRootOfCurrentTab()
+                }
+            }
         }
     }
 
