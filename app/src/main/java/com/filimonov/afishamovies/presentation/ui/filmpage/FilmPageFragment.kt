@@ -78,17 +78,9 @@ class FilmPageFragment : Fragment() {
 
     private val viewAnimator = ViewAnimator()
 
-    private val actorsAdapter = PersonAdapter(
-        onClick = {
-            // TODO: launch ActorPageFragment
-        }
-    )
+    private val actorsAdapter = PersonAdapter()
 
-    private val workersAdapter = PersonAdapter(
-        onClick = {
-            // TODO: launch ActorPageFragment
-        }
-    )
+    private val workersAdapter = PersonAdapter()
 
     private val similarMovieAdapter = SimilarMovieAdapter(
         onClick = {
