@@ -34,41 +34,61 @@
 
     </Toolbar>
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/cg_type"
-        android:layout_width="wrap_content"
+    <HorizontalScrollView
+        android:id="@+id/hsv_chips"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:fillViewport="true"
+        android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:selectionRequired="true"
-        app:singleLine="true"
-        app:singleSelection="true">
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_frame"
-            style="@style/ChipStyle"
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/frames" />
+            android:layout_height="wrap_content">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_backstage"
-            style="@style/ChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/backstage" />
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingStart="@dimen/padding_start_16dp"
+                android:paddingEnd="@dimen/padding_end_16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
+                app:selectionRequired="true"
+                app:singleLine="true"
+                app:singleSelection="true">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_poster"
-            style="@style/ChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/posters" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_frame"
+                    style="@style/ChipStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/frames" />
 
-    </com.google.android.material.chip.ChipGroup>
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_backstage"
+                    style="@style/ChipStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/backstage" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_poster"
+                    style="@style/ChipStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/posters" />
+
+            </com.google.android.material.chip.ChipGroup>
+        </FrameLayout>
+
+    </HorizontalScrollView>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_gallery"
@@ -76,7 +96,8 @@
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/margin_top_24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cg_type"
+        app:layout_constraintTop_toBottomOf="@id/hsv_chips"
+        android:layout_marginHorizontal="8dp"
         tools:listitem="@layout/item_image_gallery_small" />
 
     <TextView

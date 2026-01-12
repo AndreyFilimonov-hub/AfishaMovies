@@ -201,10 +201,8 @@ class GalleryFragment : Fragment() {
         binding.rvGallery.addItemDecoration(
             ImageSpaceDecoration(
                 imageAdapter,
-                requireContext().resources.getDimensionPixelSize(R.dimen.margin_start),
-                requireContext().resources.getDimensionPixelSize(R.dimen.margin_end),
                 requireContext().resources.getDimensionPixelSize(R.dimen.space_between),
-                requireContext().resources.getDimensionPixelSize(R.dimen.space_top_bottom_8dp)
+                requireContext().resources.getDimensionPixelSize(R.dimen.space_top_bottom_4dp)
             )
         )
 

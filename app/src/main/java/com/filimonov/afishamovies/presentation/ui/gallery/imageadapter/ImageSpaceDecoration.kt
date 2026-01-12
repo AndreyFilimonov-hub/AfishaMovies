@@ -7,8 +7,6 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
 class ImageSpaceDecoration(
     private val adapter: ImageAdapter,
-    private val spaceStart: Int,
-    private val spaceEnd: Int,
     private val spaceBetween: Int,
     private val spaceTopBottom: Int
 ) :
@@ -32,9 +30,9 @@ class ImageSpaceDecoration(
         val number = parent.getChildAdapterPosition(view) + 1
 
         when (number % 3) {
-            0 -> outRect.set(spaceStart, spaceTopBottom, spaceEnd, spaceTopBottom)
-            1 -> outRect.set(spaceStart, spaceTopBottom, spaceBetween, spaceTopBottom)
-            2 -> outRect.set(spaceBetween, spaceTopBottom, spaceEnd, spaceTopBottom)
+            0 -> outRect.set(0, spaceTopBottom, 0, spaceTopBottom)
+            1 -> outRect.set(0, spaceTopBottom, spaceBetween, spaceTopBottom)
+            2 -> outRect.set(spaceBetween, spaceTopBottom, 0, spaceTopBottom)
         }
     }
 }

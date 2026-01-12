@@ -29,11 +29,11 @@ class SpaceItemDecoration(
 
         when {
             position % 2 == 0 -> {
-                outRect.set(0, 0, marginBetween, marginBottom)
+                outRect.set(marginBetween, 0, 0, marginBottom)
             }
 
             else -> {
-                outRect.set(marginBetween, 0, 0, marginBottom)
+                outRect.set(0, 0, marginBetween, marginBottom)
             }
         }
     }

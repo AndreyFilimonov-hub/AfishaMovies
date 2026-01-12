@@ -6,12 +6,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.filimonov.afishamovies.R
-import com.filimonov.afishamovies.databinding.ItemBannerBinding
+import com.filimonov.afishamovies.databinding.ItemBannerGridBinding
 import com.filimonov.afishamovies.domain.entities.PersonBannerEntity
 import com.filimonov.afishamovies.presentation.utils.cutWordEnd
 
 class ListPageWorkerBannerViewHolder(
-    private val binding: ItemBannerBinding,
+    private val binding: ItemBannerGridBinding,
     private val onPersonBannerClick: (PersonBannerEntity) -> Unit
 ) :
     RecyclerView.ViewHolder(binding.root) {
