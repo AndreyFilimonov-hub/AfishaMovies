@@ -119,12 +119,13 @@ class GalleryFragment : Fragment() {
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                TransitionManager.beginDelayedTransition(binding.rvGallery)
                 viewModel.state.collect { state ->
                     when (state) {
                         GalleryState.InitialLoading -> {
                             with(viewAnimator) {
                                 setupVisibilityGone(binding.llNoInternet, shortAnimationDuration)
+                                setupVisibilityGone(binding.rvGallery, shortAnimationDuration)
+                                setupVisibilityGone(binding.tvEmpty, shortAnimationDuration)
                                 setupVisibilityVisible(binding.pbLoading, shortAnimationDuration)
                             }
                         }
@@ -133,6 +134,7 @@ class GalleryFragment : Fragment() {
                             with(viewAnimator) {
                                 setupVisibilityGone(binding.pbLoading, shortAnimationDuration)
                                 setupVisibilityGone(binding.rvGallery, shortAnimationDuration)
+                                setupVisibilityGone(binding.tvEmpty, shortAnimationDuration)
                                 setupVisibilityVisible(binding.llNoInternet, shortAnimationDuration)
                             }
                         }
