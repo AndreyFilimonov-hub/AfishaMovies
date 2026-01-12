@@ -9,10 +9,10 @@ import com.filimonov.afishamovies.data.database.model.FilmPersonCrossRef
 import com.filimonov.afishamovies.data.database.model.FilmSimilarMediaBannerCrossRef
 import com.filimonov.afishamovies.data.database.model.MediaBannerDbModel
 import com.filimonov.afishamovies.data.mapper.toDbModel
-import com.filimonov.afishamovies.data.mapper.toFilmPageEntity
-import com.filimonov.afishamovies.data.mapper.toImagePreviewListEntity
+import com.filimonov.afishamovies.data.mapper.toEntity
+import com.filimonov.afishamovies.data.mapper.toEntityList
 import com.filimonov.afishamovies.data.mapper.toMediaBannerEntityList
-import com.filimonov.afishamovies.data.mapper.toPersonList
+import com.filimonov.afishamovies.data.mapper.toPersonBannerEntityList
 import com.filimonov.afishamovies.data.network.FilmPageService
 import com.filimonov.afishamovies.domain.entities.FilmPageCollectionsState
 import com.filimonov.afishamovies.domain.entities.FilmPageEntity
@@ -42,28 +42,15 @@ class FilmPageRepositoryImpl @Inject constructor(
         filmPageFromDb?.let {
             val similarMediaBannersFromDb =
                 filmSimilarMediaBannerDao.getSimilarMediaBannersByFilmId(id)
-                    ?.toMediaBannerEntityList()
-            similarMovies[id] = similarMediaBannersFromDb ?: emptyList()
+                    ?.toMediaBannerEntityList() ?: emptyList()
+            similarMovies[id] = similarMediaBannersFromDb
 
             val personsFromDb = filmPersonDao.getPersonsByFilmId(id)
-            persons[id] = personsFromDb.toPersonList()
+            persons[id] = personsFromDb.toPersonBannerEntityList()
 
-            return FilmPageEntity(
-                filmPageFromDb.filmId,
-                filmPageFromDb.ratingName,
-                filmPageFromDb.yearGenres,
-                filmPageFromDb.description,
-                filmPageFromDb.shortDescription,
-                filmPageFromDb.posterUrl,
-                filmPageFromDb.countryMovieLengthAgeRating,
-                persons = personsFromDb.toPersonList(),
-                similarMovies = similarMediaBannersFromDb,
-                filmPageFromDb.isLiked,
-                filmPageFromDb.isWantToWatch,
-                filmPageFromDb.isWatched
-            )
+            return it.toEntity(personsFromDb.toPersonBannerEntityList(), similarMediaBannersFromDb)
         }
-        return apiService.getFilmPageById(id).toFilmPageEntity().also {
+        return apiService.getFilmPageById(id).toEntity().also {
             persons[id] = it.persons
             similarMovies[id] = it.similarMovies ?: emptyList()
         }
@@ -71,7 +58,13 @@ class FilmPageRepositoryImpl @Inject constructor(
 
     override fun getFilmPageCollectionsState(movieId: Int): Flow<FilmPageCollectionsState> {
         return filmPageDao.getFilmPageCollectionsStateFlow(movieId)
-            .map { FilmPageCollectionsState(it?.isLiked ?: false, it?.isWantToWatch ?: false, it?.isWatched ?: false) }
+            .map {
+                FilmPageCollectionsState(
+                    it?.isLiked ?: false,
+                    it?.isWantToWatch ?: false,
+                    it?.isWatched ?: false
+                )
+            }
     }
 
     override suspend fun getImagePreviewsByMovieId(movieId: Int): List<ImagePreviewEntity> {
@@ -81,7 +74,7 @@ class FilmPageRepositoryImpl @Inject constructor(
                 apiService.getPreviewImagesByMovieId(
                     movieId = movieId,
                     type = typeName
-                ).images.toImagePreviewListEntity()
+                ).images.toEntityList()
             )
         }
         return images
