@@ -59,7 +59,7 @@
                 android:clickable="true"
                 android:contentDescription="@null"
                 android:focusable="true"
-                android:src="@drawable/arrow_back"
+                android:src="@drawable/ic_arrow_back"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -73,7 +73,7 @@
                 android:clickable="true"
                 android:contentDescription="@null"
                 android:focusable="true"
-                android:src="@drawable/like"
+                android:src="@drawable/ic_like"
                 app:layout_constraintBottom_toBottomOf="@id/fl_poster"
                 app:layout_constraintEnd_toStartOf="@+id/iv_want_to_watch"
                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -89,7 +89,7 @@
                 android:clickable="true"
                 android:contentDescription="@null"
                 android:focusable="true"
-                android:src="@drawable/want_to_watch"
+                android:src="@drawable/ic_want_to_watch"
                 app:layout_constraintBottom_toBottomOf="@id/fl_poster"
                 app:layout_constraintEnd_toStartOf="@+id/iv_watched"
                 app:layout_constraintStart_toEndOf="@+id/iv_like" />
@@ -104,7 +104,7 @@
                 android:clickable="true"
                 android:contentDescription="@null"
                 android:focusable="true"
-                android:src="@drawable/dont_watch"
+                android:src="@drawable/ic_dont_watched"
                 app:layout_constraintBottom_toBottomOf="@id/fl_poster"
                 app:layout_constraintEnd_toStartOf="@+id/iv_repost"
                 app:layout_constraintStart_toEndOf="@+id/iv_want_to_watch" />
@@ -119,7 +119,7 @@
                 android:clickable="true"
                 android:contentDescription="@null"
                 android:focusable="true"
-                android:src="@drawable/repost"
+                android:src="@drawable/ic_repost"
                 app:layout_constraintBottom_toBottomOf="@id/fl_poster"
                 app:layout_constraintEnd_toStartOf="@+id/iv_more"
                 app:layout_constraintStart_toEndOf="@+id/iv_watched" />
@@ -134,7 +134,7 @@
                 android:clickable="true"
                 android:contentDescription="@null"
                 android:focusable="true"
-                android:src="@drawable/more"
+                android:src="@drawable/ic_more"
                 app:layout_constraintBottom_toBottomOf="@id/fl_poster"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_repost" />

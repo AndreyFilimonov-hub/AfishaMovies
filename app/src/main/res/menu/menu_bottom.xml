@@ -2,19 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/item_home"
-        android:icon="@drawable/home_option"
+        android:icon="@drawable/ic_home_option"
         android:orderInCategory="1"
         android:title="" />
 
     <item
         android:id="@+id/item_search"
-        android:icon="@drawable/search_option"
+        android:icon="@drawable/ic_search_option"
         android:orderInCategory="2"
         android:title="" />
 
     <item
         android:id="@+id/item_profile"
-        android:icon="@drawable/profile_option"
+        android:icon="@drawable/ic_profile_option"
         android:orderInCategory="3"
         android:title="" />
 </menu>

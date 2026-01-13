@@ -12,7 +12,7 @@
         android:layout_height="@dimen/delete_collection_size"
         android:contentDescription="@null"
         android:padding="@dimen/padding_5dp"
-        android:src="@drawable/delete_icon"
+        android:src="@drawable/ic_delete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

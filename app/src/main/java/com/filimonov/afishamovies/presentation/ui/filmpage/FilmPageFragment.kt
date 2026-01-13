@@ -299,9 +299,9 @@ class FilmPageFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 viewModel.collectionState.collect { state ->
-                    binding.ivLike.setImageResource(if (state.isLiked) R.drawable.like_active else R.drawable.like)
-                    binding.ivWantToWatch.setImageResource(if (state.isWantToWatch) R.drawable.want_to_watch_active else R.drawable.want_to_watch)
-                    binding.ivWatched.setImageResource(if (state.isWatched) R.drawable.watch else R.drawable.dont_watch)
+                    binding.ivLike.setImageResource(if (state.isLiked) R.drawable.ic_like_active else R.drawable.ic_like)
+                    binding.ivWantToWatch.setImageResource(if (state.isWantToWatch) R.drawable.ic_want_to_watch_active else R.drawable.ic_want_to_watch)
+                    binding.ivWatched.setImageResource(if (state.isWatched) R.drawable.ic_watched else R.drawable.ic_dont_watched)
                 }
             }
         }

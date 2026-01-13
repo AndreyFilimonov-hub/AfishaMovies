@@ -35,7 +35,7 @@
                 android:clickable="true"
                 android:contentDescription="@null"
                 android:focusable="true"
-                android:src="@drawable/arrow_back" />
+                android:src="@drawable/ic_arrow_back" />
         </Toolbar>
 
         <TextView
@@ -80,7 +80,7 @@
                 android:layout_marginEnd="@dimen/margin_end_16dp"
                 android:contentDescription="@null"
                 android:scaleX="-1"
-                android:src="@drawable/arrow_back"
+                android:src="@drawable/ic_arrow_back"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -90,7 +90,7 @@
                 android:layout_height="@dimen/height_32dp"
                 android:layout_marginTop="@dimen/margin_top_16dp"
                 android:contentDescription="@null"
-                android:src="@drawable/arrow_back"
+                android:src="@drawable/ic_arrow_back"
                 app:layout_constraintEnd_toStartOf="@id/iv_next_from"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -150,7 +150,7 @@
                 android:layout_marginEnd="@dimen/margin_end_16dp"
                 android:contentDescription="@null"
                 android:scaleX="-1"
-                android:src="@drawable/arrow_back"
+                android:src="@drawable/ic_arrow_back"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -160,7 +160,7 @@
                 android:layout_height="@dimen/height_32dp"
                 android:layout_marginTop="@dimen/margin_top_16dp"
                 android:contentDescription="@null"
-                android:src="@drawable/arrow_back"
+                android:src="@drawable/ic_arrow_back"
                 app:layout_constraintEnd_toStartOf="@id/iv_next_to"
                 app:layout_constraintTop_toTopOf="parent" />
 

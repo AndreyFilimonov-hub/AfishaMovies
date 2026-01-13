@@ -13,7 +13,7 @@
         android:contentDescription="@null"
         android:elevation="@dimen/elevation_8dp"
         android:focusable="true"
-        android:src="@drawable/bucket_icon"
+        android:src="@drawable/ic_bucket"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

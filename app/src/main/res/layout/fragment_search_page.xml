@@ -13,7 +13,7 @@
         android:contentDescription="@null"
         android:paddingStart="@dimen/padding_start_16dp"
         android:paddingEnd="0dp"
-        android:src="@drawable/search_icon"
+        android:src="@drawable/ic_search"
         app:layout_constraintBottom_toBottomOf="@id/sb_main"
         app:layout_constraintStart_toStartOf="@id/sb_main"
         app:layout_constraintTop_toTopOf="@id/sb_main" />
@@ -47,7 +47,7 @@
         android:focusable="true"
         android:paddingStart="0dp"
         android:paddingEnd="@dimen/padding_end_16dp"
-        android:src="@drawable/filter_icon"
+        android:src="@drawable/ic_filter"
         app:layout_constraintBottom_toBottomOf="@id/sb_main"
         app:layout_constraintEnd_toEndOf="@id/sb_main"
         app:layout_constraintTop_toTopOf="@id/sb_main" />
