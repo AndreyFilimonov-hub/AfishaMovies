@@ -50,6 +50,8 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 
+    implementation(libs.androidx.work.runtime.ktx)
+
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     implementation (libs.kotlinx.coroutines.android)
