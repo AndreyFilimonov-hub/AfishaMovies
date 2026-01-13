@@ -1,6 +1,7 @@
 package com.filimonov.afishamovies.di
 
 import android.app.Application
+import com.filimonov.afishamovies.AfishaMoviesApp
 import com.filimonov.afishamovies.di.filmpagecomponent.FilmPageComponent
 import com.filimonov.afishamovies.di.gallerypagecomponent.GalleryComponent
 import com.filimonov.afishamovies.di.homepagecomponent.HomePageComponent
@@ -28,6 +29,8 @@ interface AppComponent {
     fun profilePageComponent(): ProfilePageComponent.Factory
 
     fun onBoardPageComponent(): OnBoardPageComponent.Factory
+
+    fun inject(application: AfishaMoviesApp)
 
     @Component.Factory
     interface AppComponentFactory {
