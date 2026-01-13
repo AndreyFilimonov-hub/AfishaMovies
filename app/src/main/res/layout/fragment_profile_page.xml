@@ -165,7 +165,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="@string/empty_collection" />
+                android:text="@string/empty_interested_collection" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_was_interesting"
