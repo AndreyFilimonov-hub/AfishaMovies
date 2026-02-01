@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
     private var pendingDeepLink: Intent? = null
 
-    val binging: ActivityMainBinding by lazy {
+    private val binging: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
